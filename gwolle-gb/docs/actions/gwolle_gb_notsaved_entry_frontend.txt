@@ -25,5 +25,5 @@ function my_gwolle_gb_notsaved_entry_frontend( $entry ) {
 	}
 
 }
-add_action( 'gwolle_gb_notsaved_entry_frontend', '			do_action( 'gwolle_gb_save_entry_frontend', $entry );
-' );
+add_action( 'gwolle_gb_notsaved_entry_frontend', 'my_gwolle_gb_notsaved_entry_frontend' );
+

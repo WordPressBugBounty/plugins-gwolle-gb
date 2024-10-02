@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.6
-Stable tag: 4.6.2
+Stable tag: 4.7.0
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -367,11 +367,7 @@ Using a theme with AJAX navigation can give issues. Only on the guestbook page i
 So you would need to load it on every page to have it available for the guestbook. You can add the following code to functions.php of your theme:
 
 	<?php
-	function my_gwolle_gb_register() {
-		wp_enqueue_script('gwolle_gb_frontend_js');
-		wp_enqueue_style('gwolle_gb_frontend_css');
-	}
-	add_action('wp_enqueue_scripts', 'my_gwolle_gb_register', 20);
+	add_action('wp_enqueue_scripts', 'gwolle_gb_enqueue', 20);
 	?>
 
 I don't have any experience myself with AJAX themes. If it doesn't work, please contact the theme author.
@@ -453,6 +449,18 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.7.0 =
+* 2024-10-02
+* Always use utf8mb4 for database tables (requires MySQL 5.5 or higher).
+* Better check for direct access of files.
+* Remove return message about 'too fast', not needed really.
+* Add function and action 'gwolle_gb_enqueue' so people can choose whether to load css or not.
+* Add filter gwolle_gb_enqueue_frontend_css.
+* Add filter gwolle_gb_bbcode_img_enabled.
+* Add function gwolle_gb_bbcode_img_disabled.
+* Also parse (or strip) BBcode in notification mails.
+* Loading plugin translations should be delayed until init action.
 
 = 4.6.2 =
 * 2024-02-09

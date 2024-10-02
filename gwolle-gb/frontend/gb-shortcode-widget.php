@@ -1,9 +1,8 @@
 <?php
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -46,7 +45,7 @@ function get_gwolle_gb_shortcode_widget( $atts ) {
 	}
 
 	// Load Frontend CSS in Footer, only when it's active.
-	wp_enqueue_style('gwolle_gb_frontend_css');
+	gwolle_gb_enqueue();
 
 	$widget_title = esc_html__('Guestbook', 'gwolle-gb');
 	$book_id      = $shortcode_atts['book_id'];

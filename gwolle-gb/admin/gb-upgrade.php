@@ -8,10 +8,8 @@
  */
 
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -48,8 +46,8 @@ function gwolle_gb_install() {
 			admin_reply_uid int(5) NOT NULL default '0',
 			book_id int(5) NOT NULL default '1',
 			PRIMARY KEY  (id)
-		) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
-	$result = $wpdb->query($sql);
+		) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+	$result = $wpdb->query($sql); // returns bool
 
 	$sql = "
 		CREATE TABLE IF NOT EXISTS
@@ -61,17 +59,8 @@ function gwolle_gb_install() {
 			author_id int(5) NOT NULL,
 			datetime bigint(8) UNSIGNED NOT NULL,
 			PRIMARY KEY  (id)
-		) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci";
-	$result = $wpdb->query($sql);
-
-	/* Upgrade to new shiny db collation. Since WP 4.2 */
-	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	if ( function_exists('maybe_convert_table_to_utf8mb4') ) {
-		if ( 'utf8mb4' === $wpdb->charset ) {
-			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_entries );
-			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_log );
-		}
-	}
+		) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+	$result = $wpdb->query($sql); // returns bool
 
 	/* Set default options if not set yet. */
 	gwolle_gb_set_defaults();
@@ -263,25 +252,25 @@ function gwolle_gb_upgrade() {
 		$wpdb->query("
 				ALTER
 				TABLE " . $wpdb->gwolle_gb_entries . "
-					DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
+					DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
 			");
 		$wpdb->query("
 				ALTER
 				TABLE " . $wpdb->gwolle_gb_entries . "
 					CHANGE `entry_id` `entry_id` INT(10) NOT NULL AUTO_INCREMENT,
-					CHANGE `entry_author_name` `entry_author_name` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+					CHANGE `entry_author_name` `entry_author_name` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 					CHANGE `entry_authorAdminId` `entry_authorAdminId` INT(5) NOT NULL DEFAULT '0',
-					CHANGE `entry_author_email` `entry_author_email` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-					CHANGE `entry_author_origin` `entry_author_origin` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-					CHANGE `entry_author_website` `entry_author_website` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-					CHANGE `entry_author_ip` `entry_author_ip` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-					CHANGE `entry_author_host` `entry_author_host` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-					CHANGE `entry_content` `entry_content` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-					CHANGE `entry_date` `entry_date` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+					CHANGE `entry_author_email` `entry_author_email` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+					CHANGE `entry_author_origin` `entry_author_origin` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+					CHANGE `entry_author_website` `entry_author_website` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+					CHANGE `entry_author_ip` `entry_author_ip` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+					CHANGE `entry_author_host` `entry_author_host` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+					CHANGE `entry_content` `entry_content` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+					CHANGE `entry_date` `entry_date` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 					CHANGE `entry_isChecked` `entry_isChecked` TINYINT(1) NOT NULL,
 					CHANGE `entry_checkedBy` `entry_checkedBy` INT(5) NOT NULL,
-					CHANGE `entry_isDeleted` `entry_isDeleted` VARCHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
-					CHANGE `entry_isSpam` `entry_isSpam` VARCHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0'
+					CHANGE `entry_isDeleted` `entry_isDeleted` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+					CHANGE `entry_isSpam` `entry_isSpam` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
 			");
 		add_option('gwolle_gb-showLineBreaks', 'false');
 	}
@@ -393,19 +382,19 @@ function gwolle_gb_upgrade() {
 		$wpdb->query( "
 			ALTER TABLE $wpdb->gwolle_gb_entries
 				CHANGE `entry_id` `id` INT(10) NOT NULL AUTO_INCREMENT,
-				CHANGE `entry_author_name` `author_name` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+				CHANGE `entry_author_name` `author_name` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 				CHANGE `entry_authorAdminId` `author_id` INT(5) NOT NULL DEFAULT '0',
-				CHANGE `entry_author_email` `author_email` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-				CHANGE `entry_author_origin` `author_origin` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-				CHANGE `entry_author_website` `author_website` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-				CHANGE `entry_author_ip` `author_ip` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-				CHANGE `entry_author_host` `author_host` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-				CHANGE `entry_content` `content` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-				CHANGE `entry_date` `date` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+				CHANGE `entry_author_email` `author_email` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+				CHANGE `entry_author_origin` `author_origin` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+				CHANGE `entry_author_website` `author_website` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+				CHANGE `entry_author_ip` `author_ip` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+				CHANGE `entry_author_host` `author_host` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+				CHANGE `entry_content` `content` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+				CHANGE `entry_date` `date` VARCHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
 				CHANGE `entry_isChecked` `ischecked` TINYINT(1) NOT NULL,
 				CHANGE `entry_checkedBy` `checkedby` INT(5) NOT NULL,
-				CHANGE `entry_isDeleted` `istrash` VARCHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
-				CHANGE `entry_isSpam` `isspam` VARCHAR(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0'
+				CHANGE `entry_isDeleted` `istrash` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+				CHANGE `entry_isSpam` `isspam` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
 			");
 	}
 
@@ -520,10 +509,8 @@ function gwolle_gb_upgrade() {
 	/* Upgrade to new shiny db collation. Since WP 4.2 */
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	if ( function_exists('maybe_convert_table_to_utf8mb4') ) {
-		if ( 'utf8mb4' === $wpdb->charset ) {
-			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_entries );
-			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_log );
-		}
+		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_entries );
+		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_log );
 	}
 
 	/* Set default options if not set yet. */

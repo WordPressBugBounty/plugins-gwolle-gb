@@ -3,7 +3,7 @@
 Plugin Name: Gwolle Guestbook
 Plugin URI: https://wordpress.org/plugins/gwolle-gb/
 Description: Gwolle Guestbook is not just another guestbook for WordPress. The goal is to provide an easy and slim way to integrate a guestbook into your WordPress powered site. Don't use your 'comment' section the wrong way - install Gwolle Guestbook and have a real guestbook.
-Version: 4.6.2
+Version: 4.7.0
 Author: Marcel Pol
 Author URI: https://zenoweb.nl
 License: GPLv2 or later
@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 // Plugin Version
-define('GWOLLE_GB_VER', '4.6.2');
+define('GWOLLE_GB_VER', '4.7.0');
 
 
 /*
@@ -83,7 +83,7 @@ define('GWOLLE_GB_VER', '4.6.2');
 /*
  * Definitions
  */
-define('GWOLLE_GB_FOLDER', plugin_basename(dirname(__FILE__)));
+define('GWOLLE_GB_FOLDER', plugin_basename( __DIR__ ));
 define('GWOLLE_GB_DIR', WP_PLUGIN_DIR . '/' . GWOLLE_GB_FOLDER);
 define('GWOLLE_GB_URL', plugins_url( '/', __FILE__ ));
 

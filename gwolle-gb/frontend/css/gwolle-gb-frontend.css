@@ -243,6 +243,7 @@ body .gwolle-gb-content a {
 .gwolle-gb .gb-entry .gb-entry-content img {
 	max-width: 100%;
 	max-height: 700px;
+	display: inline-block;
 }
 .gwolle-gb .gb-entry .gb-highlight {
 	background-color: #ddff00;
@@ -484,5 +485,3 @@ div.gb-social-media-share img {
 	}
 
 }
-
-

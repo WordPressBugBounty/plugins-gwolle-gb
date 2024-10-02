@@ -4,10 +4,8 @@
  */
 
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -109,7 +107,15 @@ Entry content:
 			$tagname = $mailtags["$tagnum"];
 			$mail_body = str_replace('%' . $tagname . '%', $info["$tagname"], $mail_body);
 		}
+
 		$mail_body = gwolle_gb_format_values_for_mail( $mail_body );
+
+		$form_setting = gwolle_gb_get_setting( 'form' );
+		if ( isset($form_setting['form_bbcode_enabled']) && $form_setting['form_bbcode_enabled'] === 'true' ) {
+			$mail_body = gwolle_gb_bbcode_parse( $mail_body );
+		} else {
+			$mail_body = gwolle_gb_bbcode_strip( $mail_body );
+		}
 
 		// Add logging to mail
 		$log_entries = gwolle_gb_get_log_entries( $entry->get_id() );
@@ -202,6 +208,13 @@ Entry content:
 			}
 			$mail_body = gwolle_gb_format_values_for_mail( $mail_body );
 
+			$form_setting = gwolle_gb_get_setting( 'form' );
+			if ( isset($form_setting['form_bbcode_enabled']) && $form_setting['form_bbcode_enabled'] === 'true' ) {
+				$mail_body = gwolle_gb_bbcode_parse( $mail_body );
+			} else {
+				$mail_body = gwolle_gb_bbcode_strip( $mail_body );
+			}
+
 			wp_mail($entry->get_author_email(), $subject, $mail_body, $header);
 
 		}
@@ -281,6 +294,13 @@ Original entry posted on %date%:
 		}
 		$mail_body = gwolle_gb_format_values_for_mail( $mail_body );
 
+		$form_setting = gwolle_gb_get_setting( 'form' );
+		if ( isset($form_setting['form_bbcode_enabled']) && $form_setting['form_bbcode_enabled'] === 'true' ) {
+			$mail_body = gwolle_gb_bbcode_parse( $mail_body );
+		} else {
+			$mail_body = gwolle_gb_bbcode_strip( $mail_body );
+		}
+
 		wp_mail($entry->get_author_email(), $subject, $mail_body, $header);
 
 	}
@@ -356,6 +376,13 @@ Original entry posted on %date%:
 			$mail_body = str_replace('%' . $tagname . '%', $info["$tagname"], $mail_body);
 		}
 		$mail_body = gwolle_gb_format_values_for_mail( $mail_body );
+
+		$form_setting = gwolle_gb_get_setting( 'form' );
+		if ( isset($form_setting['form_bbcode_enabled']) && $form_setting['form_bbcode_enabled'] === 'true' ) {
+			$mail_body = gwolle_gb_bbcode_parse( $mail_body );
+		} else {
+			$mail_body = gwolle_gb_bbcode_strip( $mail_body );
+		}
 
 		wp_mail($entry->get_author_email(), $subject, $mail_body, $header);
 

@@ -6,10 +6,8 @@
  */
 
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -65,9 +63,7 @@ function get_gwolle_gb( $atts ) {
 	}
 
 	// Load Frontend CSS in Footer, only when it's active
-	wp_enqueue_style('gwolle_gb_frontend_css');
-	//wp_enqueue_script('jquery');
-	wp_enqueue_script('gwolle_gb_frontend_js');
+	gwolle_gb_enqueue();
 
 
 	// Define $output
@@ -112,10 +108,7 @@ function get_gwolle_gb_write( $atts ) {
 	}
 
 	// Load Frontend CSS in Footer, only when it's active
-	wp_enqueue_style('gwolle_gb_frontend_css');
-	//wp_enqueue_script('jquery');
-	wp_enqueue_script('gwolle_gb_frontend_js');
-
+	gwolle_gb_enqueue();
 
 	// Define $output
 	$output = '<div class="gwolle-gb">';
@@ -157,10 +150,7 @@ function get_gwolle_gb_read( $atts ) {
 	}
 
 	// Load Frontend CSS in Footer, only when it's active
-	wp_enqueue_style('gwolle_gb_frontend_css');
-	//wp_enqueue_script('jquery');
-	wp_enqueue_script('gwolle_gb_frontend_js');
-
+	gwolle_gb_enqueue();
 
 	// Define $output
 	$output = '<div class="gwolle-gb">';

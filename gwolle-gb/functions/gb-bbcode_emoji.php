@@ -1,10 +1,8 @@
 <?php
 
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -39,10 +37,17 @@ function gwolle_gb_bbcode_parse( $str ) {
 	$str = preg_replace($bb, $html, $str);
 
 	// First images, then links, so we support images inside links.
-	$bbcode_img_referrer = apply_filters( 'gwolle_gb_bbcode_img_referrer', 'no-referrer' );
-	$pattern = "#\[img\]([^\[]*)\[/img\]#i";
-	$replace = '<img src="\\1" alt="" referrerpolicy="' . $bbcode_img_referrer . '" loading="lazy" />';
-	$str = preg_replace($pattern, $replace, $str);
+	$bbcode_img_enabled = apply_filters( 'gwolle_gb_bbcode_img_enabled', true );
+	if ( $bbcode_img_enabled ) {
+		$bbcode_img_referrer = apply_filters( 'gwolle_gb_bbcode_img_referrer', 'no-referrer' );
+		$pattern = "#\[img\]([^\[]*)\[/img\]#i";
+		$replace = '<img src="\\1" alt="" referrerpolicy="' . $bbcode_img_referrer . '" loading="lazy" />';
+		$str = preg_replace($pattern, $replace, $str);
+	} else {
+		$pattern = "#\[img\]([^\[]*)\[/img\]#i";
+		$replace = '';
+		$str = preg_replace($pattern, $replace, $str);
+	}
 
 	// Links with quotes.
 	$bbcode_link_rel = apply_filters( 'gwolle_gb_bbcode_link_rel', 'nofollow noopener noreferrer' );
@@ -220,3 +225,22 @@ function gwolle_gb_maybe_encode_emoji( $string, $field ) {
 	}
 	return $string;
 }
+
+/*
+ * Add CSS to the Footer to make it possible to hide the BBcode image button.
+ */
+function gwolle_gb_bbcode_img_disabled() {
+
+	$bbcode_img_enabled = apply_filters( 'gwolle_gb_bbcode_img_enabled', true );
+	if ( ! $bbcode_img_enabled ) {
+		echo '
+		<style id="gwolle_gb_bbcode_img_disabled" type="text/css">
+		html body .markItUp li.markItUpButton5 {
+			display: none;
+		}
+		</style>
+		';
+	}
+
+}
+add_action( 'wp_footer', 'gwolle_gb_bbcode_img_disabled' );

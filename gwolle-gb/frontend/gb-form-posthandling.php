@@ -1,9 +1,8 @@
 <?php
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -390,7 +389,7 @@ function gwolle_gb_frontend_posthandling() {
 					$entry->set_isspam(true);
 					$marked_by_timeout = true;
 					if (get_option( 'gwolle_gb-refuse-spam', 'false') === 'true') {
-						gwolle_gb_add_message( '<p class="refuse-spam-timeout"><strong>' . esc_html__('Your entry was submitted too fast, please slow down and try again.', 'gwolle-gb') . '</strong></p>', true, false );
+						gwolle_gb_add_message( '<p class="refuse-spam-timeout"><strong>' . esc_html__('Your entry was marked as spam. Please try again.', 'gwolle-gb') . '</strong></p>', true, false );
 						do_action( 'gwolle_gb_notsaved_entry_frontend', $entry );
 						return false;
 					}

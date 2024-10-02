@@ -7,10 +7,8 @@
  */
 
 
-// No direct calls to this script
-if ( strpos($_SERVER['PHP_SELF'], basename(__FILE__) )) {
-	die('No direct calls allowed!');
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 
 
 /*
@@ -99,6 +97,27 @@ add_action('wp_enqueue_scripts', 'gwolle_gb_register');
 
 
 /*
+ * Enqueue styles and scripts.
+ * Enqueue them in the frontend function only when we need them.
+ *
+ * @uses filter gwolle_gb_enqueue_frontend_css, true when css should be loaded. false if not.
+ */
+function gwolle_gb_enqueue() {
+
+	$enqueue_css = apply_filters( 'gwolle_gb_enqueue_frontend_css', true );
+	if ( $enqueue_css ) {
+		wp_enqueue_style('gwolle_gb_frontend_css');
+	}
+
+	//wp_enqueue_script('jquery'); // already done when registering.
+	wp_enqueue_script('gwolle_gb_frontend_js');
+
+	do_action( 'gwolle_gb_enqueue', $enqueue_css );
+
+}
+
+
+/*
  * Enqueue JS and CSS for marktitup editor functions.
  *
  * @since 3.0.0
@@ -129,7 +148,7 @@ function gwolle_gb_enqueue_markitup() {
 function gwolle_gb_load_lang() {
 	load_plugin_textdomain( 'gwolle-gb', false, GWOLLE_GB_FOLDER . '/lang' );
 }
-add_action('plugins_loaded', 'gwolle_gb_load_lang');
+add_action( 'init', 'gwolle_gb_load_lang' );
 
 
 /*
