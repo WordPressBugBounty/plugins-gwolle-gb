@@ -48,9 +48,9 @@ function get_gwolle_gb_shortcode_widget( $atts ) {
 	gwolle_gb_enqueue();
 
 	$widget_title = esc_html__('Guestbook', 'gwolle-gb');
-	$book_id      = $shortcode_atts['book_id'];
-	$num_entries  = $shortcode_atts['num_entries'];
-	$num_words    = $shortcode_atts['num_words'];
+	$book_id      = (int) $shortcode_atts['book_id'];
+	$num_entries  = (int) $shortcode_atts['num_entries'];
+	$num_words    = (int) $shortcode_atts['num_words'];
 	$postid       = 0;
 
 	$widget_class = 'gwolle_gb_widget gwolle-gb-widget';

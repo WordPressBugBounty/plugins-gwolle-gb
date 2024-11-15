@@ -68,7 +68,7 @@ function gwolle_gb_frontend_read( $shortcode_atts, $shortcode ) {
 
 	/* List view. */
 	if ( (int) $shortcode_atts['num_entries'] > 0 ) {
-		$num_entries = $shortcode_atts['num_entries'];
+		$num_entries = (int) $shortcode_atts['num_entries'];
 	} else {
 		$num_entries = (int) get_option('gwolle_gb-entriesPerPage', 20);
 		$num_entries = (int) apply_filters( 'gwolle_gb_read_num_entries', $num_entries, $shortcode_atts );

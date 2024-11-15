@@ -2,8 +2,8 @@
 Contributors: Gwolle, mpol
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
-Tested up to: 6.6
-Stable tag: 4.7.0
+Tested up to: 6.7
+Stable tag: 4.7.1
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,10 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.7.1 =
+* 2024-11-15
+* Better check for parameters in the shortcode.
 
 = 4.7.0 =
 * 2024-10-02

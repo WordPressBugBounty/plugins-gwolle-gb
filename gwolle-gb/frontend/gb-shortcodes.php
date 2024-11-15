@@ -59,7 +59,7 @@ function get_gwolle_gb( $atts ) {
 
 	if ( is_singular() && is_main_query() && ! is_admin() ) {
 		$id = get_the_ID();
-		update_post_meta( $id, 'gwolle_gb_book_id', $shortcode_atts['book_id'] );
+		update_post_meta( $id, 'gwolle_gb_book_id', (int) $shortcode_atts['book_id'] );
 	}
 
 	// Load Frontend CSS in Footer, only when it's active
@@ -104,7 +104,7 @@ function get_gwolle_gb_write( $atts ) {
 
 	if ( is_singular() && is_main_query() && ! is_admin() ) {
 		$id = get_the_ID();
-		update_post_meta( $id, 'gwolle_gb_book_id', $shortcode_atts['book_id'] );
+		update_post_meta( $id, 'gwolle_gb_book_id', (int) $shortcode_atts['book_id'] );
 	}
 
 	// Load Frontend CSS in Footer, only when it's active
@@ -146,7 +146,7 @@ function get_gwolle_gb_read( $atts ) {
 	}
 	if ( is_singular() && is_main_query() && ! is_admin() ) {
 		$id = get_the_ID();
-		update_post_meta( $id, 'gwolle_gb_book_id', $shortcode_atts['book_id'] );
+		update_post_meta( $id, 'gwolle_gb_book_id', (int) $shortcode_atts['book_id'] );
 	}
 
 	// Load Frontend CSS in Footer, only when it's active
