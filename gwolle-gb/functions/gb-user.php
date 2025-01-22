@@ -131,7 +131,7 @@ function gwolle_gb_get_author_name_html( $entry ) {
 	$author_id = $entry->get_author_id();
 	$is_moderator = gwolle_gb_is_moderator( $author_id );
 	if ( $is_moderator ) {
-		$author_name_html = '<i class="gb-moderator">' . esc_attr( $author_name ) . '</i>';
+		$author_name_html = '<i class="gb-moderator">' . wp_kses_post( $author_name ) . '</i>'; // allow html in author_name.
 	} else {
 		$author_name_html = $author_name;
 	}

@@ -438,7 +438,7 @@ function gwolle_gb_page_entries() {
 										</td>
 										<td class="book">
 											<span class="book-icon" title="' . esc_html__('Book ID', 'gwolle-gb') . ' ' . $entry->get_book_id() . '">
-												<a href="' . add_query_arg( 'book_id', $entry->get_book_id(), $request_uri ) . '"
+												<a href="' . esc_url( add_query_arg( 'book_id', $entry->get_book_id(), $request_uri ) ) . '"
 													title="' . esc_attr__('Book ID', 'gwolle-gb') . ' ' . $entry->get_book_id() . '">
 													' . $entry->get_book_id() . '
 												</a>

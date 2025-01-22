@@ -101,9 +101,15 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 			<div class="gwolle-gb-write">
 				<h3>' . esc_html__('Log in to post an entry', 'gwolle-gb') . '</h3>';
 
+		if ( is_ssl() ) {
+			$protocol = 'https://';
+		} else {
+			$protocol = 'http://';
+		}
+
 		$args = array(
 			'echo'     => false,
-			'redirect' => ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+			'redirect' => esc_url( $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ),
 		);
 		$output .= wp_login_form( $args );
 
@@ -305,7 +311,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		$field_name2 = gwolle_gb_get_field_name( 'honeypot2' );
 		$honeypot_value = (int) get_option( 'gwolle_gb-honeypot_value', 15 );
 		$output .= '
-			<div class="' . esc_attr( $field_name ) . '" style="display:none;overflow:hidden;">
+			<div class="' . esc_attr( $field_name ) . '" style="display:none;overflow:hidden;" hidden="true" aria-hidden="true">
 				<div class="label">
 					<label for="' . esc_attr( $field_name ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
 					<label for="' . esc_attr( $field_name2 ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
@@ -324,7 +330,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		$field_name2 = gwolle_gb_get_field_name( 'timeout2' );
 		$random = rand( 100, 100000 );
 		$output .= '
-			<div class="' . esc_attr( $field_name ) . '" style="display:none;overflow:hidden;">
+			<div class="' . esc_attr( $field_name ) . '" style="display:none;overflow:hidden;" hidden="true" aria-hidden="true">
 				<div class="label">
 					<label for="' . esc_attr( $field_name ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
 					<label for="' . esc_attr( $field_name2 ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>

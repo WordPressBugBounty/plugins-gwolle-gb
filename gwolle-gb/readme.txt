@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.7
-Stable tag: 4.7.1
+Stable tag: 4.7.2
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,12 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.7.2 =
+* 2025-01-22
+* Fix XSS security issue (thanks Peter Thaleikis).
+* Allow html in author_name through filter.
+* Hide invisible elements for screenreaders.
 
 = 4.7.1 =
 * 2024-11-15
