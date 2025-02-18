@@ -358,6 +358,9 @@ User IP address: %author_ip%
 	// function gwolle_gb_addon_upload_media_handler() {
 	/* translators: Return messages for uploading images */
 	esc_html__('Your file is too large.', 'gwolle-gb');
+	// function gwolle_gb_addon_upload_media_handler() {
+	/* translators: Return messages for uploading images */
+	sprintf( esc_html__('Your file is too large (Max %d MiB)', 'gwolle-gb'), $allowed_filesize_mib );
 	/* translators: Return messages for uploading images */
 	esc_html__('Your file has the wrong mime type.', 'gwolle-gb');
 	/* translators: Return messages for uploading images */
@@ -366,7 +369,8 @@ User IP address: %author_ip%
 	esc_html__('Something went wrong. Please try again or contact an admin.', 'gwolle-gb');
 	/* translators: Return messages for uploading images */
 	esc_html__('File was uploaded successfully.', 'gwolle-gb');
-
+	/* translators: Return messages for uploading images */
+	esc_html__('File was uploaded successfully and is now added into the content as bbcode.', 'gwolle-gb');
 	// function gwolle_gb_addon_enqueue_frontend()
 	/* translators: Message for uploading images */
 	esc_html__( 'Please select a file before clicking Upload.', 'gwolle-gb' );

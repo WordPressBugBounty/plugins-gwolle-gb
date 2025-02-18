@@ -163,7 +163,7 @@ function gwolle_gb_page_settings_update() {
 					$header = gwolle_gb_sanitize_input( $_POST['gb_header'] );
 					update_option('gwolle_gb-header', $header);
 
-					$notice = gwolle_gb_sanitize_input( $_POST['notice'], 'setting_textarea' );
+					$notice = gwolle_gb_sanitize_input( $_POST['gwolle_gb_notice'], 'setting_textarea' );
 					update_option('gwolle_gb-notice', $notice);
 
 					if (isset($_POST['form_ajax']) && $_POST['form_ajax'] === 'on') {
@@ -265,9 +265,9 @@ function gwolle_gb_page_settings_update() {
 						update_option('gwolle_gb-admin_style', 'false');
 					}
 
-					if (isset($_POST['navigation']) && (int) $_POST['navigation'] === 0) {
+					if (isset($_POST['gwolle_gb_navigation']) && (int) $_POST['gwolle_gb_navigation'] === 0) {
 						update_option('gwolle_gb-navigation', 0);
-					} else if (isset($_POST['navigation']) && (int) $_POST['navigation'] === 1) {
+					} else if (isset($_POST['gwolle_gb_navigation']) && (int) $_POST['gwolle_gb_navigation'] === 1) {
 						update_option('gwolle_gb-navigation', 1);
 					}
 
@@ -345,7 +345,7 @@ function gwolle_gb_page_settings_update() {
 						update_option('gwolle_gb-refuse-spam', 'false');
 					}
 
-					if (isset($_POST['honeypot']) && $_POST['honeypot'] === 'on') {
+					if (isset($_POST['gwolle_gb_honeypot']) && $_POST['gwolle_gb_honeypot'] === 'on') {
 						update_option('gwolle_gb-honeypot', 'true');
 					} else {
 						update_option('gwolle_gb-honeypot', 'false');

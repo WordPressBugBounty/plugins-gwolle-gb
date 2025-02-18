@@ -132,6 +132,7 @@ function gwolle_gb_enqueue_markitup() {
 		'bullet'    => /* translators: MarkItUp menu item */ esc_html__('Bulleted List', 'gwolle-gb' ),
 		'numeric'   => /* translators: MarkItUp menu item */ esc_html__('Numeric List', 'gwolle-gb' ),
 		'picture'   => /* translators: MarkItUp menu item */ esc_html__('Picture', 'gwolle-gb' ),
+		'youtube'   => /* translators: MarkItUp menu item */ esc_html__('Youtube', 'gwolle-gb' ),
 		'source'    => /* translators: MarkItUp menu item */ esc_html__('Source', 'gwolle-gb' ),
 		'link'      => /* translators: MarkItUp menu item */ esc_html__('Link', 'gwolle-gb' ),
 		'linktext'  => /* translators: MarkItUp menu item */ esc_html__('Your text to link...', 'gwolle-gb' ),

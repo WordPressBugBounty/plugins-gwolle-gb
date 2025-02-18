@@ -78,7 +78,7 @@ function gwolle_gb_page_settingstab_debug() {
 		?>
 
 		<tr>
-			<th scope="row"><label for="blogdescription"><?php esc_html_e('Test', 'gwolle-gb'); ?></label></th>
+			<th scope="row"><label for="gwolle_gb_debug"><?php esc_html_e('Test', 'gwolle-gb'); ?></label></th>
 			<td>
 				<p>
 				<?php esc_html_e('This test will attempt to save two test entries, one with standard text and one with Emoji.', 'gwolle-gb'); ?>

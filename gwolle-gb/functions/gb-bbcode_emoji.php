@@ -8,69 +8,77 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /*
  * Parse the BBcode into HTML for output.
  *
- * @param string $str content that needs to be parsed
+ * @param string $entry_content content that needs to be parsed
  * @return string parsed content
  */
-function gwolle_gb_bbcode_parse( $str ) {
+function gwolle_gb_bbcode_parse( $entry_content ) {
+
 	$bb = array();
 	$html = array();
 
-	$bb[] = "#\[b\](.*?)\[/b\]#si";
-	$html[] = "<strong>\\1</strong>";
-	$bb[] = "#\[i\](.*?)\[/i\]#si";
-	$html[] = "<i>\\1</i>";
-	$bb[] = "#\[u\](.*?)\[/u\]#si";
-	$html[] = "<u>\\1</u>";
+	$bb[] = '#\[b\](.*?)\[/b\]#si';
+	$html[] = '<strong>\\1</strong>';
+	$bb[] = '#\[i\](.*?)\[/i\]#si';
+	$html[] = '<i>\\1</i>';
+	$bb[] = '#\[u\](.*?)\[/u\]#si';
+	$html[] = '<u>\\1</u>';
 	// We run the regex on lists twice to support sublists.
-	$bb[] = "#\[ul\](.*?)\[/ul\]#si";
-	$html[] = "<ul>\\1</ul>";
-	$bb[] = "#\[ul\](.*?)\[/ul\]#si";
-	$html[] = "<ul>\\1</ul>";
-	$bb[] = "#\[ol\](.*?)\[/ol\]#si";
-	$html[] = "<ol>\\1</ol>";
-	$bb[] = "#\[ol\](.*?)\[/ol\]#si";
-	$html[] = "<ol>\\1</ol>";
-	$bb[] = "#\[li\](.*?)\[/li\]#si";
-	$html[] = "<li>\\1</li>";
-	$bb[] = "#\[li\](.*?)\[/li\]#si";
-	$html[] = "<li>\\1</li>";
-	$str = preg_replace($bb, $html, $str);
+	$bb[] = '#\[ul\](.*?)\[/ul\]#si';
+	$html[] = '<ul>\\1</ul>';
+	$bb[] = '#\[ul\](.*?)\[/ul\]#si';
+	$html[] = '<ul>\\1</ul>';
+	$bb[] = '#\[ol\](.*?)\[/ol\]#si';
+	$html[] = '<ol>\\1</ol>';
+	$bb[] = '#\[ol\](.*?)\[/ol\]#si';
+	$html[] = '<ol>\\1</ol>';
+	$bb[] = '#\[li\](.*?)\[/li\]#si';
+	$html[] = '<li>\\1</li>';
+	$bb[] = '#\[li\](.*?)\[/li\]#si';
+	$html[] = '<li>\\1</li>';
+	$entry_content = preg_replace( $bb, $html, $entry_content );
 
 	// First images, then links, so we support images inside links.
 	$bbcode_img_enabled = apply_filters( 'gwolle_gb_bbcode_img_enabled', true );
 	if ( $bbcode_img_enabled ) {
 		$bbcode_img_referrer = apply_filters( 'gwolle_gb_bbcode_img_referrer', 'no-referrer' );
-		$pattern = "#\[img\]([^\[]*)\[/img\]#i";
+		$pattern = '#\[img\]([^\[]*)\[/img\]#i';
 		$replace = '<img src="\\1" alt="" referrerpolicy="' . $bbcode_img_referrer . '" loading="lazy" />';
-		$str = preg_replace($pattern, $replace, $str);
+		$entry_content = preg_replace( $pattern, $replace, $entry_content );
 	} else {
-		$pattern = "#\[img\]([^\[]*)\[/img\]#i";
+		$pattern = '#\[img\]([^\[]*)\[/img\]#i';
 		$replace = '';
-		$str = preg_replace($pattern, $replace, $str);
+		$entry_content = preg_replace( $pattern, $replace, $entry_content );
+	}
+
+	// Youtube embeds.
+	$bbcode_youtube_enabled = apply_filters( 'gwolle_gb_bbcode_youtube_enabled', true );
+	if ( $bbcode_youtube_enabled ) {
+		$entry_content = gwolle_gb_bbcode_youtube_embed( $entry_content );
 	}
 
 	// Links with quotes.
 	$bbcode_link_rel = apply_filters( 'gwolle_gb_bbcode_link_rel', 'nofollow noopener noreferrer' );
-	$pattern = "#\[url href=\&\#034\;([^\]]*)\&\#034\;\]([^\[]*)\[/url\]#i";
+	$pattern = '#\[url href=\&\#034\;([^\]]*)\&\#034\;\]([^\[]*)\[/url\]#i';
 	$replace = '<a href="\\1" target="_blank" rel="' . $bbcode_link_rel . '">\\2</a>';
-	$str = preg_replace($pattern, $replace, $str);
+	$entry_content = preg_replace( $pattern, $replace, $entry_content );
 	// Links without quotes.
-	$pattern = "#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i";
+	$pattern = '#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i';
 	$replace = '<a href="\\1" target="_blank" rel="' . $bbcode_link_rel . '">\\2</a>';
-	$str = preg_replace($pattern, $replace, $str);
+	$entry_content = preg_replace( $pattern, $replace, $entry_content );
 
 	if ( get_option( 'gwolle_gb-showLineBreaks', 'false' ) === 'true' ) {
 		// fix nl2br adding <br />'s
-		$str = str_replace( '<br /><ol>', '<ol>', $str );
-		$str = str_replace( '<ol><br />', '<ol>', $str );
-		$str = str_replace( '</ol><br />', '</ol>', $str );
-		$str = str_replace( '<br /><ul>', '<ul>', $str );
-		$str = str_replace( '<ul><br />', '<ul>', $str );
-		$str = str_replace( '</ul><br />', '</ul>', $str );
-		$str = str_replace( '</li><br />', '</li>', $str );
+		$entry_content = str_replace( '<br /><ol>', '<ol>', $entry_content );
+		$entry_content = str_replace( '<ol><br />', '<ol>', $entry_content );
+		$entry_content = str_replace( '</ol><br />', '</ol>', $entry_content );
+		$entry_content = str_replace( '<br /><ul>', '<ul>', $entry_content );
+		$entry_content = str_replace( '<ul><br />', '<ul>', $entry_content );
+		$entry_content = str_replace( '</ul><br />', '</ul>', $entry_content );
+		$entry_content = str_replace( '</li><br />', '</li>', $entry_content );
 	}
 
-	return $str;
+	return $entry_content;
+
 }
 
 
@@ -80,33 +88,39 @@ function gwolle_gb_bbcode_parse( $str ) {
  * @param string $str content that needs to be stripped
  * @return string stripped content
  */
-function gwolle_gb_bbcode_strip( $str ) {
+function gwolle_gb_bbcode_strip( $entry_content ) {
+
 	$bb = array();
 	$html = array();
 
-	$bb[] = "#\[b\](.*?)\[/b\]#si";
-	$html[] = "\\1";
-	$bb[] = "#\[i\](.*?)\[/i\]#si";
-	$html[] = "\\1";
-	$bb[] = "#\[u\](.*?)\[/u\]#si";
-	$html[] = "\\1";
-	$bb[] = "#\[ul\](.*?)\[/ul\]#si";
-	$html[] = "\\1";
-	$bb[] = "#\[ol\](.*?)\[/ol\]#si";
-	$html[] = "\\1";
-	$bb[] = "#\[li\](.*?)\[/li\]#si";
-	$html[] = "\\1";
-	$str = preg_replace($bb, $html, $str);
+	$bb[] = '#\[b\](.*?)\[/b\]#si';
+	$html[] = '\\1';
+	$bb[] = '#\[i\](.*?)\[/i\]#si';
+	$html[] = '\\1';
+	$bb[] = '#\[u\](.*?)\[/u\]#si';
+	$html[] = '\\1';
+	$bb[] = '#\[ul\](.*?)\[/ul\]#si';
+	$html[] = '\\1';
+	$bb[] = '#\[ol\](.*?)\[/ol\]#si';
+	$html[] = '\\1';
+	$bb[] = '#\[li\](.*?)\[/li\]#si';
+	$html[] = '\\1';
+	$entry_content = preg_replace( $bb, $html, $entry_content );
 
-	$pattern = "#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i";
+	$pattern = '#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i';
 	$replace = '\\1';
-	$str = preg_replace($pattern, $replace, $str);
+	$entry_content = preg_replace( $pattern, $replace, $entry_content );
 
-	$pattern = "#\[img\]([^\[]*)\[/img\]#i";
+	$pattern = '#\[img\]([^\[]*)\[/img\]#i';
 	$replace = '';
-	$str = preg_replace($pattern, $replace, $str);
+	$entry_content = preg_replace( $pattern, $replace, $entry_content );
 
-	return $str;
+	$pattern = '#\[youtube\]([^\[]*)\[/youtube\]#i';
+	$replace = '';
+	$entry_content = preg_replace( $pattern, $replace, $entry_content );
+
+	return $entry_content;
+
 }
 
 
@@ -116,6 +130,7 @@ function gwolle_gb_bbcode_strip( $str ) {
  * @return string html with a elements with emoji
  */
 function gwolle_gb_get_emoji() {
+
 	$emoji = '
 		<a title="😄" class="gwolle_gb_emoji_1 noslimstat">😄</a>
 		<a title="😃" class="gwolle_gb_emoji_2 noslimstat">😃</a>
@@ -196,40 +211,47 @@ function gwolle_gb_get_emoji() {
 	 * @param string $emoji The list of Emoji.
 	 */
 	$emoji = apply_filters( 'gwolle_gb_get_emoji', $emoji );
+
 	return $emoji;
+
 }
 
 
 /*
  * Convert to 3byte Emoji for storing in db, if db-charset is not utf8mb4.
  *
- * @param string $string text string to encode
+ * @param string $entry_content text string to encode
  * @param string $field the database field that is used for that string, will be checked on charset.
- * @return string original input string encoded or not.
+ * @return string original input entry_content encoded or not.
  *
  * @since 1.3.5
  * @since WordPress 4.2.0 for wp_encode_emoji function.
  */
-function gwolle_gb_maybe_encode_emoji( $string, $field ) {
+function gwolle_gb_maybe_encode_emoji( $entry_content, $field ) {
+
 	global $wpdb;
+
 	$db_charset = $wpdb->charset;
 	if ( 'utf8mb4' !== $db_charset ) {
 		if ( function_exists( 'wp_encode_emoji' ) && function_exists( 'mb_convert_encoding' ) ) {
 			// No support for the proper charset, so encode to html entities.
-			$string = wp_encode_emoji( $string );
+			$entry_content = wp_encode_emoji( $entry_content );
 			// Enable this for debugging.
 			// gwolle_gb_add_message( '<p class="debug_emoji"><strong>Ran wp_encode_emoji function.</strong></p>', false, false );
 		}
 		// Enable this for debugging.
 		// gwolle_gb_add_message( '<p class="debug_emoji"><strong>MySQL Charset: ' . $charset . '</strong></p>', false, false );
 	}
-	return $string;
+
+	return $entry_content;
+
 }
 
+
 /*
- * Add CSS to the Footer to make it possible to hide the BBcode image button.
+ * Add CSS to the Footer to make it possible to hide BBcode buttons.
  */
-function gwolle_gb_bbcode_img_disabled() {
+function gwolle_gb_bbcode_disabled() {
 
 	$bbcode_img_enabled = apply_filters( 'gwolle_gb_bbcode_img_enabled', true );
 	if ( ! $bbcode_img_enabled ) {
@@ -242,5 +264,104 @@ function gwolle_gb_bbcode_img_disabled() {
 		';
 	}
 
+	$bbcode_youtube_enabled = apply_filters( 'gwolle_gb_bbcode_youtube_enabled', true );
+	if ( ! $bbcode_youtube_enabled ) {
+		echo '
+		<style id="gwolle_gb_bbcode_youtube_disabled" type="text/css">
+		html body .markItUp li.markItUpButton6 {
+			display: none;
+		}
+		</style>
+		';
+	}
+
 }
-add_action( 'wp_footer', 'gwolle_gb_bbcode_img_disabled' );
+add_action( 'wp_footer', 'gwolle_gb_bbcode_disabled' );
+
+
+function gwolle_gb_bbcode_img_disabled() {
+
+	_deprecated_function( __FUNCTION__, ' 4.8.0', 'gwolle_gb_bbcode_disabled()' );
+	gwolle_gb_bbcode_disabled();
+
+}
+
+
+/*
+ * Convert youtube embed from bbcode to full iframe embeds in entry content.
+ *
+ * @param string $entry_content text with entry_content including possible youtube embed.
+ * @return array with youtube bbcode changed for youtube iframe embeds (or unchanged if nothing found).
+ *
+ * @since 4.8.0
+ */
+function gwolle_gb_bbcode_youtube_embed( $entry_content ) {
+
+	$embeds = array();
+
+	/*
+	 * Check if the custom string matches the YouTube pattern
+	 * Use a regular expression to match the custom [youtube] shortcode.
+	 * The regex captures the YouTube URL inside the shortcode, which is then extracted into the matches array.
+	 * matches[0] is an array with the original string [youtube]youtube.com...[/youtube]
+	 * matches[1] is an array with the matching string youtube.com...
+	 *
+	 */
+	if ( preg_match_all( '#\[youtube\]([^\[]*)\[/youtube\]#i', $entry_content, $matches ) ) {
+
+
+/*
+array(2) {
+	[0]=>
+	array(2) {
+		[0]=>
+			string(62) "[youtube]https://www.youtube.com/watch?v=FqkW3jpfLC8[/youtube]"
+		[1]=>
+			string(62) "[youtube]https://www.youtube.com/watch?v=8vmv6xsdjO4[/youtube]"
+		}
+	[1]=>
+	array(2) {
+		[0]=>
+			string(43) "https://www.youtube.com/watch?v=FqkW3jpfLC8"
+		[1]=>
+			string(43) "https://www.youtube.com/watch?v=8vmv6xsdjO4"
+		}
+}
+*/
+
+
+		if ( is_array( $matches[0] ) && ! empty( $matches[0] ) ) {
+
+			$count = count( $matches[0] );
+			for ( $i = 0; $i < $count; $i++ ) {
+
+				$match_0 = $matches[0][$i];
+				$match_1 = $matches[1][$i];
+
+				if ( strlen( $match_0 ) < 1 || strlen( $match_1 ) < 1 ) {
+					continue; // something broke somewhere
+				}
+
+				// Use WP_Embed to handle the YouTube embed
+				// Create a new WP_Embed object and use its run_shortcode() method to embed the YouTube URL.
+				// This method wraps the YouTube URL in an embed shortcode and processes it, using the default WordPress embed system.
+				// The run_shortcode() method is used with [embed] shortcode for embedding, as WordPress allows embeds from platforms like YouTube through this shortcode.
+				$wp_embed = new WP_Embed();
+				$embed_code = $wp_embed->run_shortcode('[embed]' . esc_url( $match_1 ) . '[/embed]'); // iframe code
+
+				// Optionally, you can also use WP_oEmbed directly to get the HTML
+				// Use WP_oEmbed to fetch the oEmbed HTML.
+				// The get_html() method from WP_oEmbed returns the HTML embed code for the URL, which can be directly output.
+				//$oembed = new WP_oEmbed();
+				//$oembed_html = $oembed->get_html( $match_1 );
+
+				// You can choose to use either embed_code or oembed_html depending on your needs.
+				$entry_content = str_replace( $match_0, $embed_code, $entry_content );
+
+			}
+		}
+	}
+
+	return $entry_content;
+
+}

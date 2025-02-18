@@ -143,13 +143,13 @@ function gwolle_gb_page_settingstab_reading() {
 		</tr>
 
 		<tr>
-			<th scope="row"><label for="navigation"><?php esc_html_e('Navigation', 'gwolle-gb'); ?></label></th>
+			<th scope="row"><label for="gwolle_gb_navigation"><?php esc_html_e('Navigation', 'gwolle-gb'); ?></label></th>
 			<td>
 				<?php $navigation = (int) get_option( 'gwolle_gb-navigation', 0 ); ?>
-				<label><input type="radio" name="navigation" value="0" <?php checked( 0, $navigation ); ?> />
+				<label><input type="radio" name="gwolle_gb_navigation" value="0" <?php checked( 0, $navigation ); ?> />
 					<?php esc_html_e('Pagination', 'gwolle-gb'); ?>
 				</label><br />
-				<label><input type="radio" name="navigation" value="1" <?php checked( 1, $navigation ); ?> />
+				<label><input type="radio" name="gwolle_gb_navigation" value="1" <?php checked( 1, $navigation ); ?> />
 					<?php esc_html_e('Infinite Scroll', 'gwolle-gb'); ?>
 				</label><br />
 				<span class="setting-description"><?php esc_html_e('Use standard navigation with links to all pages, or use infinite scroll where entries will be added to the bottom as you are reading.', 'gwolle-gb'); ?></span>

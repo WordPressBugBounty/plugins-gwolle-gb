@@ -188,9 +188,10 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* Name */
 	if ( isset($form_setting['form_name_enabled']) && $form_setting['form_name_enabled'] === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'name' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
 		$label = apply_filters( 'gwolle_gb_author_name_label', esc_html__('Name', 'gwolle-gb') );
 		$output .= '<div class="' . esc_attr( $field_name ) . '">
-				<div class="label"><label for="' . esc_attr( $field_name ) . '" class="text-info">' . $label;
+				<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label;
 		if ( isset($form_setting['form_name_mandatory']) && $form_setting['form_name_mandatory'] === 'true' ) {
 			$output .= $required_indicator;
 		}
@@ -199,7 +200,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		if (in_array($field_name, $gwolle_gb_error_fields)) {
 			$output .= ' error';
 		}
-		$output .= '" value="' . esc_attr( $name ) . '" type="text" name="' . esc_attr( $field_name ) . '"';
+		$output .= '" value="' . esc_attr( $name ) . '" type="text" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '"';
 		if ( in_array($field_name, $gwolle_gb_error_fields) && isset($autofocus) ) {
 			$output .= $autofocus;
 			$autofocus = false; // disable it for the next error.
@@ -217,9 +218,10 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* City / Origin */
 	if ( isset($form_setting['form_city_enabled']) && $form_setting['form_city_enabled'] === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'city' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
 		$label = apply_filters( 'gwolle_gb_author_origin_label', esc_html__('City', 'gwolle-gb') );
 		$output .= '<div class="' . esc_attr( $field_name ) . '">
-					<div class="label"><label for="' . esc_attr( $field_name ) . '" class="text-info">' . $label;
+					<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label;
 		if ( isset($form_setting['form_city_mandatory']) && $form_setting['form_city_mandatory'] === 'true' ) {
 			$output .= $required_indicator;
 		}
@@ -228,7 +230,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		if (in_array($field_name, $gwolle_gb_error_fields)) {
 			$output .= ' error';
 		}
-		$output .= '" value="' . esc_attr( $origin ) . '" type="text" name="' . esc_attr( $field_name ) . '"';
+		$output .= '" value="' . esc_attr( $origin ) . '" type="text" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '"';
 		if ( in_array($field_name, $gwolle_gb_error_fields) && isset($autofocus) ) {
 			$output .= $autofocus;
 			$autofocus = false; // disable it for the next error.
@@ -245,9 +247,10 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* Email */
 	if ( isset($form_setting['form_email_enabled']) && $form_setting['form_email_enabled'] === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'email' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
 		$label = apply_filters( 'gwolle_gb_author_email_label', esc_html__('Email', 'gwolle-gb') );
 		$output .= '<div class="' . esc_attr( $field_name ) . '">
-				<div class="label"><label for="' . esc_attr( $field_name ) . '" class="text-info">' . $label;
+				<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label;
 		if ( isset($form_setting['form_email_mandatory']) && $form_setting['form_email_mandatory'] === 'true' ) {
 			$output .= $required_indicator;
 		}
@@ -256,7 +259,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		if (in_array($field_name, $gwolle_gb_error_fields)) {
 			$output .= ' error';
 		}
-		$output .= '" value="' . esc_attr( $email ) . '" type="email" name="' . esc_attr( $field_name ) . '"';
+		$output .= '" value="' . esc_attr( $email ) . '" type="email" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '"';
 		if ( in_array($field_name, $gwolle_gb_error_fields) && isset($autofocus) ) {
 			$output .= $autofocus;
 			$autofocus = false; // disable it for the next error.
@@ -270,8 +273,9 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	} else {
 		if ( isset($email) && strlen($email) > 0 ) {
 			$field_name = gwolle_gb_get_field_name( 'email' );
+			$field_id = gwolle_gb_get_field_id( $field_name );
 			// For logged in users, just save the email anyway.
-			$output .= '<input value="' . esc_attr( $email ) . '" type="hidden" name="' . esc_attr( $field_name ) . '" class="gwolle_gb_author_email" />';
+			$output .= '<input value="' . esc_attr( $email ) . '" type="hidden" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '" class="gwolle_gb_author_email" />';
 		}
 	}
 	$output .= apply_filters( 'gwolle_gb_write_add_after_email', '' );
@@ -279,9 +283,10 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* Website / Homepage */
 	if ( isset($form_setting['form_homepage_enabled']) && $form_setting['form_homepage_enabled'] === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'website' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
 		$label = apply_filters( 'gwolle_gb_author_website_label', esc_html__('Website', 'gwolle-gb') );
 		$output .= '<div class="' . esc_attr( $field_name ) . '">
-				<div class="label"><label for="' . esc_attr( $field_name ) . '" class="text-info">' . $label;
+				<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label;
 		if ( isset($form_setting['form_homepage_mandatory']) && $form_setting['form_homepage_mandatory'] === 'true' ) {
 			$output .= $required_indicator;
 		}
@@ -290,7 +295,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		if (in_array($field_name, $gwolle_gb_error_fields)) {
 			$output .= ' error';
 		}
-		$output .= '" value="' . esc_attr( $website ) . '" type="url" name="' . esc_attr( $field_name ) . '"';
+		$output .= '" value="' . esc_attr( $website ) . '" type="url" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '"';
 		if ( in_array($field_name, $gwolle_gb_error_fields) && isset($autofocus) ) {
 			$output .= $autofocus;
 			$autofocus = false; // disable it for the next error.
@@ -309,16 +314,18 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	if ( get_option( 'gwolle_gb-honeypot', 'true') === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'honeypot' );
 		$field_name2 = gwolle_gb_get_field_name( 'honeypot2' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
+		$field_id2 = gwolle_gb_get_field_id( $field_name2 );
 		$honeypot_value = (int) get_option( 'gwolle_gb-honeypot_value', 15 );
 		$output .= '
 			<div class="' . esc_attr( $field_name ) . '" style="display:none;overflow:hidden;" hidden="true" aria-hidden="true">
 				<div class="label">
-					<label for="' . esc_attr( $field_name ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
-					<label for="' . esc_attr( $field_name2 ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
+					<label for="' . esc_attr( $field_id ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
+					<label for="' . esc_attr( $field_id2 ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
 				</div>
 				<div class="input">
-					<input value="' . esc_attr( $honeypot_value ) . '" type="text" name="' . esc_attr( $field_name ) . '" class="' . esc_attr( $field_name ) . '" style="transform: translateY(10000px);" />
-					<input value="" type="text" name="' . esc_attr( $field_name2 ) . '" class="' . esc_attr( $field_name2 ) . '" style="transform: translateY(10000px);" />
+					<input value="' . esc_attr( $honeypot_value ) . '" type="text" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '" class="' . esc_attr( $field_name ) . '" style="transform: translateY(10000px);" />
+					<input value="" type="text" name="' . esc_attr( $field_name2 ) . '" id="' . esc_attr( $field_id2 ) . '" class="' . esc_attr( $field_name2 ) . '" style="transform: translateY(10000px);" />
 				</div>
 				<div class="clearBoth"></div>
 			</div>';
@@ -328,16 +335,18 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	if ( get_option( 'gwolle_gb-timeout', 'true') === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'timeout' );
 		$field_name2 = gwolle_gb_get_field_name( 'timeout2' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
+		$field_id2 = gwolle_gb_get_field_id( $field_name2 );
 		$random = rand( 100, 100000 );
 		$output .= '
 			<div class="' . esc_attr( $field_name ) . '" style="display:none;overflow:hidden;" hidden="true" aria-hidden="true">
 				<div class="label">
-					<label for="' . esc_attr( $field_name ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
-					<label for="' . esc_attr( $field_name2 ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
+					<label for="' . esc_attr( $field_id ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
+					<label for="' . esc_attr( $field_id2 ) . '" class="text-primary">' . esc_html__('Do not touch this', 'gwolle-gb') . '</label>
 				</div>
 				<div class="input">
-					<input value="' . esc_attr( $random ) . '" type="text" name="' . esc_attr( $field_name ) . '" class="' . esc_attr( $field_name ) . '" style="transform: translateY(10000px);" />
-					<input value="' . esc_attr( $random ) . '" type="text" name="' . esc_attr( $field_name2 ) . '" class="' . esc_attr( $field_name2 ) . '" style="transform: translateY(10000px);" />
+					<input value="' . esc_attr( $random ) . '" type="text" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '" class="' . esc_attr( $field_name ) . '" style="transform: translateY(10000px);" />
+					<input value="' . esc_attr( $random ) . '" type="text"id="' . esc_attr( $field_id2 ) . '" name="' . esc_attr( $field_name2 ) . '" class="' . esc_attr( $field_name2 ) . '" style="transform: translateY(10000px);" />
 				</div>
 				<div class="clearBoth"></div>
 			</div>';
@@ -346,18 +355,19 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* Content */
 	if ( isset($form_setting['form_message_enabled']) && $form_setting['form_message_enabled'] === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'content' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
 		$label = apply_filters( 'gwolle_gb_content_label', esc_html__('Guestbook entry', 'gwolle-gb') ); // backwards compatible.
 		$label = apply_filters( 'gwolle_gb_author_content_label', $label ); // new consistent name.
 		$form_message_maxlength = (int) $form_setting['form_message_maxlength'];
 		$used_characters = gwolle_gb_count_characters( $content );
 
 		$output .= '<div class="' . esc_attr( $field_name ) . '">
-				<div class="label"><label for="' . esc_attr( $field_name ) . '" class="text-info">' . $label;
+				<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label;
 		if ( isset($form_setting['form_message_mandatory']) && $form_setting['form_message_mandatory'] === 'true' ) {
 			$output .= $required_indicator;
 		}
 		$output .= '</label></div>
-				<div class="input"><textarea name="' . esc_textarea( $field_name ) . '" class="' . esc_attr( $field_name ) . ' wp-exclude-emoji';
+				<div class="input"><textarea id="' . esc_attr( $field_id ) . '" name="' . esc_textarea( $field_name ) . '" class="' . esc_attr( $field_name ) . ' wp-exclude-emoji';
 		if (in_array($field_name, $gwolle_gb_error_fields)) {
 			$output .= ' error';
 		}
@@ -397,6 +407,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* Custom Anti-Spam */
 	if ( isset($form_setting['form_antispam_enabled']) && $form_setting['form_antispam_enabled'] === 'true' ) {
 		$field_name = gwolle_gb_get_field_name( 'custom' );
+		$field_id = gwolle_gb_get_field_id( $field_name );
 		$antispam_question = gwolle_gb_sanitize_output( get_option('gwolle_gb-antispam-question') );
 		$antispam_answer   = gwolle_gb_sanitize_output( get_option('gwolle_gb-antispam-answer') );
 
@@ -404,14 +415,14 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 			$output .= '
 				<div class="gwolle_gb_antispam">
 					<div class="label">
-						<label for="' . esc_attr( $field_name ) . '" class="text-info">'
+						<label for="' . esc_attr( $field_id ) . '" class="text-info">'
 						. esc_html__('Question:', 'gwolle-gb') . ' ' . esc_attr( $antispam_question ) . $required_indicator . '</label>
 					</div>
 					<div class="input"><input class="' . esc_attr( $field_name );
 			if (in_array( $field_name, $gwolle_gb_error_fields)) {
 				$output .= ' error ';
 			}
-			$output .= '" value="' . esc_attr( $antispam ) . '" type="text" name="' . esc_attr( $field_name ) . '"';
+			$output .= '" value="' . esc_attr( $antispam ) . '" type="text" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '"';
 			if ( in_array( $field_name, $gwolle_gb_error_fields) && isset($autofocus) ) {
 				$output .= $autofocus;
 				$autofocus = false; // disable it for the next error.
@@ -441,19 +452,21 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 			}
 		}
 		/* translators: %1$s and %2$s is a link to the privacy policy page. */
+		$field_id = gwolle_gb_get_field_id( 'gwolle_gb_privacy' );
 		$label = apply_filters( 'gwolle_gb_privacy_label', sprintf( esc_html__( 'I accept the %1$sPrivacy Policy%2$s', 'gwolle-gb' ), $a_open, $a_close ) );
 		$output .= '
 				<div class="gwolle_gb_privacy">
-					<div class="label"><label for="gwolle_gb_privacy" class="text-info">' . $label . $required_indicator . '</label></div>
-					<div class="input"><input type="checkbox" name="gwolle_gb_privacy" class="gwolle_gb_privacy" required' . $checked . ' /></div>
+					<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label . $required_indicator . '</label></div>
+					<div class="input"><input type="checkbox" id="' . esc_attr( $field_id ) . '" name="gwolle_gb_privacy" class="gwolle_gb_privacy" required' . $checked . ' /></div>
 					<div class="clearBoth">&nbsp;</div>
 				</div>';
 	}
 
 	/* Nonce, always add it, so we can use it if desired. */
 	$field_name = gwolle_gb_get_field_name( 'nonce' );
+	$field_id = gwolle_gb_get_field_id( $field_name );
 	$nonce = wp_create_nonce( 'gwolle_gb_add_entry' );
-	$output .= '<input type="hidden" class="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $nonce ) . '" />';
+	$output .= '<input type="hidden" class="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $nonce ) . '" />';
 
 	/* Use this filter to just add something */
 	$output .= apply_filters( 'gwolle_gb_write_add_form', '' );

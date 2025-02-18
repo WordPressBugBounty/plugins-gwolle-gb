@@ -58,6 +58,10 @@ html body div.gwolle-gb form.gwolle-gb-write button.gb-notice-dismiss {
 	float: left;
 }
 
+div.gwolle-gb-write #loginform input {
+	display: block;
+}
+
 /* Text meant only for screen readers in broken themes. */
 .gwolle-gb .screen-reader-text {
   border: 0;

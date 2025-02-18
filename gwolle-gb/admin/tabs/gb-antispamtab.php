@@ -67,14 +67,14 @@ function gwolle_gb_page_settingstab_antispam() {
 		</tr>
 
 		<tr>
-			<th scope="row"><label for="honeypot"><?php esc_html_e('Honeypot', 'gwolle-gb'); ?></label></th>
+			<th scope="row"><label for="gwolle_gb_honeypot"><?php esc_html_e('Honeypot', 'gwolle-gb'); ?></label></th>
 			<td>
 				<input <?php
 					if (get_option( 'gwolle_gb-honeypot', 'true') === 'true') {
 						echo 'checked="checked"';
 					} ?>
-					type="checkbox" name="honeypot" id="honeypot">
-				<label for="honeypot">
+					type="checkbox" name="gwolle_gb_honeypot" id="gwolle_gb_honeypot">
+				<label for="gwolle_gb_honeypot">
 					<?php esc_html_e('Use Honeypot.', 'gwolle-gb'); ?>
 				</label><br />
 				<span class="setting-description">

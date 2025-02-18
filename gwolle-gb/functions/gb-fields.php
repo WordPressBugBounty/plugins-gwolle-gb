@@ -29,3 +29,34 @@ function gwolle_gb_get_field_name( $field ) {
 	return $field_name;
 
 }
+
+
+/*
+ * Use a custom and unique field id based on field name plus a counter for the form fields.
+ * Labels need to point to an id of the form field, for the 'for' attribute.
+ *
+ * @param string field name of the requested field.
+ * @return string fieldname appended with a counter.
+ *
+ * @uses static $ids array with counters for each field.
+ *
+ * @since 4.8.0
+ */
+function gwolle_gb_get_field_id( $field_name ) {
+
+	static $ids;
+
+	if ( ! is_array( $ids ) ) {
+		$ids = array();
+	}
+
+	if ( ! isset( $ids["$field_name"] )  ) {
+		$ids["$field_name"] = 0;
+	}
+	$ids["$field_name"]++;
+
+	$field_id = $field_name . '-' . $ids["$field_name"];
+
+	return $field_id;
+
+}

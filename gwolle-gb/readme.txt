@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.7
-Stable tag: 4.7.2
+Stable tag: 4.8.0
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,18 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.8.0 =
+* 2025-02-18
+* Add option for Youtube to bbcode.
+* Add function gwolle_gb_bbcode_disabled.
+* Deprecate function gwolle_gb_bbcode_img_disabled.
+* Add filter gwolle_gb_bbcode_youtube_enabled.
+* Add function 'gwolle_gb_get_field_id()'.
+* Fix formfields to have an id attribute, for accessibility (thanks chris0815).
+* Add CSS for loginform to have text label above input field.
+* Take some hints from phpcs.
+* Update strings for Add-On.
 
 = 4.7.2 =
 * 2025-01-22

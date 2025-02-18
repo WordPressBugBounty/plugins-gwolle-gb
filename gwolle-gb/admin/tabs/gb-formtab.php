@@ -72,7 +72,7 @@ function gwolle_gb_page_settingstab_form() {
 		</tr>
 
 		<tr>
-			<th scope="row"><label for="notice"><?php esc_html_e('Notice Text', 'gwolle-gb'); ?></label></th>
+			<th scope="row"><label for="gwolle_gb_notice"><?php esc_html_e('Notice Text', 'gwolle-gb'); ?></label></th>
 			<td>
 				<?php
 				$notice = gwolle_gb_sanitize_output( get_option('gwolle_gb-notice', false), 'setting_textarea' );
@@ -84,7 +84,7 @@ It's possible that your entry will only be visible in the guestbook after we rev
 We reserve the right to edit, delete, or not publish entries.
 ", 'gwolle-gb');
 				} ?>
-				<textarea name="notice" id="notice" style="width:400px;height:180px;" class="regular-text"><?php echo esc_textarea( $notice ); ?></textarea>
+				<textarea name="gwolle_gb_notice" id="gwolle_gb_notice" style="width:400px;height:180px;" class="regular-text"><?php echo esc_textarea( $notice ); ?></textarea>
 				<br />
 				<span class="setting-description">
 					<?php esc_html_e('You can set the content of the notice that gets shown below the form.', 'gwolle-gb');

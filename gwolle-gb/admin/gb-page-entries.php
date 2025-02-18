@@ -252,10 +252,10 @@ function gwolle_gb_page_entries() {
 					<h3><?php esc_html_e('Select one option below, either User ID or Email address', 'gwolle-gb'); ?></h3>
 					<p>
 						<label for="gwolle_gb_user_id" class="text-info"><?php esc_html_e('User ID', 'gwolle-gb'); ?>:<br />
-							<input type="text" name="gwolle_gb_user_id" value="<?php echo esc_attr( $user_id ); ?>" placeholder="<?php esc_html_e('User ID', 'gwolle-gb'); ?>" />
+							<input type="text" id="gwolle_gb_user_id" name="gwolle_gb_user_id" value="<?php echo esc_attr( $user_id ); ?>" placeholder="<?php esc_html_e('User ID', 'gwolle-gb'); ?>" />
 						</label><br />
 						<label for="gwolle_gb_user_email" class="text-info"><?php esc_html_e('User Email', 'gwolle-gb'); ?>:<br />
-							<input type="text" name="gwolle_gb_user_email" value="<?php echo esc_attr( $user_email ); ?>" placeholder="<?php esc_html_e('User Email', 'gwolle-gb'); ?>" />
+							<input type="text" id="gwolle_gb_user_email" name="gwolle_gb_user_email" value="<?php echo esc_attr( $user_email ); ?>" placeholder="<?php esc_html_e('User Email', 'gwolle-gb'); ?>" />
 						</label><br />
 						<input type="submit" name="gb_search_user" id="gb_search_user" class="button button-primary" value="<?php esc_attr_e('Search entries', 'gwolle-gb'); ?>"  />
 					</p><?php
