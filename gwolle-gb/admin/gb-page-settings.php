@@ -475,6 +475,12 @@ function gwolle_gb_page_settings_update() {
 						update_option('gwolle_gb-notifyByMail', $user_ids);
 					}
 
+					if (isset($_POST['gwolle_gb-notify-with-spam']) && $_POST['gwolle_gb-notify-with-spam'] === 'on') {
+						update_option('gwolle_gb-notify-with-spam', 'true');
+					} else {
+						update_option('gwolle_gb-notify-with-spam', 'false');
+					}
+
 					if ( isset($_POST['adminMailContent']) ) {
 						$mail_content = gwolle_gb_sanitize_input( $_POST['adminMailContent'], 'setting_textarea' );
 						update_option('gwolle_gb-adminMailContent', $mail_content);

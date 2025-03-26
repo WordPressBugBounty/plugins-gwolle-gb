@@ -119,6 +119,23 @@ function gwolle_gb_page_settingstab_email() {
 		</tr>
 
 		<tr>
+			<th scope="row"><label for="gwolle_gb-notify-with-spam"><?php /* translators: Settings page, option for notification email */ esc_html_e('Notify with Spam', 'gwolle-gb'); ?></label></th>
+			<td>
+				<input <?php
+					if (get_option( 'gwolle_gb-notify-with-spam', 'true') === 'true') {
+						echo 'checked="checked"';
+					} ?>
+					type="checkbox" name="gwolle_gb-notify-with-spam" id="gwolle_gb-notify-with-spam">
+				<label for="gwolle_gb-notify-with-spam">
+					<?php esc_html_e('Send a notification email even when the entry is marked as spam.', 'gwolle-gb'); ?>
+				</label><br />
+				<span class="setting-description">
+					<?php esc_html_e('This setting can help you act more quickly when the entry was marked as spam and was a false positive.', 'gwolle-gb'); ?>
+				</span>
+			</td>
+		</tr>
+
+		<tr>
 			<th scope="row"><label for="admin_mail_from"><?php /* translators: Setting for SMTP mail from header */ esc_html_e('Send from address', 'gwolle-gb'); ?></label></th>
 			<td>
 				<input type="email" name="admin_mail_from" id="admin_mail_from" class="regular-text" value="<?php echo gwolle_gb_sanitize_output( get_option('gwolle_gb-mail-from', false) ); ?>" placeholder="info@example.com" />

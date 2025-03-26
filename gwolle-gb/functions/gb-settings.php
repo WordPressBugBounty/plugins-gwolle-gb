@@ -36,8 +36,9 @@ function gwolle_gb_register_settings() {
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_author_moderation', 'strval' ); // 'false'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-moderate-entries',  'strval' ); // 'true'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-navigation',        'intval' ); // 0 or 1, default is 0
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-nonce',             'strval' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-nonce',             'strval' ); // 'false'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-notifyByMail',      'strval' ); // comma separated list of User IDs, initially empty
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-notify-with-spam',  'strval' ); // 'true'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-notice',            'strval' ); // string, but initially empty
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-paginate_all',      'strval' ); // 'false'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-read',              'array'  ); // serialized array, but initially empty

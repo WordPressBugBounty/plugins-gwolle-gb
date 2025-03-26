@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.7
-Stable tag: 4.8.0
+Stable tag: 4.8.1
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,12 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.8.1 =
+* 2025-03-26
+* Change default setting, disable Nonce spamfilter.
+* Add option to also send notification email with spam entries.
+* Fix heading and notice, show default when empty.
 
 = 4.8.0 =
 * 2025-02-18

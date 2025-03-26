@@ -524,6 +524,7 @@ function gwolle_gb_upgrade() {
 /*
  * Set default options.
  * Idea is to have all options in the database and thus cached, so we hit an empty cache less often.
+ * It is always called on upgrade from gwolle_gb_upgrade().
  *
  * @since 2.5.0
  */
@@ -598,7 +599,10 @@ function gwolle_gb_set_defaults() {
 		update_option( 'gwolle_gb-navigation', 0 );
 	}
 	if ( get_option('gwolle_gb-nonce', false) === false ) {
-		update_option( 'gwolle_gb-nonce', 'true' );
+		update_option( 'gwolle_gb-nonce', 'false' );
+	}
+	if ( get_option('gwolle_gb-notify-with-spam', false) === false ) {
+		update_option( 'gwolle_gb-notify-with-spam', 'true' );
 	}
 	if ( get_option('gwolle_gb-paginate_all', false) === false ) {
 		update_option( 'gwolle_gb-paginate_all', 'false' );

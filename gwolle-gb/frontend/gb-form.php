@@ -160,7 +160,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	 * Header text 'Write a new entry for the Guestbook'
 	 */
 	$header = gwolle_gb_sanitize_output( get_option('gwolle_gb-header', false) );
-	if ( $header === false ) {
+	if ( $header === false || $header === '' ) { // No text set by the user. Use the default text.
 		$header = esc_html__('Write a new entry for the Guestbook', 'gwolle-gb');
 	}
 	$header = apply_filters( 'gwolle_gb_header_text', $header);
@@ -471,6 +471,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	/* Use this filter to just add something */
 	$output .= apply_filters( 'gwolle_gb_write_add_form', '' );
 
+	/* Submit button and message container */
 	$output .= '
 			<div class="gwolle_gb_messages_bottom_container"></div>
 
@@ -494,7 +495,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 				';
 
 	$notice = gwolle_gb_sanitize_output( get_option('gwolle_gb-notice', false), 'setting_textarea' );
-	if ( $notice === false ) { // No text set by the user. Use the default text.
+	if ( $notice === false || $notice === '' ) { // No text set by the user. Use the default text.
 		$notice = esc_html__("
 Fields marked with * are required.
 Your E-mail address won't be published.
