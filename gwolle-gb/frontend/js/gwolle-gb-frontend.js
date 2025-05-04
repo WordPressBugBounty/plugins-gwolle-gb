@@ -22,7 +22,40 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * JavaScript for Gwolle Guestbook Frontend.
  */
 
-var gwolle_gb_ajax_callback = jQuery.Callbacks(); // Callback function to be fired after AJAX request.
+
+// Define it in main scope.
+// deprecated since 4.9.0, remove this callback sometime soon.
+var gwolle_gb_ajax_callback;
+// This will load it before 'document' and 'window' (well, sometimes).
+jQuery( window ).on( 'load', function() {
+	gwolle_gb_ajax_callback = jQuery.Callbacks(); // Callback function to be fired after AJAX request.
+});
+
+
+/*
+ * Run this function after changes in the guestbook reading list.
+ */
+function gwolle_gb_frontend_callback_function() {
+
+	if ( typeof gwolle_gb_read === 'function' ) {
+		gwolle_gb_read();
+	}
+	if ( typeof gwolle_gb_readless === 'function' ) {
+		gwolle_gb_readless();
+	}
+	if ( typeof gwolle_gb_metabox_handle === 'function' ) {
+		gwolle_gb_metabox_handle();
+	}
+
+	// For add-on.
+	if ( typeof gwolle_gb_addon_frontend_callback_function === 'function' ) {
+		gwolle_gb_addon_frontend_callback_function();
+	}
+
+}
+jQuery(document).ready(function($) {
+	gwolle_gb_frontend_callback_function();
+});
 
 
 /*
@@ -49,10 +82,6 @@ jQuery(document).ready(function($) {
 /*
  * Click the readmore and the full content of that entry becomes visible.
  */
-jQuery(document).ready(function($) {
-	gwolle_gb_readmore();
-	gwolle_gb_ajax_callback.add( gwolle_gb_readmore );
-});
 function gwolle_gb_readmore() {
 	jQuery(".gb-entry-content .gwolle-gb-readmore").off('click');
 	jQuery(".gb-entry-content .gwolle-gb-readmore").on('click', function() {
@@ -71,10 +100,6 @@ function gwolle_gb_readmore() {
 	});
 }
 /* And collapse that again. */
-jQuery(document).ready(function($) {
-	gwolle_gb_readless();
-	gwolle_gb_ajax_callback.add( gwolle_gb_readless );
-});
 function gwolle_gb_readless() {
 	jQuery(".gb-entry-content .gwolle-gb-readless").off('click');
 	jQuery(".gb-entry-content .gwolle-gb-readless").on('click', function() {
@@ -96,10 +121,6 @@ function gwolle_gb_readless() {
 /*
  * Metabox, toggle on and off.
  */
-jQuery(document).ready(function($) {
-	gwolle_gb_metabox_handle();
-	gwolle_gb_ajax_callback.add( gwolle_gb_metabox_handle );
-});
 function gwolle_gb_metabox_handle() {
 	jQuery('div.gb-metabox-handle').off('click');
 	jQuery('div.gb-metabox-handle').on('click', function() {
@@ -173,23 +194,9 @@ jQuery(document).ready(function($) {
 			}
 
 			/*
-			 * Add callback for after ajax event. Used for metabox-handle for new entries.
-			 *
-			 * @since 2.3.0
-			 *
-			 * Example code for using the callback:
-			 *
-			 * jQuery(document).ready(function($) {
-			 *     gwolle_gb_ajax_callback.add( my_callback_function );
-			 * });
-			 *
-			 * function my_callback_function() {
-			 *     console.log('This is the callback');
-			 *     return false;
-			 * }
-			 *
+			 * Run callback for after ajax event. Used for metabox-handle for new entries.
 			 */
-			gwolle_gb_ajax_callback.fire();
+			gwolle_gb_frontend_callback_function();
 
 			gwolle_gb_scroll_busy = false;
 
@@ -336,23 +343,9 @@ jQuery(document).ready(function($) {
 						jQuery( '.gwolle_gb_submit_ajax_icon', main_div ).css( 'display', 'none' );
 
 						/*
-						 * Add callback for after AJAX request. Used for metabox-handle for new entries.
-						 *
-						 * @since 2.3.0
-						 *
-						 * Example code for using the callback:
-						 *
-						 * jQuery(document).ready(function($) {
-						 *     gwolle_gb_ajax_callback.add( my_callback_function );
-						 * });
-						 *
-						 * function my_callback_function() {
-						 *     console.log('This is the callback');
-						 *     return false;
-						 * }
-						 *
+						 * Run callback for after ajax event. Used for metabox-handle for new entries.
 						 */
-						gwolle_gb_ajax_callback.fire();
+						gwolle_gb_frontend_callback_function();
 
 					} else {
 						// Not saved...

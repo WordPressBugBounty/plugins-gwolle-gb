@@ -2,8 +2,8 @@
 Contributors: Gwolle, mpol
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
-Tested up to: 6.7
-Stable tag: 4.8.1
+Tested up to: 6.8
+Stable tag: 4.9.0
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,12 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.9.0 =
+* 2025-05-04
+* Deprecate 'gwolle_gb_ajax_callback' as jQuery.Callbacks.
+* Timing and loading order of JavaScript is impossible to manage.
+* Add JavaScript function 'gwolle_gb_frontend_callback_function'.
 
 = 4.8.1 =
 * 2025-03-26

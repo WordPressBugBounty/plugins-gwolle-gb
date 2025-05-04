@@ -159,7 +159,7 @@ function gwolle_gb_deps_admin_notice() {
 	if ( $active && defined( 'GWOLLE_GB_ADDON_VER' ) ) {
 		$zeno_el = '<a href="https://zenoweb.nl/downloads/gwolle-guestbook-add-on/" target="_blank">';
 		$zeno_el_close = '</a>';
-		$required_version = '2.5.0';
+		$required_version = '2.9.0';
 
 		if ( version_compare( GWOLLE_GB_ADDON_VER, $required_version, '>=' ) ) {
 			return; // We have the minimal version.
