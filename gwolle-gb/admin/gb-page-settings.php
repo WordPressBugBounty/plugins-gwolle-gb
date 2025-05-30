@@ -387,6 +387,12 @@ function gwolle_gb_page_settings_update() {
 						update_option('gwolle_gb-sfs', 'false');
 					}
 
+					if (isset($_POST['cleantalk-active']) && $_POST['cleantalk-active'] === 'on') {
+						update_option('gwolle_gb-cleantalk-active', 'true');
+					} else {
+						update_option('gwolle_gb-cleantalk-active', 'false');
+					}
+
 					$form_setting = gwolle_gb_get_setting( 'form' );
 					if ( isset($_POST['form-antispam-enabled']) && $_POST['form-antispam-enabled'] === 'on' ) {
 						$form_setting['form_antispam_enabled'] = 'true';

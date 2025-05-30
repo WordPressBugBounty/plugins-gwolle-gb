@@ -210,15 +210,22 @@ jQuery(document).ready(function($) {
 /*
  * Mangle data for the honeypot.
  */
-jQuery(document).ready(function($) {
-	jQuery( 'form.gwolle-gb-write' ).each( function( index, form ) {
+document.addEventListener("DOMContentLoaded", () => {
+	document.querySelectorAll('form.gwolle-gb-write')?.forEach( function(form) {
+
 		var honeypot  = gwolle_gb_frontend_script.honeypot;
 		var honeypot2 = gwolle_gb_frontend_script.honeypot2;
-		var val = jQuery( 'input.' + honeypot, form ).val();
-		if ( val > 0 ) {
-			jQuery( 'input.' + honeypot2, form ).val( val );
-			jQuery( 'input.' + honeypot, form ).val( '' );
+
+		var honeypot_val  = parseInt( form.querySelector(`input.${honeypot}`)?.value, 10 );
+		var honeypot2_val = parseInt( form.querySelector(`input.${honeypot2}`)?.value, 10 );
+
+		if ( ! isNaN( honeypot_val ) && (typeof honeypot_val != "undefined") && (typeof honeypot2_val != "undefined") ) {
+			if ( honeypot_val > 0 ) {
+				form.querySelector(`input.${honeypot2}`).value = honeypot_val;
+				form.querySelector(`input.${honeypot}`).value = '';
+			}
 		}
+
 	});
 });
 
@@ -226,19 +233,25 @@ jQuery(document).ready(function($) {
 /*
  * Mangle data for the form timeout.
  */
-jQuery(document).ready(function($) {
-	jQuery( 'form.gwolle-gb-write' ).each( function( index, form ) {
+document.addEventListener("DOMContentLoaded", () => {
+	document.querySelectorAll('form.gwolle-gb-write')?.forEach( function(form) {
+
 		var timeout  = gwolle_gb_frontend_script.timeout;
 		var timeout2 = gwolle_gb_frontend_script.timeout2;
 
-		var timer  = new Number( jQuery( 'input.' + timeout, form ).val() );
-		var timer2 = new Number( jQuery( 'input.' + timeout2, form ).val() );
+		var timer  = parseInt( form.querySelector(`input.${timeout}`)?.value, 10 );
+		var timer2 = parseInt( form.querySelector(`input.${timeout2}`)?.value, 10 );
 
-		var timer  = timer - 1;
-		var timer2 = timer2 + 1;
+		if ( ! isNaN( timer ) && ! isNaN( timer2 ) && (typeof timer != "undefined") && (typeof timer2 != "undefined") ) {
 
-		jQuery( 'input.' + timeout, form ).val( timer );
-		jQuery( 'input.' + timeout2, form ).val( timer2 );
+			var timer  = timer - 1;
+			var timer2 = timer2 + 1;
+
+			form.querySelector(`input.${timeout}`).value = timer;
+			form.querySelector(`input.${timeout2}`).value = timer2;
+
+		}
+
 	});
 });
 

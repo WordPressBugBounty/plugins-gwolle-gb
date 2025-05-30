@@ -61,7 +61,7 @@ function gwolle_gb_page_settingstab_antispam() {
 				<span class="setting-description">
 					<?php esc_html_e('Entries that are marked as spam will be placed in your spam folder by default.', 'gwolle-gb'); ?>
 					<br />
-					<?php esc_html_e('This option will refuse to accept entries marked by Honeypot, Nonce, Link Checker, Form Timeout, Akismet and Stop Forum Spam. Users will see the form again after submit, with an error stating that it is recognized as spam.', 'gwolle-gb'); ?>
+					<?php esc_html_e('This option will refuse to accept entries marked by Honeypot, Nonce, Link Checker, Form Timeout, Akismet, Stop Forum Spam and Cleantalk. Users will see the form again after submit, with an error stating that it is recognized as spam.', 'gwolle-gb'); ?>
 				</span>
 			</td>
 		</tr>
@@ -179,19 +179,19 @@ function gwolle_gb_page_settingstab_antispam() {
 					</a><br />
 					<?php
 					$current_plugins = get_option('active_plugins');
-					$wordpress_api_key = get_option('wordpress_api_key');
+					$akismet_api_key = get_option('wordpress_api_key');
 
 					// Check wether Akismet is installed and activated or not.
 					if ( ! in_array('akismet/akismet.php', $current_plugins)) {
 						echo esc_html__('Akismet is an external service by Automattic that acts as a spamfilter for guestbook entries.', 'gwolle-gb') . '<br />';
 						// Akismet is not installed and activated. Show notice with suggestion to install it.
 						esc_html_e("Akismet helps you to fight spam. It's free and easy to install. Download and install it today to stop spam in your guestbook.", 'gwolle-gb');
-					} else if ( ! $wordpress_api_key) {
-						// No WordPress API key is defined and set in the database.
+					} else if ( ! $akismet_api_key) {
+						// No Akismet API key is defined and set in the database.
 						/* translators: %1$s and %2$s are a strong element. %3$s and %4$s is for a link. */
-						echo sprintf( esc_html__('Sorry, was not able to locate your %1$sWordPress API key%2$s. You can enter it at the %3$sAkismet configuration page%4$s.', 'gwolle-gb'), '<strong>', '</strong>', '<a href="options-general.php?page=akismet-key-config">', '</a>' );
+						echo sprintf( esc_html__('Sorry, was not able to locate your %1$sAkismet API key%2$s. You can enter it at the %3$sAkismet configuration page%4$s.', 'gwolle-gb'), '<strong>', '</strong>', '<a href="options-general.php?page=akismet-key-config">', '</a>' );
 					} else {
-						// Akismet is installed and activated and a WordPress API key exists (we just assume it is valid).
+						// Akismet is installed and activated and a Akismet API key exists (we just assume it is valid).
 						echo '<input ';
 						if ( get_option( 'gwolle_gb-akismet-active', 'false' ) === 'true' ) {
 							echo 'checked="checked" ';
@@ -202,7 +202,7 @@ function gwolle_gb_page_settingstab_antispam() {
 							</label><br />';
 						esc_html_e('Akismet is an external service by Automattic that acts as a spamfilter for guestbook entries.', 'gwolle-gb');
 						echo '<br />';
-						esc_html_e('The WordPress API key has been found, so you can start using Akismet right now.', 'gwolle-gb');
+						esc_html_e('The Akismet API key has been found, so you can start using Akismet right now.', 'gwolle-gb');
 					}
 					?>
 				</span>
@@ -227,6 +227,47 @@ function gwolle_gb_page_settingstab_antispam() {
 					$link_wp = '<a href="https://www.stopforumspam.com" target="_blank">';
 					/* translators: %1$s and %2$s is a link */
 					echo sprintf( esc_html__( 'If you want to know more about Stop Forum Spam and how it works, please read about it on their %1$swebsite%2$s.', 'gwolle-gb' ), $link_wp, '</a>' );
+					?>
+				</span>
+			</td>
+		</tr>
+
+		<tr>
+			<th scope="row">
+				<label for="cleantalk-active"><?php esc_html_e('Cleantalk', 'gwolle-gb'); ?></label>
+			</th>
+			<td>
+				<span class="setting-description">
+					<a href="https://cleantalk.org/" title="<?php esc_html_e('Learn more about Cleantalk...', 'gwolle-gb'); ?>" target="_blank">
+						<?php esc_html_e("What's Cleantalk?", 'gwolle-gb'); ?>
+					</a><br />
+					<?php
+					$current_plugins = get_option('active_plugins');
+					$cleantalk_settings = get_option('cleantalk_settings');
+
+					// Check wether Cleantalk is installed and activated or not.
+					if ( ! in_array('cleantalk-spam-protect/cleantalk.php', $current_plugins)) {
+						echo esc_html__('Cleantalk is an external service that acts as a spamfilter for guestbook entries.', 'gwolle-gb') . '<br />';
+						// Cleantalk is not installed and activated. Show notice with suggestion to install it.
+						esc_html_e("Cleantalk helps you to fight spam. It's easy to install. Download and install it today to stop spam in your guestbook.", 'gwolle-gb');
+					} else if ( ! $cleantalk_settings['apikey'] ) {
+						// No Cleantalk API key is defined and set in the database.
+						/* translators: %1$s and %2$s are a strong element. %3$s and %4$s is for a link. */
+						echo sprintf( esc_html__('Sorry, was not able to locate your %1$sCleantalk API key%2$s. You can enter it at the %3$sCleantalk configuration page%4$s.', 'gwolle-gb'), '<strong>', '</strong>', '<a href="options-general.php?page=cleantalk">', '</a>' );
+					} else {
+						// Cleantalk is installed and activated and a Cleantalk API key exists (we just assume it is valid).
+						echo '<input ';
+						if ( get_option( 'gwolle_gb-cleantalk-active', 'false' ) === 'true' ) {
+							echo 'checked="checked" ';
+						}
+						echo 'name="cleantalk-active" id="cleantalk-active" type="checkbox" />
+							<label for="cleantalk-active">
+							' . esc_html__('Use Cleantalk', 'gwolle-gb') . '
+							</label><br />';
+						esc_html_e('Cleantalk is an external service that acts as a spamfilter for guestbook entries.', 'gwolle-gb');
+						echo '<br />';
+						esc_html_e('The Cleantalk API key has been found, so you can start using Cleantalk right now.', 'gwolle-gb');
+					}
 					?>
 				</span>
 			</td>

@@ -535,6 +535,9 @@ function gwolle_gb_set_defaults() {
 	if ( get_option('gwolle_gb-akismet-active', false) === false ) {
 		update_option( 'gwolle_gb-akismet-active', 'false' );
 	}
+	if ( get_option('gwolle_gb-cleantalk-active', false) === false ) {
+		update_option( 'gwolle_gb-cleantalk-active', 'false' );
+	}
 	if ( get_option('gwolle_gb-entries_per_page', false) === false ) {
 		update_option( 'gwolle_gb-entries_per_page', 20 );
 	}

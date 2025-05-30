@@ -1,9 +1,9 @@
 === Gwolle Guestbook ===
-Contributors: Gwolle, mpol
+Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, therab, robinnatter, ronr1999, slavum, chris0815, cleantalk, alexclassroom
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.8
-Stable tag: 4.9.0
+Stable tag: 4.9.1
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,12 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.9.1 =
+* 2025-05-30
+* Add support for Cleantalk antispam service.
+* Fix missing s in settingspage for cleantalk (thanks alexclassroom).
+* Rewrite small part of jQuery JavaScript to Vanilla JavaScript.
 
 = 4.9.0 =
 * 2025-05-04

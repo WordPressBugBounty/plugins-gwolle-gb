@@ -3,7 +3,7 @@
 Plugin Name: Gwolle Guestbook
 Plugin URI: https://wordpress.org/plugins/gwolle-gb/
 Description: Gwolle Guestbook is not just another guestbook for WordPress. The goal is to provide an easy and slim way to integrate a guestbook into your WordPress powered site. Don't use your 'comment' section the wrong way - install Gwolle Guestbook and have a real guestbook.
-Version: 4.9.0
+Version: 4.9.1
 Author: Marcel Pol
 Author URI: https://zenoweb.nl
 License: GPLv2 or later
@@ -13,6 +13,18 @@ Domain Path: /lang/
 
 Copyright 2009 - 2010  Wolfgang Timme  (https://github.com/wtimme)
 Copyright 2014 - 2025  Marcel Pol      (marcel@timelord.nl)
+Copyright 2015         dbonovas
+Copyright 2015         haraldreingruber
+Copyright 2017         roots84
+Copyright 2017         dedotombo
+Copyright 2018         therab
+Copyright 2020         robinnatter
+Copyright 2020         ronr1999
+Copyright 2023         slavum
+Copyright 2025         chris0815
+Copyright 2025         cleantalk
+Copyright 2025         alexclassroom
+
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,7 +43,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 // Plugin Version
-define('GWOLLE_GB_VER', '4.9.0');
+define('GWOLLE_GB_VER', '4.9.1');
 
 
 /*
@@ -146,6 +158,7 @@ require_once GWOLLE_GB_DIR . '/functions/gb-bbcode_emoji.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-book_id.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-cache.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-capabilities.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-cleantalk.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-dependencies.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-debug.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-fields.php';

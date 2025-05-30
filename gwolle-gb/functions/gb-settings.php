@@ -18,6 +18,7 @@ function gwolle_gb_register_settings() {
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-antispam-answer',   'strval' ); // empty string
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-authorMailContent', 'strval' ); // empty by default
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-authormoderationcontent', 'strval' ); // empty by default
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-cleantalk-active',  'strval' ); // 'false'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-entries_per_page',  'intval' ); // 20
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-entriesPerPage',    'intval' ); // 20
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-excerpt_length',    'intval' ); // 0

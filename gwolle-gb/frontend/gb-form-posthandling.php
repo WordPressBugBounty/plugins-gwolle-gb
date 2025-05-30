@@ -204,14 +204,14 @@ function gwolle_gb_frontend_posthandling() {
 		 */
 		$user_id = get_current_user_id(); // Returns 0 if no current user.
 		if ( get_option('gwolle_gb-moderate-entries', 'true') === 'true' ) {
-			// Moderation, only set to checked for moderators.
+			// Moderation enabled, only set entry to checked for moderator submissions.
 			if ( gwolle_gb_is_moderator($user_id) ) {
 				$entry->set_ischecked( true );
 			} else {
 				$entry->set_ischecked( false );
 			}
 		} else {
-			// No moderation, set to checked.
+			// Moderation disabled, set entry to checked.
 			$entry->set_ischecked( true );
 		}
 
@@ -250,6 +250,7 @@ function gwolle_gb_frontend_posthandling() {
 			}
 		}
 
+
 		/* Stop Forum Spam: check for spam and set accordingly */
 		$marked_by_sfs = false;
 		if ( get_option( 'gwolle_gb-sfs', 'false') === 'true' ) {
@@ -260,6 +261,23 @@ function gwolle_gb_frontend_posthandling() {
 				$marked_by_sfs = true;
 				if (get_option( 'gwolle_gb-refuse-spam', 'false') === 'true') {
 					gwolle_gb_add_message( '<p class="refuse-spam-sfs"><strong>' . esc_html__('Your entry was marked as spam. Please try again.', 'gwolle-gb') . '</strong></p>', true, false );
+					do_action( 'gwolle_gb_notsaved_entry_frontend', $entry );
+					return false;
+				}
+			}
+		}
+
+
+		/* Cleantalk: check for spam and set accordingly */
+		$marked_by_cleantalk = false;
+		if ( get_option( 'gwolle_gb-cleantalk-active', 'false' ) === 'true' ) {
+			$isspam = gwolle_gb_cleantalk( $entry );
+			if ( $isspam ) {
+				// Returned true, so considered spam
+				$entry->set_isspam(true);
+				$marked_by_cleantalk = true;
+				if (get_option( 'gwolle_gb-refuse-spam', 'false') === 'true') {
+					gwolle_gb_add_message( '<p class="refuse-spam-cleantalk"><strong>' . esc_html__('Your entry was marked as spam. Please try again.', 'gwolle-gb') . '</strong></p>', true, false );
 					do_action( 'gwolle_gb_notsaved_entry_frontend', $entry );
 					return false;
 				}
@@ -462,6 +480,9 @@ function gwolle_gb_frontend_posthandling() {
 			}
 			if ( $marked_by_sfs ) {
 				gwolle_gb_add_log_entry( $entry->get_id(), 'marked-by-sfs' );
+			}
+			if ( $marked_by_cleantalk ) {
+				gwolle_gb_add_log_entry( $entry->get_id(), 'marked-by-cleantalk' );
 			}
 			if ( $marked_by_honeypot ) {
 				gwolle_gb_add_log_entry( $entry->get_id(), 'marked-by-honeypot' );
