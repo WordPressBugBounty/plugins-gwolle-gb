@@ -4,7 +4,7 @@
  * Template with function: gwolle_gb_entry_template()
  *
  * By default this file will be loaded from /wp-content/plugins/gwolle-gb-frontend/gwolle_gb-entry.php.
- * If you place it in your childtheme or parenttheme, it will be overridden.
+ * If you place it in your child theme or parent theme, that will override it.
  * Make sure you only return values, and not to use echo statements.
  */
 
@@ -15,7 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 if ( ! function_exists('gwolle_gb_entry_template') ) {
 	/*
-	 * Template file for s single guestbook entry.
+	 * Template file for a single guestbook entry.
+	 * Is used in lists as well.
 	 *
 	 * @param object $entry instance of gwolle_gb_entry.
 	 * @param bool $first true if it is the first entry.
@@ -52,7 +53,7 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 		}
 		$entry_class = apply_filters( 'gwolle_gb_entry_class', $entry_class );
 
-		$entry_output .= '<div class="' . $entry_class . '" data-entry_id="' . (int) $entry->get_id() . '">';
+		$entry_output .= '<div class="' . $entry_class . '" id="gb-entry_' . $entry->get_id() . '" data-entry_id="' . (int) $entry->get_id() . '">';
 		$entry_output .= '
 				<article>';
 

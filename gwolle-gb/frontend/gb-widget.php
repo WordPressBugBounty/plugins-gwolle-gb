@@ -105,7 +105,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 							continue;
 						}
 
-						$widget_html .= $this->widget_single_view( $entry, $instance, $widget_item_class, $link );
+						$widget_html .= $this->widget_single_view( $entry, $instance, $widget_item_class, $link, $permalink );
 
 						$counter++;
 					}
@@ -133,7 +133,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 							continue; // already listed
 						}
 
-						$widget_html .= $this->widget_single_view( $entry, $instance, $widget_item_class, $link );
+						$widget_html .= $this->widget_single_view( $entry, $instance, $widget_item_class, $link, $permalink );
 
 						$counter++;
 					}
@@ -166,11 +166,25 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 			}
 		}
 
-		public function widget_single_view( $entry, $instance, $widget_item_class, $link ) {
+		/*
+		 * Single view for the widget.
+		 *
+		 * @param $entry
+		 * @param $instance
+		 * @param $widget_item_class
+		 * @param $link
+		 * @param $permalink (since 4.9.1)
+		 *
+		 * @return html for the widget view.
+		 *
+		 * @since 4.3.0
+		 */
+		public function widget_single_view( $entry, $instance, $widget_item_class, $link, $permalink = '' ) {
 
 			$name      = (int) esc_attr($instance['name']);
 			$date      = (int) esc_attr($instance['date']);
 			$num_words = (int) esc_attr($instance['num_words']);
+			$entry_id  = (int) $entry->get_id();
 
 			$widget_html = '
 						<li class="' . esc_attr( $widget_item_class ) . '">';
@@ -205,12 +219,15 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 				$entry_content = convert_smilies( $entry_content );
 			}
 			$widget_html .= '
-								<span class="gb-entry-content">' . $entry_content . $link;
+								<span class="gb-entry-content">
+								<a href="' . $permalink . '#gb-entry_' . $entry_id . '">' . $entry_content . $link;
 
 			// Use this filter to just add something
 			$widget_html .= apply_filters( 'gwolle_gb_entry_widget_add_content', '', $entry );
 
-			$widget_html .= '</span>';
+			$widget_html .= '
+								</a>
+								</span><br />';
 
 			// Use this filter to just add something
 			$widget_html .= apply_filters( 'gwolle_gb_entry_widget_add_after', '', $entry );

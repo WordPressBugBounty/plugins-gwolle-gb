@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, ther
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.8
-Stable tag: 4.9.1
+Stable tag: 4.9.2
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,12 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.9.2 =
+* 2025-06-08
+* Add #id again to entries in main shortcode.
+* Add link in widget to the corresponding entry.
+* Fix 'readmore' functionality (broke in 4.9.0).
 
 = 4.9.1 =
 * 2025-05-30

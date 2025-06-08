@@ -37,8 +37,8 @@ jQuery( window ).on( 'load', function() {
  */
 function gwolle_gb_frontend_callback_function() {
 
-	if ( typeof gwolle_gb_read === 'function' ) {
-		gwolle_gb_read();
+	if ( typeof gwolle_gb_readmore === 'function' ) {
+		gwolle_gb_readmore();
 	}
 	if ( typeof gwolle_gb_readless === 'function' ) {
 		gwolle_gb_readless();
