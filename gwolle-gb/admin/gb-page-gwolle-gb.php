@@ -106,7 +106,7 @@ function gwolle_gb_overview() {
 				<tr class="gwolle-gb-overview-all">
 					<td>
 						<a href="<?php echo admin_url( 'admin.php?page=' . GWOLLE_GB_FOLDER . '/entries.php&amp;show=all' ); ?>">
-							<?php echo $count['all']; ?>
+							<?php echo $count['all']; ?><span class="screen-reader-text"><?php echo _n( 'Entry total', 'Entries total', $count['all'], 'gwolle-gb' ); ?></span>
 						</a>
 					</td>
 					<td class="colored">
@@ -117,7 +117,7 @@ function gwolle_gb_overview() {
 				<tr class="gwolle-gb-overview-checked">
 					<td>
 						<a href="<?php echo admin_url( 'admin.php?page=' . GWOLLE_GB_FOLDER . '/entries.php&amp;show=checked' ); ?>">
-						<?php echo $count['checked']; ?>
+						<?php echo $count['checked']; ?><span class="screen-reader-text"><?php echo _n( 'Unlocked entry', 'Unlocked entries', $count['checked'], 'gwolle-gb' ); ?></span>
 					</a></td>
 					<td class="colored">
 						<?php echo _n( 'Unlocked entry', 'Unlocked entries', $count['checked'], 'gwolle-gb' ); ?>
@@ -127,7 +127,7 @@ function gwolle_gb_overview() {
 				<tr class="gwolle-gb-overview-unchecked">
 					<td>
 						<a href="<?php echo admin_url( 'admin.php?page=' . GWOLLE_GB_FOLDER . '/entries.php&amp;show=unchecked' ); ?>">
-						<?php echo $count['unchecked']; ?>
+						<?php echo $count['unchecked']; ?><span class="screen-reader-text"><?php echo _n( 'New entry', 'New entries', $count['unchecked'], 'gwolle-gb' ); ?></span>
 					</a></td>
 					<td class="colored">
 						<?php echo _n( 'New entry', 'New entries', $count['unchecked'], 'gwolle-gb' ); ?>
@@ -137,7 +137,7 @@ function gwolle_gb_overview() {
 				<tr class="gwolle-gb-overview-spam">
 					<td>
 						<a href="<?php echo admin_url( 'admin.php?page=' . GWOLLE_GB_FOLDER . '/entries.php&amp;show=spam' ); ?>">
-						<?php echo $count['spam']; ?>
+						<?php echo $count['spam']; ?><span class="screen-reader-text"><?php echo _n( 'Spam entry', 'Spam entries', $count['spam'], 'gwolle-gb' ); ?></span>
 					</a></td>
 					<td class="colored">
 						<?php echo _n( 'Spam entry', 'Spam entries', $count['spam'], 'gwolle-gb' ); ?>
@@ -147,7 +147,7 @@ function gwolle_gb_overview() {
 				<tr class="gwolle-gb-overview-trash">
 					<td>
 						<a href="<?php echo admin_url( 'admin.php?page=' . GWOLLE_GB_FOLDER . '/entries.php&amp;show=trash' ); ?>">
-						<?php echo $count['trash']; ?>
+						<?php echo $count['trash']; ?><span class="screen-reader-text"><?php echo _n( 'Trashed entry', 'Trashed entries', $count['trash'], 'gwolle-gb' ); ?></span>
 					</a></td>
 					<td class="colored">
 						<?php echo _n( 'Trashed entry', 'Trashed entries', $count['trash'], 'gwolle-gb' ); ?>
@@ -300,7 +300,7 @@ function gwolle_gb_overview_help() {
 	<ul class="ul-disc">
 		<li>' . esc_html__('Create a new page.', 'gwolle-gb') . '</li>
 		<li>' . esc_html__('Choose a title and set &quot;[gwolle_gb]&quot; (without the quotes) as the content.', 'gwolle-gb') . '</li>
-		<li>' . esc_html__('Shortcode:', 'gwolle-gb') . ' <input type="text" name="gwolle_gb_shortcode" size="10" value="[gwolle_gb]" id="gwolle_gb_shortcode" /></li>
+		<li><label for="gwolle_gb_shortcode">' . esc_html__('Shortcode:', 'gwolle-gb') . ' <input type="text" name="gwolle_gb_shortcode" size="10" value="[gwolle_gb]" id="gwolle_gb_shortcode" /></label></li>
 	</ul>';
 }
 

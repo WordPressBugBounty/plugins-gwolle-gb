@@ -1,9 +1,9 @@
 === Gwolle Guestbook ===
-Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, therab, robinnatter, ronr1999, slavum, chris0815, cleantalk, alexclassroom
+Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, therab, robinnatter, ronr1999, slavum, chris0815, cleantalk, alexclassroom, rhialto
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.8
-Stable tag: 4.9.2
+Stable tag: 4.9.3
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,15 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.9.3 =
+* 2025-06-23
+* Fix security issue in BBcode (thanks zer0gh0st (D.Sim) through Wordfence).
+* Use esc_url and wp_kses on BBcode data through url and img.
+* Use preg_replace_callback for a callback function for sanitizing.
+* Add label to admin pages.
+* Add screen-reader-text to main admin pages.
+* Make log messages more consistent (thanks rhialto).
 
 = 4.9.2 =
 * 2025-06-08

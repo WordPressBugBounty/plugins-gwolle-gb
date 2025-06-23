@@ -37,18 +37,21 @@ function gwolle_gb_bbcode_parse( $entry_content ) {
 	$html[] = '<li>\\1</li>';
 	$entry_content = preg_replace( $bb, $html, $entry_content );
 
+
 	// First images, then links, so we support images inside links.
 	$bbcode_img_enabled = apply_filters( 'gwolle_gb_bbcode_img_enabled', true );
 	if ( $bbcode_img_enabled ) {
-		$bbcode_img_referrer = apply_filters( 'gwolle_gb_bbcode_img_referrer', 'no-referrer' );
+		//$bbcode_img_referrer = apply_filters( 'gwolle_gb_bbcode_img_referrer', 'no-referrer' );
 		$pattern = '#\[img\]([^\[]*)\[/img\]#i';
-		$replace = '<img src="\\1" alt="" referrerpolicy="' . $bbcode_img_referrer . '" loading="lazy" />';
-		$entry_content = preg_replace( $pattern, $replace, $entry_content );
+		//$replace = '<img src="\\1" alt="" referrerpolicy="' . $bbcode_img_referrer . '" loading="lazy" />'; // do not use, we need wp_kses()
+		//$entry_content = preg_replace( $pattern, $replace, $entry_content );
+		$entry_content = preg_replace_callback( $pattern, 'gwolle_gb_bbcode_parse_img_callback', $entry_content );
 	} else {
 		$pattern = '#\[img\]([^\[]*)\[/img\]#i';
 		$replace = '';
 		$entry_content = preg_replace( $pattern, $replace, $entry_content );
 	}
+
 
 	// Youtube embeds.
 	$bbcode_youtube_enabled = apply_filters( 'gwolle_gb_bbcode_youtube_enabled', true );
@@ -56,15 +59,20 @@ function gwolle_gb_bbcode_parse( $entry_content ) {
 		$entry_content = gwolle_gb_bbcode_youtube_embed( $entry_content );
 	}
 
+
 	// Links with quotes.
-	$bbcode_link_rel = apply_filters( 'gwolle_gb_bbcode_link_rel', 'nofollow noopener noreferrer' );
+	//$bbcode_link_rel = apply_filters( 'gwolle_gb_bbcode_link_rel', 'nofollow noopener noreferrer' );
 	$pattern = '#\[url href=\&\#034\;([^\]]*)\&\#034\;\]([^\[]*)\[/url\]#i';
-	$replace = '<a href="\\1" target="_blank" rel="' . $bbcode_link_rel . '">\\2</a>';
-	$entry_content = preg_replace( $pattern, $replace, $entry_content );
+	//$replace = '<a href="\\1" target="_blank" rel="' . $bbcode_link_rel . '">\\2</a>';
+	//$entry_content = preg_replace( $pattern, $replace, $entry_content ); // do not use, we need wp_kses()
+	$entry_content = preg_replace_callback( $pattern, 'gwolle_gb_bbcode_parse_link_callback', $entry_content );
+
 	// Links without quotes.
 	$pattern = '#\[url href=([^\]]*)\]([^\[]*)\[/url\]#i';
-	$replace = '<a href="\\1" target="_blank" rel="' . $bbcode_link_rel . '">\\2</a>';
-	$entry_content = preg_replace( $pattern, $replace, $entry_content );
+	//$replace = '<a href="\\1" target="_blank" rel="' . $bbcode_link_rel . '">\\2</a>';
+	//$entry_content = preg_replace( $pattern, $replace, $entry_content ); // do not use, we need wp_kses()
+	$entry_content = preg_replace_callback( $pattern, 'gwolle_gb_bbcode_parse_link_callback', $entry_content );
+
 
 	if ( get_option( 'gwolle_gb-showLineBreaks', 'false' ) === 'true' ) {
 		// fix nl2br adding <br />'s
@@ -78,6 +86,62 @@ function gwolle_gb_bbcode_parse( $entry_content ) {
 	}
 
 	return $entry_content;
+
+}
+
+
+/*
+ * Sanitize the BBcode images with a callback for preg_replace_callback().
+ *
+ * @param array $matches content that needs to be sanitized
+ * @return sanitized content
+ *
+ * @since 4.9.3
+ */
+function gwolle_gb_bbcode_parse_img_callback( $matches ) {
+
+	$bbcode_img_referrer = apply_filters( 'gwolle_gb_bbcode_img_referrer', 'no-referrer' );
+
+	/*
+	 * as usual:
+	 * $matches[0] is the complete match
+	 * $matches[1] the match for the first subpattern enclosed in '(...)'
+	 * $matches[2] the match for the second subpattern enclosed in '(...)'
+	 */
+
+	// overwrite data with our own.
+	$matches[1] = '<img src="' . esc_url( $matches[1] ) . '" alt="" referrerpolicy="' . $bbcode_img_referrer . '" loading="lazy" />';
+
+	return $matches[1];
+
+}
+
+
+/*
+ * Sanitize the BBcode links with a callback for preg_replace_callback().
+ *
+ * @param array $matches content that needs to be sanitized
+ * @return sanitized content
+ *
+ * @since 4.9.3
+ */
+function gwolle_gb_bbcode_parse_link_callback( $matches ) {
+
+	$bbcode_link_rel = apply_filters( 'gwolle_gb_bbcode_link_rel', 'nofollow noopener noreferrer' );
+
+	/*
+	 * as usual:
+	 * $matches[0] is the complete match
+	 * $matches[1] the match for the first subpattern enclosed in '(...)'
+	 * $matches[2] the match for the second subpattern enclosed in '(...)'
+	 */
+
+	// overwrite data with our own.
+	// use wp_kses_post because an image might be inside a link.
+	$matches[1] = '<a href="' . esc_url( $matches[1] ) . '" target="_blank" rel="' . $bbcode_link_rel . '">' . wp_kses_post( $matches[2] ) . '</a>';
+	$matches[2] = '';
+
+	return $matches[1] . ($matches[2]);
 
 }
 

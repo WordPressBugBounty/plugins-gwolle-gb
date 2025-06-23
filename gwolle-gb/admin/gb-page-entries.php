@@ -323,10 +323,13 @@ function gwolle_gb_page_entries() {
 					<thead>
 						<tr>
 							<th scope="col" class="manage-column column-cb check-column">
-								<input name="check-all-top" id="check-all-top" type="checkbox">
+								<label for="check-all-top">
+									<input name="check-all-top" id="check-all-top" type="checkbox">
+								</label>
 							</th>
 							<th scope="col"><?php esc_html_e('Book', 'gwolle-gb');
 								if ($book_id > 0) {
+									?><span class="screen-reader-text"><?php esc_html_e('Book', 'gwolle-gb'); ?></span><?php
 									echo ' ' . (int) $book_id;
 								} ?>
 							</th>
@@ -346,7 +349,9 @@ function gwolle_gb_page_entries() {
 					<tfoot>
 						<tr>
 							<th scope="col" class="manage-column column-cb check-column">
-								<input name="check-all-bottom" id="check-all-bottom" type="checkbox">
+								<label for="check-all-bottom">
+									<input name="check-all-bottom" id="check-all-bottom" type="checkbox">
+								</label>
 							</th>
 							<th scope="col"><?php esc_html_e('Book', 'gwolle-gb');
 								if ($book_id > 0) {

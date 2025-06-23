@@ -158,7 +158,9 @@ function gwolle_gb_editor_postbox_content( $entry ) {
  */
 function gwolle_gb_editor_postbox_website( $entry ) {
 	?>
-	<input type="url" name="gwolle_gb_author_website" value="<?php echo esc_attr( gwolle_gb_sanitize_output( $entry->get_author_website() ) ); ?>" id="author_website" />
+	<label for="gwolle_gb_author_website">
+		<input type="url" name="gwolle_gb_author_website" value="<?php echo esc_attr( gwolle_gb_sanitize_output( $entry->get_author_website() ) ); ?>" id="gwolle_gb_author_website" />
+	</label>
 	<p><?php
 		/* translators: %s is a code element */
 		echo sprintf( esc_html__('Example: %shttps://www.example.com/%s', 'gwolle-gb'), '<code>', '</code>' ); ?>
@@ -172,7 +174,9 @@ function gwolle_gb_editor_postbox_website( $entry ) {
  */
 function gwolle_gb_editor_postbox_author_origin( $entry ) {
 	?>
-	<input type="text" name="gwolle_gb_author_origin" class="wp-exclude-emoji" value="<?php echo esc_attr( gwolle_gb_sanitize_output( $entry->get_author_origin() ) ); ?>" id="author_origin" />
+	<label for="gwolle_gb_author_origin">
+		<input type="text" name="gwolle_gb_author_origin" class="wp-exclude-emoji" value="<?php echo esc_attr( gwolle_gb_sanitize_output( $entry->get_author_origin() ) ); ?>" id="gwolle_gb_author_origin" />
+	</label>
 	<?php
 }
 
@@ -183,8 +187,9 @@ function gwolle_gb_editor_postbox_author_origin( $entry ) {
 function gwolle_gb_editor_postbox_admin_reply( $entry ) {
 	$form_setting = gwolle_gb_get_setting( 'form' );
 	?>
-
-	<textarea rows="10" name="gwolle_gb_admin_reply" id="gwolle_gb_admin_reply" class="wp-exclude-emoji"><?php echo esc_textarea( gwolle_gb_sanitize_output( $entry->get_admin_reply(), 'admin_reply' ) ); ?></textarea>
+	<label for="gwolle_gb_admin_reply">
+		<textarea rows="10" name="gwolle_gb_admin_reply" id="gwolle_gb_admin_reply" class="wp-exclude-emoji"><?php echo esc_textarea( gwolle_gb_sanitize_output( $entry->get_admin_reply(), 'admin_reply' ) ); ?></textarea>
+	</label>
 
 	<?php
 	if ( isset($form_setting['form_bbcode_enabled']) && $form_setting['form_bbcode_enabled'] === 'true' ) {
