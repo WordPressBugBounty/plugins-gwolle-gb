@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, ther
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.9
-Stable tag: 4.10.0
+Stable tag: 4.10.1
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,14 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.10.1 =
+* 2026-02-06
+* Remove dependency on jQuery on frontend.
+* Remove gwolle_gb_ajax_callback jQuery callback.
+* Escape key closes metabox.
+* Fix undefined variable in main widget.
+* Change a few class names.
 
 = 4.10.0 =
 * 2025-12-23

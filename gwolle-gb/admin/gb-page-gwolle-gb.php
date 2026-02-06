@@ -37,7 +37,7 @@ function gwolle_gb_welcome() {
 		add_meta_box('gwolle_gb_addon', esc_html__('The Add-On', 'gwolle-gb'), 'gwolle_gb_overview_addon', 'gwolle_gb_welcome', 'right');
 	} ?>
 
-	<div class="wrap gwolle_gb">
+	<div class="wrap gwolle_gb gwolle-gb">
 		<div id="icon-gwolle-gb"><br /></div>
 		<?php
 		$heading = esc_html__('Gwolle Guestbook', 'gwolle-gb');
@@ -98,7 +98,7 @@ function gwolle_gb_overview() {
 	$count['all']     = gwolle_gb_get_entry_count( array( 'all'   => 'all'   ) );
 	?>
 
-	<div class="table table_content gwolle_gb gwolle-gb-overview">
+	<div class="table table_content gwolle_gb gwolle-gb gwolle-gb-overview">
 		<h3><?php esc_html_e('Overview', 'gwolle-gb'); ?></h3>
 
 		<table>
@@ -377,6 +377,7 @@ function gwolle_gb_overview_addon() {
 		<li><a href="https://zenoweb.nl/forums/forum/guestbook-add-on/" target="_blank">' . esc_html__( 'Support Forum', 'gwolle-gb' ) . '</a></li>
 		<li><a href="https://zenoweb.nl/reviews/" target="_blank">' . esc_html__( 'Reviews', 'gwolle-gb' ) . '</a></li>
 		<li><a href="https://zenoweb.nl/log-in/" target="_blank">' . esc_html__( 'Log in', 'gwolle-gb' ) . '</a></li>
+		<li><a href="https://zenoweb.nl/register/" target="_blank">' . esc_html__( 'Register', 'gwolle-gb' ) . '</a></li>
 	</ul>
 	';
 	if ( defined( 'GWOLLE_GB_ADDON_VER' ) ) {

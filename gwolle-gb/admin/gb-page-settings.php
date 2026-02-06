@@ -77,38 +77,38 @@ function gwolle_gb_page_settings() {
 			<?php } ?>
 		</h2>
 
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_forms <?php if ($active_tab === 'gwolle_gb_forms') { echo "active";} ?>" method="post" action="#">
+		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_forms gwolle-gb-forms <?php if ($active_tab === 'gwolle_gb_forms') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_page_settingstab_form(); ?>
 		</form>
 
 
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_reading <?php if ($active_tab === 'gwolle_gb_reading') { echo "active";} ?>" method="post" action="#">
+		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_reading gwolle-gb-reading <?php if ($active_tab === 'gwolle_gb_reading') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_page_settingstab_reading(); ?>
 		</form>
 
 
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_admin <?php if ($active_tab === 'gwolle_gb_admin') { echo "active";} ?>" method="post" action="#">
+		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_admin gwolle-gb-admin <?php if ($active_tab === 'gwolle_gb_admin') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_page_settingstab_admin(); ?>
 		</form>
 
 
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_antispam <?php if ($active_tab === 'gwolle_gb_antispam') { echo "active";} ?>" method="post" action="#">
+		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_antispam gwolle-gb-antispam <?php if ($active_tab === 'gwolle_gb_antispam') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_page_settingstab_antispam(); ?>
 		</form>
 
 
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_mail <?php if ($active_tab === 'gwolle_gb_mail') { echo "active";} ?>" method="post" action="#">
+		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_mail gwolle-gb-mail <?php if ($active_tab === 'gwolle_gb_mail') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_page_settingstab_email(); ?>
 		</form>
 
 
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_debug <?php if ($active_tab === 'gwolle_gb_debug') { echo "active";} ?>" method="post" action="#">
+		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_debug gwolle-gb-debug <?php if ($active_tab === 'gwolle_gb_debug') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_page_settingstab_debug(); ?>
 		</form>
 
 
 		<?php if ( ! is_multisite() ) { ?>
-			<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_uninstall <?php if ($active_tab === 'gwolle_gb_uninstall') { echo "active";} ?>" method="post" action="#">
+			<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle-gb-options gwolle_gb_uninstall gwolle-gb-uninstall <?php if ($active_tab === 'gwolle_gb_uninstall') { echo "active";} ?>" method="post" action="#">
 				<?php gwolle_gb_page_settingstab_uninstall(); ?>
 			</form>
 		<?php } ?>

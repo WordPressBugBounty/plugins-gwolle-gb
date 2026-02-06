@@ -173,7 +173,7 @@ function gwolle_gb_page_entries() {
 	}
 	?>
 
-	<div class="wrap gwolle_gb">
+	<div class="wrap gwolle_gb gwolle-gb">
 		<div id="icon-gwolle-gb"><br /></div>
 		<h1><?php esc_html_e('Guestbook entries', 'gwolle-gb'); ?> (Gwolle Guestbook) - v<?php echo GWOLLE_GB_VER; ?></h1>
 

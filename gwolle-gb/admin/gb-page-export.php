@@ -1,7 +1,7 @@
 <?php /*
  *
- *	export.php
- *	Lets the user export guestbook entries to a CSV file.
+ * export.php
+ * Lets the user export guestbook entries to a CSV file.
  *
  */
 
@@ -24,11 +24,11 @@ function gwolle_gb_page_export() {
 	 * Build the Page.
 	 */
 	?>
-	<div class="wrap gwolle_gb">
+	<div class="wrap gwolle_gb gwolle-gb">
 		<div id="icon-gwolle-gb"><br /></div>
 		<h1><?php esc_html_e('Export guestbook entries.', 'gwolle-gb'); ?> (Gwolle Guestbook) - v<?php echo GWOLLE_GB_VER; ?></h1>
 
-		<div id="poststuff" class="gwolle_gb_export metabox-holder">
+		<div id="poststuff" class="gwolle_gb_export gwolle-gb-export metabox-holder">
 			<div class="postbox-container">
 				<?php
 				add_meta_box( 'gwolle_gb_export_postbox', esc_html__('Export guestbook entries from Gwolle-GB', 'gwolle-gb'), 'gwolle_gb_export_postbox', 'gwolle_gb_export', 'normal' );

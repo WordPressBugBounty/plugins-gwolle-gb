@@ -320,7 +320,7 @@ function gwolle_gb_bbcode_disabled() {
 	$bbcode_img_enabled = apply_filters( 'gwolle_gb_bbcode_img_enabled', true );
 	if ( ! $bbcode_img_enabled ) {
 		echo '
-		<style id="gwolle_gb_bbcode_img_disabled" type="text/css">
+		<style id="gwolle-gb-bbcode-img-disabled" type="text/css">
 		html body .markItUp li.markItUpButton5 {
 			display: none;
 		}
@@ -331,7 +331,7 @@ function gwolle_gb_bbcode_disabled() {
 	$bbcode_youtube_enabled = apply_filters( 'gwolle_gb_bbcode_youtube_enabled', true );
 	if ( ! $bbcode_youtube_enabled ) {
 		echo '
-		<style id="gwolle_gb_bbcode_youtube_disabled" type="text/css">
+		<style id="gwolle-gb-bbcode-youtube-disabled" type="text/css">
 		html body .markItUp li.markItUpButton6 {
 			display: none;
 		}

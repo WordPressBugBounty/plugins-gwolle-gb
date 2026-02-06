@@ -36,9 +36,9 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 		$entry_class .= ' gb-entry_' . $entry->get_id();
 		$entry_class .= ' gb-entry-count_' . $counter;
 		if ( is_int( $counter / 2 ) ) {
-			$entry_class .= ' gwolle_gb_even gwolle-gb-even';
+			$entry_class .= ' gwolle-gb-even';
 		} else {
-			$entry_class .= ' gwolle_gb_uneven gwolle-gb-uneven';
+			$entry_class .= ' gwolle-gb-uneven';
 		}
 		if ( $first === true ) {
 			$entry_class .= ' gwolle-gb-first';
@@ -178,7 +178,7 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 
 				/* Admin Reply Author */
 				$admin_reply .= '
-						<div class="gb-admin_reply_uid gb-admin-reply-uid">';
+						<div class="gb-admin-reply-uid">';
 				$admin_reply_name = gwolle_gb_is_moderator( $entry->get_admin_reply_uid() );
 				/* Admin Avatar */
 				if ( isset($read_setting['read_aavatar']) && $read_setting['read_aavatar'] === 'true' ) {
@@ -228,7 +228,7 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 						</div>';
 				} else {
 					$admin_reply .= '
-						<div class="gb-admin_reply_content gb-admin-reply-content">
+						<div class="gb-admin-reply-content">
 						' . $admin_reply_content . '
 						</div>';
 				}

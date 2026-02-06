@@ -1,6 +1,6 @@
 
 /*
-Copyright 2014 - 2025  Marcel Pol  (email: marcel@timelord.nl)
+Copyright 2014 - 2026  Marcel Pol  (email: marcel@timelord.nl)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,14 +22,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * JavaScript for Gwolle Guestbook Frontend.
  */
 
-
-// Define it in main scope.
-// deprecated since 4.9.0, remove this callback sometime soon.
-var gwolle_gb_ajax_callback;
-// This will load it before 'document' and 'window' (well, sometimes).
-jQuery( window ).on( 'load', function() {
-	gwolle_gb_ajax_callback = jQuery.Callbacks(); // Callback function to be fired after AJAX request.
-});
 
 
 /*
@@ -57,7 +49,7 @@ function gwolle_gb_frontend_callback_function() {
 	}
 
 }
-jQuery(document).ready(function($) {
+document.addEventListener('DOMContentLoaded', function () {
 	gwolle_gb_frontend_callback_function();
 });
 
@@ -231,6 +223,16 @@ function gwolle_gb_metabox_handle() {
 		handle.addEventListener( 'click', gwolle_gb_metabox_toggle );
 	});
 
+	document.body.addEventListener( 'keyup', function(e) {
+		if ( e.key === 'Escape' ) {
+			// reset all
+			document.querySelectorAll('div.gb-metabox').forEach( metabox => {
+				metabox.style.opacity = 0;
+				metabox.style.visibility = 'hidden';
+			});
+		}
+	});
+
 }
 function gwolle_gb_metabox_toggle( event ) {
 
@@ -277,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	if ( gwolle_gb_read && gwolle_gb_read.classList.contains( 'gwolle-gb-infinite' ) ) {
 		var gwolle_gb_scroll_count = 2; // We already have page 1 listed.
 
-		var gwolle_gb_load_message = '<div class="gb-entry gwolle_gb_load_message">' + gwolle_gb_frontend_script.load_message + '</div>';
+		var gwolle_gb_load_message = '<div class="gb-entry gwolle-gb-load-message">' + gwolle_gb_frontend_script.load_message + '</div>';
 		gwolle_gb_read.insertAdjacentHTML( 'beforeend', gwolle_gb_load_message ); // append the loading message.
 
 		window.addEventListener( 'scroll', () => {
@@ -296,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 function gwolle_gb_load_page(page) {
 
-	const load_message = document.querySelectorAll('.gwolle_gb_load_message');
+	const load_message = document.querySelectorAll('.gwolle-gb-load-message');
 	load_message.forEach( function( el ) {
 		el.style.display = 'block';
 	});
@@ -304,7 +306,7 @@ function gwolle_gb_load_page(page) {
 	const gwolle_gb_read = document.querySelector(".gwolle-gb-read");
 	const book_id = gwolle_gb_read ? gwolle_gb_read.getAttribute( 'data-book_id' ) : '';
 
-	const gwolle_gb_end_message = '<div class="gb-entry gwolle_gb_end_message">' + gwolle_gb_frontend_script.end_message + '</div>';
+	const gwolle_gb_end_message = '<div class="gb-entry gwolle-gb-end-message">' + gwolle_gb_frontend_script.end_message + '</div>';
 
 	const formData = new FormData();
 	formData.append( 'action', 'gwolle_gb_infinite_scroll' );

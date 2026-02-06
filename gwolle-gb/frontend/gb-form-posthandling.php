@@ -36,7 +36,7 @@ function gwolle_gb_frontend_posthandling() {
 
 		// Option to allow only logged-in users to post. Don't show the form if not logged-in.
 		if ( ! is_user_logged_in() && get_option('gwolle_gb-require_login', 'false') === 'true' ) {
-			gwolle_gb_add_message( '<p class="require_login"><strong>' . esc_html__('Submitting a new guestbook entry is only allowed for logged-in users.', 'gwolle-gb') . '</strong></p>', true, false);
+			gwolle_gb_add_message( '<p class="require-login"><strong>' . esc_html__('Submitting a new guestbook entry is only allowed for logged-in users.', 'gwolle-gb') . '</strong></p>', true, false);
 			return false;
 		}
 
@@ -57,12 +57,12 @@ function gwolle_gb_frontend_posthandling() {
 				gwolle_gb_add_formdata( 'author_name', $author_name );
 				if ( $author_name === '' ) {
 					if ( isset($form_setting['form_name_mandatory']) && $form_setting['form_name_mandatory'] === 'true' ) {
-						gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your name is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+						gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your name is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 					}
 				}
 			} else {
 				if ( isset($form_setting['form_name_mandatory']) && $form_setting['form_name_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your name is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your name is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			}
 		}
@@ -77,12 +77,12 @@ function gwolle_gb_frontend_posthandling() {
 				gwolle_gb_add_formdata( 'author_origin', $author_origin );
 				if ( $author_origin === '' ) {
 					if ( isset($form_setting['form_city_mandatory']) && $form_setting['form_city_mandatory'] === 'true' ) {
-						gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your origin is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+						gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your origin is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 					}
 				}
 			} else {
 				if ( isset($form_setting['form_city_mandatory']) && $form_setting['form_city_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your origin is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your origin is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			}
 		}
@@ -97,11 +97,11 @@ function gwolle_gb_frontend_posthandling() {
 				if ( filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) {
 					// Valid Email address.
 				} else if ( isset($form_setting['form_email_mandatory']) && $form_setting['form_email_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your e-mail address is not filled in correctly, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your e-mail address is not filled in correctly, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			} else {
 				if ( isset($form_setting['form_email_mandatory']) && $form_setting['form_email_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your e-mail address is not filled in correctly, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your e-mail address is not filled in correctly, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			}
 		} else {
@@ -126,11 +126,11 @@ function gwolle_gb_frontend_posthandling() {
 				if ( filter_var( $author_website, FILTER_VALIDATE_URL ) ) {
 					// Valid Website URL.
 				} else if ( isset($form_setting['form_homepage_mandatory']) && $form_setting['form_homepage_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your website is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your website is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			} else {
 				if ( isset($form_setting['form_homepage_mandatory']) && $form_setting['form_homepage_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('Your website is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('Your website is not filled in, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			}
 		}
@@ -142,7 +142,7 @@ function gwolle_gb_frontend_posthandling() {
 				$content = trim($_POST["$field_name"]);
 				if ( $content === '' ) {
 					if ( isset($form_setting['form_message_mandatory']) && $form_setting['form_message_mandatory'] === 'true' ) {
-						gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('There is no message, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+						gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('There is no message, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 					}
 				} else {
 					$content = gwolle_gb_maybe_encode_emoji( $content, 'content' );
@@ -151,7 +151,7 @@ function gwolle_gb_frontend_posthandling() {
 				}
 			} else {
 				if ( isset($form_setting['form_message_mandatory']) && $form_setting['form_message_mandatory'] === 'true' ) {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('There is no message, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('There is no message, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			}
 		}
@@ -166,7 +166,7 @@ function gwolle_gb_frontend_posthandling() {
 				if ( isset($_POST["$field_name"]) && trim($_POST["$field_name"]) === trim($antispam_answer) ) {
 					//echo "You got it!";
 				} else {
-					gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('The anti-spam question was not answered correctly, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
+					gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('The anti-spam question was not answered correctly, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, $field_name); // mandatory
 				}
 			}
 			if ( isset($_POST["$field_name"]) ) {
@@ -181,7 +181,7 @@ function gwolle_gb_frontend_posthandling() {
 			if (isset($_POST['gwolle_gb_privacy']) && $_POST['gwolle_gb_privacy'] === 'on') {
 				gwolle_gb_add_formdata( 'gwolle_gb_privacy', 'on' );
 			} else {
-				gwolle_gb_add_message( '<p class="error_fields gb-error-fields"><strong>' . esc_html__('You did not accept the privacy policy, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, 'gwolle_gb_privacy'); // mandatory
+				gwolle_gb_add_message( '<p class="gb-error-fields"><strong>' . esc_html__('You did not accept the privacy policy, even though it is mandatory.', 'gwolle-gb') . '</strong></p>', true, 'gwolle_gb_privacy'); // mandatory
 			}
 		}
 
@@ -194,7 +194,7 @@ function gwolle_gb_frontend_posthandling() {
 		if ( ! $set_data ) {
 			// Data is not set in the Instance, something happened
 			do_action( 'gwolle_gb_notsaved_entry_frontend', $entry );
-			gwolle_gb_add_message( '<p class="set_data gb-set-data"><strong>' . esc_html__('There were errors submitting your guestbook entry.', 'gwolle-gb') . '</strong></p>', true, false );
+			gwolle_gb_add_message( '<p class="gb-set-data"><strong>' . esc_html__('There were errors submitting your guestbook entry.', 'gwolle-gb') . '</strong></p>', true, false );
 			return false;
 		}
 
@@ -448,7 +448,7 @@ function gwolle_gb_frontend_posthandling() {
 		if ( $save ) {
 			// We have been saved to the Database.
 
-			gwolle_gb_add_message( '<p class="entry_saved gb-entry-saved">' . esc_html__('Thank you for your entry.', 'gwolle-gb') . '</p>', false, false );
+			gwolle_gb_add_message( '<p class="gb-entry-saved">' . esc_html__('Thank you for your entry.', 'gwolle-gb') . '</p>', false, false );
 			if ( $entry->get_ischecked() === 0 || $entry->get_isspam() === 1 ) {
 				gwolle_gb_add_message( '<p>' . esc_html__('We will review it and unlock it in a short while.', 'gwolle-gb') . '</p>', false, false );
 			}
@@ -499,7 +499,7 @@ function gwolle_gb_frontend_posthandling() {
 
 			do_action( 'gwolle_gb_notsaved_entry_frontend', $entry );
 
-			gwolle_gb_add_message( '<p class="entry_notsaved gb-entry-notsaved">' . esc_html__('Sorry, something went wrong with saving your entry. Please contact a site admin.', 'gwolle-gb') . '</p>', true, false );
+			gwolle_gb_add_message( '<p class="gb-entry-notsaved">' . esc_html__('Sorry, something went wrong with saving your entry. Please contact a site admin.', 'gwolle-gb') . '</p>', true, false );
 
 			return false;
 
@@ -532,7 +532,7 @@ function gwolle_gb_check_double_entry( $entry ) {
 			foreach ( $entries as $entry_email ) {
 				if ( $entry_email->get_content() === $entry->get_content() ) {
 					// Match is double entry
-					gwolle_gb_add_message( '<p class="double_post gb-double-post"><strong>' . esc_html__('Double post: An entry with the data you entered has already been saved.', 'gwolle-gb') . '</strong></p>', true, $field_name );
+					gwolle_gb_add_message( '<p class="gb-double-post"><strong>' . esc_html__('Double post: An entry with the data you entered has already been saved.', 'gwolle-gb') . '</strong></p>', true, $field_name );
 					return $entry;
 				}
 			}

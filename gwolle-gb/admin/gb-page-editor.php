@@ -61,7 +61,7 @@ function gwolle_gb_page_editor() {
 	 * Build the Page and the Form
 	 */
 	?>
-	<div class="wrap gwolle_gb">
+	<div class="wrap gwolle_gb gwolle-gb">
 		<div id="icon-gwolle-gb"><br /></div>
 		<h1><?php echo $section_heading; ?> (Gwolle Guestbook) - v<?php echo GWOLLE_GB_VER; ?></h1>
 

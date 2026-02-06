@@ -182,7 +182,7 @@ function gwolle_gb_frontend_read( $shortcode_atts, $shortcode ) {
 		$pagination = gwolle_gb_pagination_frontend( $page_num, $pages_total );
 		$output .= $pagination;
 	} else if ( $navigation === 1 ) {
-		$entries_list_class .= ' gwolle_gb_infinite gwolle-gb-infinite';
+		$entries_list_class .= ' gwolle-gb-infinite';
 	}
 	$entries_list_class = apply_filters( 'gwolle_gb_entries_list_class', $entries_list_class );
 

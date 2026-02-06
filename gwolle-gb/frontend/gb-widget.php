@@ -59,7 +59,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 			// Prepare for SSS Slider. Registers Script with WordPress to wp_footer().
 			$widget_class = 'gwolle_gb_widget gwolle-gb-widget';
 			if ( $slider ) {
-				wp_register_script( 'gwolle_gb_widget_sss', GWOLLE_GB_URL . 'frontend/js/sss/sss.js', 'jquery', GWOLLE_GB_VER, true );
+				wp_register_script( 'gwolle_gb_widget_sss', GWOLLE_GB_URL . 'frontend/js/sss/sss.js', array( 'jquery' ), GWOLLE_GB_VER, true );
 				wp_enqueue_script( 'gwolle_gb_widget_sss' );
 				$widget_class .= ' gwolle_gb_widget_slider gwolle-gb-widget-slider';
 			}
@@ -72,13 +72,14 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 
 			$widget_html .= $args['before_widget'];
 			$widget_html .= '
-				<div class="gwolle_gb_widget gwolle-gb-widget">';
+				<div class="gwolle-gb-widget">';
 
 			if ($widget_title !== false) {
 				$widget_html .= $args['before_title'] . apply_filters('widget_title', $widget_title) . $args['after_title'];
 			}
 
 			$link = '';
+			$permalink = '';
 			if ( (int) $postid > 0 ) {
 				$permalink = gwolle_gb_get_permalink( $postid );
 				$link = '
@@ -146,7 +147,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 			// Post the link to the Guestbook.
 			if ( (int) $postid > 0 ) {
 				$widget_html .= '
-					<p class="gwolle_gb_link gwolle-gb-link">
+					<p class="gwolle-gb-link">
 						<a href="' . esc_attr( $permalink ) . '" title="' . esc_attr__('Click here to get to the guestbook.', 'gwolle-gb') . '">' . $link_text . '</a>
 					</p>';
 			}
@@ -161,7 +162,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 				// Only display widget if there are any entries.
 				echo $widget_html;
 
-				// Load Frontend CSS in Footer, only when it's active.
+				// Load JavaScript and CSS in case we're on a non-guestbook page, load it in footer.
 				gwolle_gb_enqueue();
 			}
 		}

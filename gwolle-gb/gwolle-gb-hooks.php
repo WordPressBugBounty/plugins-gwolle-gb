@@ -79,11 +79,8 @@ add_action( 'wp_initialize_site', 'gwolle_gb_wp_initialize_site' );
  */
 function gwolle_gb_register() {
 
-	// Always load jQuery, it's just easier this way.
-	wp_enqueue_script('jquery');
-
 	// Register script for frontend. Load it later.
-	wp_register_script( 'gwolle_gb_frontend_js', GWOLLE_GB_URL . 'frontend/js/gwolle-gb-frontend.js', array( 'jquery' ), GWOLLE_GB_VER, true );
+	wp_register_script( 'gwolle_gb_frontend_js', GWOLLE_GB_URL . 'frontend/js/gwolle-gb-frontend.js', false, GWOLLE_GB_VER, true );
 	$data_to_be_passed = array(
 		'ajax_url'     => admin_url('admin-ajax.php'),
 		'load_message' => /* translators: Infinite Scroll */ esc_html__('Loading more...', 'gwolle-gb'),
@@ -115,7 +112,6 @@ function gwolle_gb_enqueue() {
 		wp_enqueue_style('gwolle_gb_frontend_css');
 	}
 
-	//wp_enqueue_script('jquery'); // already done when registering.
 	wp_enqueue_script('gwolle_gb_frontend_js');
 
 	do_action( 'gwolle_gb_enqueue', $enqueue_css );
@@ -130,7 +126,7 @@ function gwolle_gb_enqueue() {
  */
 function gwolle_gb_enqueue_markitup() {
 
-	wp_enqueue_script( 'markitup', GWOLLE_GB_URL . 'frontend/markitup/jquery.markitup.js', 'jquery', GWOLLE_GB_VER, true );
+	wp_enqueue_script( 'markitup', GWOLLE_GB_URL . 'frontend/markitup/jquery.markitup.js', array( 'jquery' ), GWOLLE_GB_VER, true );
 	wp_enqueue_style('gwolle_gb_markitup_css', GWOLLE_GB_URL . 'frontend/markitup/style.css', false, GWOLLE_GB_VER,  'screen');
 
 	$data_to_be_passed = array(

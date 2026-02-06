@@ -735,7 +735,7 @@ jQuery(document).ready(function() {
 		emoticon = jQuery(this).attr("title");
 		jQuery.markItUp( { target:target, replaceWith:emoticon } );
 	});
-	/* Insert the Emoji symbol (main editor) */
+	/* Insert the Emoji symbol (admin main editor) */
 	jQuery('.gwolle_gb_emoji a').on( 'click', function() {
 		emoticon = jQuery(this).attr("title");
 		jQuery.markItUp( { target:'#gwolle_gb_content', replaceWith:emoticon } );

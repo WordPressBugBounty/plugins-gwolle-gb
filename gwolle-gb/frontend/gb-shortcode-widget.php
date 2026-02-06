@@ -53,14 +53,14 @@ function get_gwolle_gb_shortcode_widget( $atts ) {
 	$num_words    = (int) $shortcode_atts['num_words'];
 	$postid       = 0;
 
-	$widget_class = 'gwolle_gb_widget gwolle-gb-widget';
+	$widget_class = 'gwolle-gb-widget';
 	$widget_class = apply_filters( 'gwolle_gb_widget_list_class', $widget_class );
 	$widget_item_class = 'gwolle_gb_widget gwolle-gb-widget';
 	$widget_item_class = apply_filters( 'gwolle_gb_widget_item_class', $widget_item_class );
 
 
 	$widget_html = '
-				<div class="gwolle_gb_widget gwolle-gb-widget">';
+				<div class="gwolle-gb-widget">';
 	$widget_html .= apply_filters('widget_title', $widget_title);
 
 	$widget_html .= '

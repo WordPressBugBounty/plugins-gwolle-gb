@@ -87,9 +87,9 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	if ( $gwolle_gb_errors ) {
 		$messageclass = 'error';
 	}
-	$output .= '<div class="gwolle_gb_messages_top_container gwolle-gb-messages-top-container">';
+	$output .= '<div class="gwolle-gb-messages-top-container">';
 	if ( isset($gwolle_gb_messages) && $gwolle_gb_messages !== '') {
-		$output .= '<div class="gwolle_gb_messages gwolle-gb-messages ' . $messageclass . '">';
+		$output .= '<div class="gwolle-gb-messages ' . $messageclass . '">';
 		$output .= $gwolle_gb_messages;
 		$output .= '</div>';
 	}
@@ -148,7 +148,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		$formclass .= ' gwolle-gb-float';
 	}
 	if ( get_option( 'gwolle_gb-form_ajax', 'true' ) === 'true' ) {
-		$formclass .= ' gwolle_gb_form_ajax gwolle-gb-form-ajax gwolle-gb-ajax';
+		$formclass .= ' gwolle-gb-form-ajax gwolle-gb-ajax';
 	}
 	if ( is_user_logged_in() ) {
 		$formclass .= ' gwolle-gb-logged-in';
@@ -384,14 +384,14 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		}
 		$output .= ' >' . esc_textarea( $content ) . '</textarea>';
 		if ( isset($form_message_maxlength) && is_numeric($form_message_maxlength) && $form_message_maxlength > 0 ) {
-			$output .= '<span class="gb-max-length-text"><span class="gb-used-characters">' . $used_characters . '</span>/<span class="gb-max-characters">' . $form_message_maxlength . '</span> ' . esc_html__('characters', 'gwolle-gb') . '</span>';
+			$output .= '<span class="gb-max-length-text"><span class="gb-used-characters">' . (int) $used_characters . '</span>/<span class="gb-max-characters">' . (int) $form_message_maxlength . '</span> ' . esc_html__('characters', 'gwolle-gb') . '</span>';
 		}
 		if ( isset($form_setting['form_bbcode_enabled']) && $form_setting['form_bbcode_enabled'] === 'true' ) {
 			// BBcode and MarkItUp
 			gwolle_gb_enqueue_markitup();
 
 			// Emoji symbols
-			$output .= '<div class="gwolle_gb_emoji gwolle-gb-hide">';
+			$output .= '<div class="gwolle_gb_emoji gwolle-gb-emoji gwolle-gb-hide">';
 			$output .= gwolle_gb_get_emoji();
 			$output .= '</div>';
 		}
@@ -413,7 +413,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 
 		if ( isset($antispam_question) && strlen($antispam_question) > 0 && isset($antispam_answer) && strlen($antispam_answer) > 0 ) {
 			$output .= '
-				<div class="gwolle_gb_antispam">
+				<div class="gwolle_gb_antispam gwolle-gb-antispam">
 					<div class="label">
 						<label for="' . esc_attr( $field_id ) . '" class="text-info">'
 						. esc_html__('Question:', 'gwolle-gb') . ' ' . esc_attr( $antispam_question ) . $required_indicator . '</label>
@@ -455,7 +455,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		$field_id = gwolle_gb_get_field_id( 'gwolle_gb_privacy' );
 		$label = apply_filters( 'gwolle_gb_privacy_label', sprintf( esc_html__( 'I accept the %1$sPrivacy Policy%2$s', 'gwolle-gb' ), $a_open, $a_close ) );
 		$output .= '
-				<div class="gwolle_gb_privacy">
+				<div class="gwolle_gb_privacy gwolle-gb-privacy">
 					<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label . $required_indicator . '</label></div>
 					<div class="input"><input type="checkbox" id="' . esc_attr( $field_id ) . '" name="gwolle_gb_privacy" class="gwolle_gb_privacy" required' . $checked . ' /></div>
 					<div class="clearBoth">&nbsp;</div>
@@ -473,15 +473,15 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 
 	/* Submit button and message container */
 	$output .= '
-			<div class="gwolle_gb_messages_bottom_container gwolle-gb-messages-bottom-container"></div>
+			<div class="gwolle-gb-messages-bottom-container"></div>
 
 			<noscript><div class="no-js">' . esc_html__( 'Warning: This form can only be used if JavaScript is enabled in your browser.', 'gwolle-gb' ) . '</div></noscript>
 
-			<div class="gwolle_gb_submit">
+			<div class="gwolle_gb_submit gwolle-gb-submit">
 				<div class="label gwolle-gb-invisible text-muted">&nbsp;</div>
 				<div class="input">
 					<input type="submit" name="gwolle_gb_submit" class="gwolle_gb_submit button btn btn-primary ' . esc_attr( $button_class ) . '" value="' . esc_attr__('Submit', 'gwolle-gb') . '" />
-					<span class="gwolle_gb_submit_ajax_icon"></span>
+					<span class="gwolle_gb_submit_ajax_icon gwolle-gb-submit-ajax-icon"></span>
 			';
 
 	$output .= apply_filters( 'gwolle_gb_write_add_after_submit', '' );
@@ -491,7 +491,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 				<div class="clearBoth">&nbsp;</div>
 			</div>
 
-			<div class="gwolle_gb_notice">
+			<div class="gwolle_gb_notice gwolle-gb-notice">
 				';
 
 	$notice = gwolle_gb_sanitize_output( get_option('gwolle_gb-notice', false), 'setting_textarea' );

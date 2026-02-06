@@ -79,7 +79,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 
 			echo $widget_html;
 
-			// Load Frontend CSS in Footer, only when it's active.
+			// Load JavaScript and CSS in case we're on a non-guestbook page, load it in footer.
 			gwolle_gb_enqueue();
 
 		}

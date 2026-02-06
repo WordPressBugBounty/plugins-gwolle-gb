@@ -104,14 +104,12 @@ body .gwolle-gb-content a {
 
 /* Messages / Notices */
 
-.gwolle-gb .gwolle_gb_messages,
 .gwolle-gb .gwolle-gb-messages {
 	border-left: 4px solid #7ad03a;
 	box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
 	padding: 1px 12px;
 	margin: 5px 0 15px;
 }
-.gwolle-gb .gwolle_gb_messages.error,
 .gwolle-gb .gwolle-gb-messages.error {
 	border-left: 4px solid #dd3d36;
 }
@@ -365,14 +363,12 @@ div.gb-metabox-line.gb-social-media-share a {
 
 /* Widget */
 
-li.gwolle_gb_widget,
 li.gwolle-gb-widget {
 	border-bottom: 1px #ddd solid;
 	padding: 3px 0;
 	margin: 0;
 }
 
-p.gwolle_gb_link,
 p.gwolle-gb-link {
 	padding: 3px 0;
 }
@@ -380,11 +376,9 @@ p.gwolle-gb-link {
 
 /* Widget Slider */
 
-ul.gwolle_gb_widget_slider,
 ul.gwolle-gb-widget-slider {
 	margin-left: 0;
 }
-ul.gwolle_gb_widget_slider .sss,
 ul.gwolle-gb-widget-slider .sss {
 	height: 0;
 	margin: 0;
@@ -394,19 +388,15 @@ ul.gwolle-gb-widget-slider .sss {
 	overflow: hidden;
 }
 
-ul.gwolle_gb_widget_slider li:first-child,
 ul.gwolle-gb-widget-slider li:first-child,
-li.gwolle_gb_widget.ssslide:first-child,
 li.gwolle-gb-widget.ssslide:first-child {
 	display: inline-block;
 }
-ul.gwolle_gb_widget_slider li,
 ul.gwolle-gb-widget-slider li {
 	display: none;
 	border-bottom: 0px solid #ddd;
 }
 
-li.gwolle_gb_widget.ssslide,
 li.gwolle-gb-widget.ssslide {
 	width: 100%;
 	margin: 0;
