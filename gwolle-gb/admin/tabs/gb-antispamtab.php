@@ -232,47 +232,6 @@ function gwolle_gb_page_settingstab_antispam() {
 			</td>
 		</tr>
 
-		<tr>
-			<th scope="row">
-				<label for="cleantalk-active"><?php esc_html_e('Cleantalk', 'gwolle-gb'); ?></label>
-			</th>
-			<td>
-				<span class="setting-description">
-					<a href="https://cleantalk.org/" title="<?php esc_html_e('Learn more about Cleantalk...', 'gwolle-gb'); ?>" target="_blank">
-						<?php esc_html_e("What's Cleantalk?", 'gwolle-gb'); ?>
-					</a><br />
-					<?php
-					$current_plugins = get_option('active_plugins');
-					$cleantalk_settings = get_option('cleantalk_settings');
-
-					// Check wether Cleantalk is installed and activated or not.
-					if ( ! in_array('cleantalk-spam-protect/cleantalk.php', $current_plugins)) {
-						echo esc_html__('Cleantalk is an external service that acts as a spamfilter for guestbook entries.', 'gwolle-gb') . '<br />';
-						// Cleantalk is not installed and activated. Show notice with suggestion to install it.
-						esc_html_e("Cleantalk helps you to fight spam. It's easy to install. Download and install it today to stop spam in your guestbook.", 'gwolle-gb');
-					} else if ( ! $cleantalk_settings['apikey'] ) {
-						// No Cleantalk API key is defined and set in the database.
-						/* translators: %1$s and %2$s are a strong element. %3$s and %4$s is for a link. */
-						echo sprintf( esc_html__('Sorry, was not able to locate your %1$sCleantalk API key%2$s. You can enter it at the %3$sCleantalk configuration page%4$s.', 'gwolle-gb'), '<strong>', '</strong>', '<a href="options-general.php?page=cleantalk">', '</a>' );
-					} else {
-						// Cleantalk is installed and activated and a Cleantalk API key exists (we just assume it is valid).
-						echo '<input ';
-						if ( get_option( 'gwolle_gb-cleantalk-active', 'false' ) === 'true' ) {
-							echo 'checked="checked" ';
-						}
-						echo 'name="cleantalk-active" id="cleantalk-active" type="checkbox" />
-							<label for="cleantalk-active">
-							' . esc_html__('Use Cleantalk', 'gwolle-gb') . '
-							</label><br />';
-						esc_html_e('Cleantalk is an external service that acts as a spamfilter for guestbook entries.', 'gwolle-gb');
-						echo '<br />';
-						esc_html_e('The Cleantalk API key has been found, so you can start using Cleantalk right now.', 'gwolle-gb');
-					}
-					?>
-				</span>
-			</td>
-		</tr>
-
 		<?php
 		$form_setting = gwolle_gb_get_setting( 'form' );
 		$antispam_question = gwolle_gb_sanitize_output( get_option('gwolle_gb-antispam-question') );

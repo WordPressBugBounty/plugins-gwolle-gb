@@ -40,14 +40,12 @@ add_filter( 'gwolle_gb_entry_metabox_lines', 'gwolle_gb_entry_metabox_lines_edit
  */
 function gwolle_gb_entry_metabox_lines_ajax_icon( $gb_metabox, $entry ) {
 
-	if ( current_user_can('gwolle_gb_moderate_comments') ) {
-		if ( $gb_metabox ) {
+	if ( $gb_metabox ) {
 
-			$gb_metabox .= '
-					<div class="gb-metabox-line gb-metabox-line-ajax">
-						' . esc_html__('Please wait...', 'gwolle-gb') . '
-					</div>';
-		}
+		$gb_metabox .= '
+				<div class="gb-metabox-line gb-metabox-line-ajax">
+					' . esc_html__('Please wait...', 'gwolle-gb') . '
+				</div>';
 	}
 	return $gb_metabox;
 

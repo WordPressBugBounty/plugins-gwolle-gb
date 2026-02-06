@@ -217,6 +217,9 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 					$admin_reply_content = gwolle_gb_bbcode_strip($admin_reply_content);
 				}
 				if ( $excerpt_length > 0 ) {
+					$readmore = '... <a href="#" class="gwolle-gb-readmore-admin_reply" title="' . esc_attr__('Expand this admin reply and read more', 'gwolle-gb') . '">' . esc_html__('Read more', 'gwolle-gb') . '</a>';
+					$readless = '... <a href="#" class="gwolle-gb-readless-admin_reply" title="' . esc_attr__('Collapse this admin reply again', 'gwolle-gb') . '">' . esc_html__('Collapse', 'gwolle-gb') . '</a>';
+
 					$admin_reply_excerpt = wp_trim_words( $admin_reply_content, $excerpt_length, $readmore );
 					$admin_reply .= '
 						<div class="gb-admin_reply-excerpt">' . $admin_reply_excerpt . '</div>
@@ -244,7 +247,7 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 		$gb_metabox = apply_filters( 'gwolle_gb_entry_metabox_lines', '', $entry );
 		if ( $gb_metabox ) {
 			$entry_output .= '
-					<div class="gb-metabox-handle" tabindex="0">' . esc_html__('...', 'gwolle-gb' ) . '<span class="screen-reader-text"> ' . esc_html__('Toggle this metabox.', 'gwolle-gb') . '</span></div>
+					<button type="button" class="gb-metabox-handle" tabindex="0" aria-expanded="false">' . esc_html__('...', 'gwolle-gb' ) . '<span class="screen-reader-text"> ' . esc_html__('Toggle this metabox.', 'gwolle-gb') . '</span></button>
 					<div class="gb-metabox">' .
 						$gb_metabox . '
 					</div>';

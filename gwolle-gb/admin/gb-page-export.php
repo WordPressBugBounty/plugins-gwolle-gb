@@ -133,7 +133,7 @@ function gwolle_gb_export_callback() {
 	/* Check Nonce */
 	$verified = false;
 	if ( isset($_POST['gwolle_gb_wpnonce']) ) {
-		$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce'], 'gwolle_gb_page_export' );
+		$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce'] ) ), 'gwolle_gb_page_export' );
 	}
 	if ( $verified === false ) {
 		// Nonce is invalid.
@@ -298,7 +298,7 @@ function gwolle_gb_export_user_callback() {
 	/* Check Nonce */
 	$verified = false;
 	if ( isset($_POST['gwolle_gb_wpnonce']) ) {
-		$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce'], 'gwolle_gb_page_export_user' );
+		$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce'] ) ), 'gwolle_gb_page_export_user' );
 	}
 	if ( $verified === false ) {
 		// Nonce is invalid.

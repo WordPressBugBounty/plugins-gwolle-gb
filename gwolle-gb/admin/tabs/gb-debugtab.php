@@ -41,7 +41,7 @@ function gwolle_gb_page_settingstab_debug() {
 		/* Check Nonce */
 		$verified = false;
 		if ( isset($_POST['gwolle_gb_page_settings_debugtab']) ) {
-			$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_debugtab'], 'gwolle_gb_page_settings_debugtab' );
+			$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_debugtab'] ) ), 'gwolle_gb_page_settings_debugtab' );
 		}
 		if ( $verified && isset( $_POST['gwolle_gb_debug'] ) ) {
 			// Save test entries

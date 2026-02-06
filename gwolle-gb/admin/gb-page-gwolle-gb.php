@@ -394,7 +394,7 @@ function gwolle_gb_welcome_post() {
 	/* Check Nonce */
 	$verified = false;
 	if ( isset($_POST['gwolle_gb_wpnonce']) ) {
-		$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce'], 'gwolle_gb_page_gwolle' );
+		$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce'] ) ), 'gwolle_gb_page_gwolle' );
 	}
 	if ( $verified === false ) {
 		gwolle_gb_add_message( '<p>' . esc_html__('The Nonce did not validate. Please reload the page and try again.', 'gwolle-gb') . '</p>', true, false);
@@ -422,7 +422,7 @@ function gwolle_gb_welcome_post() {
 		$user_ids[] = (int) $user_id; // Really add it.
 
 		$user_ids = implode( ',', $user_ids );
-		update_option('gwolle_gb-notifyByMail', $user_ids);
+		update_option( 'gwolle_gb-notifyByMail', $user_ids, true );
 
 		gwolle_gb_add_message( '<p>' . esc_html__('Changes saved.', 'gwolle-gb') . '</p>', false, false);
 	} else if ( ! isset($_POST['notify_by_mail'] ) ) {
@@ -444,7 +444,7 @@ function gwolle_gb_welcome_post() {
 		}
 
 		$user_ids = implode( ',', $user_ids );
-		update_option('gwolle_gb-notifyByMail', $user_ids);
+		update_option( 'gwolle_gb-notifyByMail', $user_ids, true );
 		gwolle_gb_add_message( '<p>' . esc_html__('Changes saved.', 'gwolle-gb') . '</p>', false, false);
 	}
 }

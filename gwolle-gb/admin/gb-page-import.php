@@ -319,7 +319,7 @@ function gwolle_gb_page_import_post() {
 			/* Check Nonce */
 			$verified = false;
 			if ( isset($_POST['gwolle_gb_wpnonce_dms']) ) {
-				$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce_dms'], 'gwolle_gb_page_import_dms' );
+				$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce_dms'] ) ), 'gwolle_gb_page_import_dms' );
 			}
 			if ( $verified === false ) {
 				// Nonce is invalid.
@@ -400,7 +400,7 @@ function gwolle_gb_page_import_post() {
 			/* Check Nonce */
 			$verified = false;
 			if ( isset($_POST['gwolle_gb_wpnonce_wp']) ) {
-				$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce_wp'], 'gwolle_gb_page_import_wp' );
+				$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce_wp'] ) ), 'gwolle_gb_page_import_wp' );
 			}
 			if ( $verified === false ) {
 				// Nonce is invalid.
@@ -480,7 +480,7 @@ function gwolle_gb_page_import_post() {
 			/* Check Nonce */
 			$verified = false;
 			if ( isset($_POST['gwolle_gb_wpnonce_gwolle']) ) {
-				$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce_gwolle'], 'gwolle_gb_page_import_gwolle' );
+				$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce_gwolle'] ) ), 'gwolle_gb_page_import_gwolle' );
 			}
 			if ( $verified === false ) {
 				// Nonce is invalid.

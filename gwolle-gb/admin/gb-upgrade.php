@@ -69,7 +69,7 @@ function gwolle_gb_install() {
 	$result_after = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_entries'");
 	$result_after2 = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_log'");
 	if ( $result_after !== 0 && $result_after2 !== 0 ) {
-		add_option('gwolle_gb_version', GWOLLE_GB_VER);
+		add_option( 'gwolle_gb_version', GWOLLE_GB_VER, '', true );
 	}
 
 	/* Call flush_rules() as a method of the $wp_rewrite object for the RSS Feed. */
@@ -110,53 +110,6 @@ function gwolle_gb_upgrade() {
 	global $wpdb;
 	$installed_ver = get_option('gwolle_gb_version');
 
-	if (version_compare($installed_ver, '0.9', '<')) {
-		/*
-		 * 0.8 -> 0.9
-		 * No changes to the database; just added a few options.
-		 */
-		add_option('recaptcha-active', 'false');
-		add_option('recaptcha-public-key', '');
-		add_option('recaptcha-private-key', '');
-	}
-
-	if (version_compare($installed_ver, '0.9.1', '<')) {
-		/*
-		 * 0.9 -> 0.9.1
-		 * Moved the email notification options to the WP options table.
-		 */
-		$notify_user = "
-				SELECT *
-				FROM
-					" . $wpdb -> prefix . "gwolle_gb_settings
-				WHERE
-					setting_name = 'notify_by_mail'
-					AND
-					setting_value = '1'
-				";
-		$notify_settings = $wpdb->get_results($notify_user, ARRAY_A);
-		foreach ( $notify_settings as $notify_setting ) {
-			//	Add an option for each notification subscriber.
-			add_option('gwolle_gb-notifyByMail-' . $notify_setting['user_id'], 'true');
-		}
-
-		// Delete the old settings table.
-		$wpdb->query("
-				DROP TABLE
-					" . $wpdb->prefix . "gwolle_gb_settings
-			");
-	}
-
-	if (version_compare($installed_ver, '0.9.2', '<')) {
-		/*
-		 **	0.9.1->0.9.2
-		 **	Renamed the option for toggling reCAPTCHA so that we can
-		 **	have different plugins using reCAPTCHA.
-		 */
-		add_option('gwolle_gb-recaptcha-active', get_option('recaptcha-active'));
-		delete_option('recaptcha-active');
-	}
-
 	if (version_compare($installed_ver, '0.9.3', '<')) {
 		/*
 		 **	0.9.2->0.9.3
@@ -164,7 +117,7 @@ function gwolle_gb_upgrade() {
 		 **	Add an option row and a new column to the entry table
 		 **	to be able to mark entries as spam automatically.
 		 */
-		add_option('gwolle_gb-akismet-active', 'false');
+		add_option( 'gwolle_gb-akismet-active', 'false', '', true );
 		$wpdb->query("
 				ALTER
 				TABLE " . $wpdb->gwolle_gb_entries . "
@@ -179,74 +132,32 @@ function gwolle_gb_upgrade() {
 
 	if (version_compare($installed_ver, '0.9.4', '<')) {
 		/*
-		 **	0.9.3->0.9.4
-		 **	added access-level, no-mail-on-spam, moderate on/off.
+		 * 0.9.3->0.9.4
+		 * moderate on/off.
 		 */
-		add_option('gwolle_gb-access-level', '10');
-		add_option('gwolle_gb-moderate-entries', 'true');
-
-		$email_notification = "
-				SELECT *
-				FROM
-					" . $wpdb->prefix . "options
-				WHERE
-					option_name LIKE 'gwolle_gb-notifyByMail-%'
-				";
-		$notifications = $wpdb->get_results($email_notification, ARRAY_A);
-		foreach ( $notifications as $notification ) {
-			add_option('gwolle_gb-notifyAll-' . str_replace('gwolle_gb-notifyByMail-', '', $notification['option_name']), 'true');
-		}
+		add_option( 'gwolle_gb-moderate-entries', 'true', '', true);
 	}
 
 	if (version_compare($installed_ver, '0.9.4.1', '<')) {
 		/*
 		 **	0.9.4->0.9.4.1
-		 **	Caching the WordPress API key so that we don't need to
-		 **	validate it each time the user opens the settings panel.
-		 **	Also, add an option to show icons in the entry list.
+		 **	add an option to show icons in the admin entry list.
 		 */
-		add_option('gwolle_gb-wordpress-api-key', get_option('wordpress_api_key'));
-		add_option('gwolle_gb-showEntryIcons', 'true');
+		add_option( 'gwolle_gb-showEntryIcons', 'true', '', false );
 	}
 
 	if (version_compare($installed_ver, '0.9.4.2', '<')) {
 		/*
 		 **	0.9.4.1->0.9.4.2
-		 **	Added the possibility to specify the content of the mail
-		 **	a subscriber of the mail notification gets.
-		 **	Also, added an option to turn the version-check on/off
-		 **	and the possibility to set the numbers of entries per page.
+		 **	add the possibility to set the numbers of entries per page.
 		 */
-		add_option('gwolle_gb-adminMailContent', '');
-		if (function_exists('file') && get_cfg_var('allow_url_fopen')) {
-			$default = 'true';
-		} else {
-			$default = 'false';
-		}
-		add_option('gwolle_gb-autoCheckVersion', $default);
-		add_option('gwolle_gb-entriesPerPage', '20');
-	}
-
-	if (version_compare($installed_ver, '0.9.4.2.1', '<')) {
-		/*
-		 **	0.9.4.2->0.9.4.2.1
-		 **	Removed the version check because of some problems.
-		 */
-		delete_option('gwolle_gb-autoCheckVersion');
-	}
-
-	if (version_compare($installed_ver, '0.9.4.3', '<')) {
-		/*
-		 **	0.9.4.2.1->0.9.4.3
-		 **	Added option to manually set link to the guestbook.
-		 */
-		add_option('gwolle_gb-guestbookLink');
+		add_option( 'gwolle_gb-entriesPerPage', '20', '', true);
 	}
 
 	if (version_compare($installed_ver, '0.9.4.5', '<')) {
 		/*
 		 **	0.9.4.2.3->0.9.4.5
-		 **	Support for Croation chars.
+		 **	Support for utf8 chars.
 		 **	Added option to toggle line breaks-visibility.
 		 */
 		$wpdb->query("
@@ -272,23 +183,7 @@ function gwolle_gb_upgrade() {
 					CHANGE `entry_isDeleted` `entry_isDeleted` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
 					CHANGE `entry_isSpam` `entry_isSpam` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'
 			");
-		add_option('gwolle_gb-showLineBreaks', 'false');
-	}
-
-	if (version_compare($installed_ver, '0.9.4.6', '<')) {
-		/*
-		 **  0.9.4.5->0.9.4.6
-		 **  Added option to show/hide text before/after [gwolle_gb] tag.
-		 */
-		add_option('gwolle_gb-guestbookOnly', 'true');
-	}
-
-	if (version_compare($installed_ver, '0.9.5', '<')) {
-		/*
-		 **  0.9.4.6->0.9.5
-		 **  Added option to toggle check for import data.
-		 */
-		add_option('gwolle_gb-checkForImport', 'true');
+		add_option( 'gwolle_gb-showLineBreaks', 'false', '', true );
 	}
 
 	if (version_compare($installed_ver, '0.9.6', '<')) {
@@ -298,8 +193,8 @@ function gwolle_gb_upgrade() {
 		 * - toggle replacing of smilies
 		 * - toggle link to author's website
 		 */
-		add_option('gwolle_gb-showSmilies', 'true');
-		add_option('gwolle_gb-linkAuthorWebsite', 'true');
+		add_option( 'gwolle_gb-showSmilies', 'true', '', true);
+		add_option( 'gwolle_gb-linkAuthorWebsite', 'true', '', true );
 	}
 
 	if (version_compare($installed_ver, '0.9.9.1', '<')) {
@@ -404,10 +299,6 @@ function gwolle_gb_upgrade() {
 		 */
 		delete_option('gwolle_gb-guestbookOnly');
 		delete_option('gwolle_gb-defaultMailText');
-		if ( get_option('gwolle_gb-recaptcha-active', 'false') === 'true' ) {
-			$form_setting = array( 'form_recaptcha_enabled' => 'true' );
-			update_option( 'gwolle_gb-form', $form_setting );
-		}
 		delete_option('gwolle_gb-recaptcha-active');
 	}
 
@@ -506,6 +397,13 @@ function gwolle_gb_upgrade() {
 		}
 	}
 
+	if (version_compare($installed_ver, '4.10.0', '<')) {
+		/*
+		 * 4.9.3->4.10.0
+		 */
+		delete_option('gwolle_gb-cleantalk-active');
+	}
+
 	/* Upgrade to new shiny db collation. Since WP 4.2 */
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	if ( function_exists('maybe_convert_table_to_utf8mb4') ) {
@@ -517,7 +415,7 @@ function gwolle_gb_upgrade() {
 	gwolle_gb_set_defaults();
 
 	/* Update the plugin version option. */
-	update_option('gwolle_gb_version', GWOLLE_GB_VER);
+	update_option( 'gwolle_gb_version', GWOLLE_GB_VER, true );
 }
 
 
@@ -530,22 +428,19 @@ function gwolle_gb_upgrade() {
  */
 function gwolle_gb_set_defaults() {
 	if ( get_option('gwolle_gb-admin_style', false) === false ) {
-		update_option( 'gwolle_gb-admin_style', 'false' );
+		update_option( 'gwolle_gb-admin_style', 'false', true );
 	}
 	if ( get_option('gwolle_gb-akismet-active', false) === false ) {
-		update_option( 'gwolle_gb-akismet-active', 'false' );
-	}
-	if ( get_option('gwolle_gb-cleantalk-active', false) === false ) {
-		update_option( 'gwolle_gb-cleantalk-active', 'false' );
+		update_option( 'gwolle_gb-akismet-active', 'false', true );
 	}
 	if ( get_option('gwolle_gb-entries_per_page', false) === false ) {
-		update_option( 'gwolle_gb-entries_per_page', 20 );
+		update_option( 'gwolle_gb-entries_per_page', 20, false ); // admin
 	}
 	if ( get_option('gwolle_gb-entriesPerPage', false) === false ) {
-		update_option( 'gwolle_gb-entriesPerPage', 20 );
+		update_option( 'gwolle_gb-entriesPerPage', 20, true ); // frontend
 	}
 	if ( get_option('gwolle_gb-excerpt_length', false) === false ) {
-		update_option( 'gwolle_gb-excerpt_length', 0 );
+		update_option( 'gwolle_gb-excerpt_length', 0, true );
 	}
 	if ( get_option('gwolle_gb-form', false) === false ) {
 		$defaults = array(
@@ -562,53 +457,52 @@ function gwolle_gb_set_defaults() {
 			'form_message_maxlength'  => 0,
 			'form_bbcode_enabled'     => 'false',
 			'form_antispam_enabled'   => 'false',
-			'form_recaptcha_enabled'  => 'false',
 			'form_privacy_enabled'    => 'false',
 			);
-		update_option( 'gwolle_gb-form', $defaults );
+		update_option( 'gwolle_gb-form', $defaults, true );
 	}
 	if ( get_option('gwolle_gb-form_ajax', false) === false ) {
-		update_option( 'gwolle_gb-form_ajax', 'true' );
+		update_option( 'gwolle_gb-form_ajax', 'true', true );
 	}
 	if ( get_option('gwolle_gb-honeypot', false) === false ) {
-		update_option( 'gwolle_gb-honeypot', 'true' );
+		update_option( 'gwolle_gb-honeypot', 'true', true );
 	}
 	if ( get_option('gwolle_gb-honeypot_value', false) === false ) {
 		$random = rand( 1, 99 );
-		update_option( 'gwolle_gb-honeypot_value', $random );
+		update_option( 'gwolle_gb-honeypot_value', $random, true );
 	}
 	if ( get_option('gwolle_gb-labels_float', false) === false ) {
-		update_option( 'gwolle_gb-labels_float', 'true' );
+		update_option( 'gwolle_gb-labels_float', 'true', true );
 	}
 	if ( get_option('gwolle_gb-linkAuthorWebsite', false) === false ) {
-		update_option( 'gwolle_gb-linkAuthorWebsite', 'true' );
+		update_option( 'gwolle_gb-linkAuthorWebsite', 'true', true );
 	}
 	if ( get_option('gwolle_gb-linkchecker', false) === false ) {
-		update_option( 'gwolle_gb-linkchecker', 'true' );
+		update_option( 'gwolle_gb-linkchecker', 'true', true );
 	}
 	if ( get_option('gwolle_gb-longtext', false) === false ) {
-		update_option( 'gwolle_gb-longtext', 'true' );
+		update_option( 'gwolle_gb-longtext', 'true', true );
 	}
 	if ( get_option('gwolle_gb-mail_author', false) === false ) {
-		update_option( 'gwolle_gb-mail_author', 'false' );
+		update_option( 'gwolle_gb-mail_author', 'false', true );
 	}
 	if ( get_option('gwolle_gb-mail_author_moderation', false) === false ) {
-		update_option( 'gwolle_gb-mail_author_moderation', 'false' );
+		update_option( 'gwolle_gb-mail_author_moderation', 'false', true );
 	}
 	if ( get_option('gwolle_gb-moderate-entries', false) === false ) {
-		update_option( 'gwolle_gb-moderate-entries', 'true' );
+		update_option( 'gwolle_gb-moderate-entries', 'true', true );
 	}
 	if ( get_option('gwolle_gb-navigation', false) === false ) {
-		update_option( 'gwolle_gb-navigation', 0 );
+		update_option( 'gwolle_gb-navigation', 0, true );
 	}
 	if ( get_option('gwolle_gb-nonce', false) === false ) {
-		update_option( 'gwolle_gb-nonce', 'false' );
+		update_option( 'gwolle_gb-nonce', 'false', true );
 	}
 	if ( get_option('gwolle_gb-notify-with-spam', false) === false ) {
-		update_option( 'gwolle_gb-notify-with-spam', 'true' );
+		update_option( 'gwolle_gb-notify-with-spam', 'true', true );
 	}
 	if ( get_option('gwolle_gb-paginate_all', false) === false ) {
-		update_option( 'gwolle_gb-paginate_all', 'false' );
+		update_option( 'gwolle_gb-paginate_all', 'false', true );
 	}
 	if ( get_option('gwolle_gb-read', false) === false ) {
 		if ( get_option('show_avatars') ) {
@@ -626,30 +520,30 @@ function gwolle_gb_set_defaults() {
 			'read_aavatar'  => 'false',
 			'read_editlink' => 'true',
 			);
-		update_option( 'gwolle_gb-read', $defaults );
+		update_option( 'gwolle_gb-read', $defaults, true );
 	}
 	if ( get_option('gwolle_gb-refuse-spam', false) === false ) {
-		update_option( 'gwolle_gb-refuse-spam', 'false' );
+		update_option( 'gwolle_gb-refuse-spam', 'false', true );
 	}
 	if ( get_option('gwolle_gb-require_login', false) === false ) {
-		update_option( 'gwolle_gb-require_login', 'false' );
+		update_option( 'gwolle_gb-require_login', 'false', true );
 	}
 	if ( get_option('gwolle_gb-sfs', false) === false ) {
-		update_option( 'gwolle_gb-sfs', 'false' );
+		update_option( 'gwolle_gb-sfs', 'false', true );
 	}
 	if ( get_option('gwolle_gb-store_ip', false) === false ) {
-		update_option( 'gwolle_gb-store_ip', 'true' );
+		update_option( 'gwolle_gb-store_ip', 'true', true );
 	}
 	if ( get_option('gwolle_gb-showEntryIcons', false) === false ) {
-		update_option( 'gwolle_gb-showEntryIcons', 'true' );
+		update_option( 'gwolle_gb-showEntryIcons', 'true', false ); // admin
 	}
 	if ( get_option('gwolle_gb-showLineBreaks', false) === false ) {
-		update_option( 'gwolle_gb-showLineBreaks', 'false' );
+		update_option( 'gwolle_gb-showLineBreaks', 'false', true );
 	}
 	if ( get_option('gwolle_gb-showSmilies', false) === false ) {
-		update_option( 'gwolle_gb-showSmilies', 'true' );
+		update_option( 'gwolle_gb-showSmilies', 'true', true );
 	}
 	if ( get_option('gwolle_gb-timeout', false) === false ) {
-		update_option( 'gwolle_gb-timeout', 'true' );
+		update_option( 'gwolle_gb-timeout', 'true', true );
 	}
 }

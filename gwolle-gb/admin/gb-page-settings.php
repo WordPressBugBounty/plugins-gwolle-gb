@@ -139,7 +139,7 @@ function gwolle_gb_page_settings_update() {
 					/* Check Nonce */
 					$verified = false;
 					if ( isset($_POST['gwolle_gb_page_settings_formtab']) ) {
-						$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_formtab'], 'gwolle_gb_page_settings_formtab' );
+						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_formtab'] ) ), 'gwolle_gb_page_settings_formtab' );
 					}
 					if ( $verified === false ) {
 						// Nonce is invalid.
@@ -148,34 +148,34 @@ function gwolle_gb_page_settings_update() {
 					}
 
 					if (isset($_POST['require_login']) && $_POST['require_login'] === 'on') {
-						update_option('gwolle_gb-require_login', 'true');
+						update_option( 'gwolle_gb-require_login', 'true', true );
 					} else {
-						update_option('gwolle_gb-require_login', 'false');
+						update_option( 'gwolle_gb-require_login', 'false', true );
 					}
 
 					if (isset($_POST['labels_float']) && $_POST['labels_float'] === 'on') {
-						update_option('gwolle_gb-labels_float', 'true');
+						update_option( 'gwolle_gb-labels_float', 'true', true );
 					} else {
-						update_option('gwolle_gb-labels_float', 'false');
+						update_option( 'gwolle_gb-labels_float', 'false', true );
 					}
 
 					// Always save it, even when empty, for MultiLingual plugins.
 					$header = gwolle_gb_sanitize_input( $_POST['gb_header'] );
-					update_option('gwolle_gb-header', $header);
+					update_option( 'gwolle_gb-header', $header, true );
 
 					$notice = gwolle_gb_sanitize_input( $_POST['gwolle_gb_notice'], 'setting_textarea' );
-					update_option('gwolle_gb-notice', $notice);
+					update_option( 'gwolle_gb-notice', $notice, true );
 
 					if (isset($_POST['form_ajax']) && $_POST['form_ajax'] === 'on') {
-						update_option('gwolle_gb-form_ajax', 'true');
+						update_option( 'gwolle_gb-form_ajax', 'true', true );
 					} else {
-						update_option('gwolle_gb-form_ajax', 'false');
+						update_option( 'gwolle_gb-form_ajax', 'false', true );
 					}
 
 					if (isset($_POST['store_ip']) && $_POST['store_ip'] === 'on') {
-						update_option('gwolle_gb-store_ip', 'true');
+						update_option( 'gwolle_gb-store_ip', 'true', true );
 					} else {
-						update_option('gwolle_gb-store_ip', 'false');
+						update_option( 'gwolle_gb-store_ip', 'false', true );
 					}
 
 					if (isset($_POST['gb_remove_ip']) && $_POST['gb_remove_ip'] === 'on') {
@@ -218,14 +218,14 @@ function gwolle_gb_page_settings_update() {
 					} else {
 						$form_setting['form_message_maxlength'] = 0;
 					}
-					update_option( 'gwolle_gb-form', $form_setting );
+					update_option( 'gwolle_gb-form', $form_setting, true );
 					break;
 
 				case 'gwolle_gb_reading':
 					/* Check Nonce */
 					$verified = false;
 					if ( isset($_POST['gwolle_gb_page_settings_readingtab']) ) {
-						$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_readingtab'], 'gwolle_gb_page_settings_readingtab' );
+						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_readingtab'] ) ), 'gwolle_gb_page_settings_readingtab' );
 					}
 					if ( $verified === false ) {
 						// Nonce is invalid.
@@ -234,47 +234,47 @@ function gwolle_gb_page_settings_update() {
 					}
 
 					if ( isset($_POST['entriesPerPage']) && is_numeric($_POST['entriesPerPage']) && $_POST['entriesPerPage'] > 0 ) {
-						update_option('gwolle_gb-entriesPerPage', (int) $_POST['entriesPerPage']);
+						update_option( 'gwolle_gb-entriesPerPage', (int) $_POST['entriesPerPage'], true );
 					}
 
 					if (isset($_POST['showLineBreaks']) && $_POST['showLineBreaks'] === 'on') {
-						update_option('gwolle_gb-showLineBreaks', 'true');
+						update_option( 'gwolle_gb-showLineBreaks', 'true', true );
 					} else {
-						update_option('gwolle_gb-showLineBreaks', 'false');
+						update_option( 'gwolle_gb-showLineBreaks', 'false', true );
 					}
 
 					if ( isset($_POST['excerpt_length']) && is_numeric($_POST['excerpt_length']) ) {
-						update_option('gwolle_gb-excerpt_length', (int) $_POST['excerpt_length']);
+						update_option( 'gwolle_gb-excerpt_length', (int) $_POST['excerpt_length'], true );
 					}
 
 					if (isset($_POST['showSmilies']) && $_POST['showSmilies'] === 'on') {
-						update_option('gwolle_gb-showSmilies', 'true');
+						update_option( 'gwolle_gb-showSmilies', 'true', true );
 					} else {
-						update_option('gwolle_gb-showSmilies', 'false');
+						update_option( 'gwolle_gb-showSmilies', 'false', true );
 					}
 
 					if (isset($_POST['linkAuthorWebsite']) && $_POST['linkAuthorWebsite'] === 'on') {
-						update_option('gwolle_gb-linkAuthorWebsite', 'true');
+						update_option( 'gwolle_gb-linkAuthorWebsite', 'true', true );
 					} else {
-						update_option('gwolle_gb-linkAuthorWebsite', 'false');
+						update_option( 'gwolle_gb-linkAuthorWebsite', 'false', true );
 					}
 
 					if (isset($_POST['admin_style']) && $_POST['admin_style'] === 'on') {
-						update_option('gwolle_gb-admin_style', 'true');
+						update_option( 'gwolle_gb-admin_style', 'true', true );
 					} else {
-						update_option('gwolle_gb-admin_style', 'false');
+						update_option( 'gwolle_gb-admin_style', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_navigation']) && (int) $_POST['gwolle_gb_navigation'] === 0) {
-						update_option('gwolle_gb-navigation', 0);
+						update_option( 'gwolle_gb-navigation', 0, true );
 					} else if (isset($_POST['gwolle_gb_navigation']) && (int) $_POST['gwolle_gb_navigation'] === 1) {
-						update_option('gwolle_gb-navigation', 1);
+						update_option( 'gwolle_gb-navigation', 1, true );
 					}
 
 					if (isset($_POST['paginate_all']) && $_POST['paginate_all'] === 'on') {
-						update_option('gwolle_gb-paginate_all', 'true');
+						update_option( 'gwolle_gb-paginate_all', 'true', true );
 					} else {
-						update_option('gwolle_gb-paginate_all', 'false');
+						update_option( 'gwolle_gb-paginate_all', 'false', true );
 					}
 
 					$list = array(
@@ -295,14 +295,14 @@ function gwolle_gb_page_settings_update() {
 							$read_setting["$item"] = 'false';
 						}
 					}
-					update_option( 'gwolle_gb-read', $read_setting );
+					update_option( 'gwolle_gb-read', $read_setting, true );
 					break;
 
 				case 'gwolle_gb_admin':
 					/* Check Nonce */
 					$verified = false;
 					if ( isset($_POST['gwolle_gb_page_settings_admintab']) ) {
-						$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_admintab'], 'gwolle_gb_page_settings_admintab' );
+						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_admintab'] ) ), 'gwolle_gb_page_settings_admintab' );
 					}
 					if ( $verified === false ) {
 						// Nonce is invalid.
@@ -311,13 +311,13 @@ function gwolle_gb_page_settings_update() {
 					}
 
 					if ( isset($_POST['entries_per_page']) && is_numeric($_POST['entries_per_page']) && $_POST['entries_per_page'] > 0 ) {
-						update_option( 'gwolle_gb-entries_per_page', (int) $_POST['entries_per_page']);
+						update_option( 'gwolle_gb-entries_per_page', (int) $_POST['entries_per_page'], false );
 					}
 
 					if (isset($_POST['showEntryIcons']) && $_POST['showEntryIcons'] === 'on') {
-						update_option('gwolle_gb-showEntryIcons', 'true');
+						update_option( 'gwolle_gb-showEntryIcons', 'true', false);
 					} else {
-						update_option('gwolle_gb-showEntryIcons', 'false');
+						update_option( 'gwolle_gb-showEntryIcons', 'false', false);
 					}
 					break;
 
@@ -325,7 +325,7 @@ function gwolle_gb_page_settings_update() {
 					/* Check Nonce */
 					$verified = false;
 					if ( isset($_POST['gwolle_gb_page_settings_antispamtab']) ) {
-						$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_antispamtab'], 'gwolle_gb_page_settings_antispamtab' );
+						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_antispamtab'] ) ), 'gwolle_gb_page_settings_antispamtab' );
 					}
 					if ( $verified === false ) {
 						// Nonce is invalid.
@@ -334,63 +334,57 @@ function gwolle_gb_page_settings_update() {
 					}
 
 					if (isset($_POST['moderate-entries']) && $_POST['moderate-entries'] === 'on') {
-						update_option('gwolle_gb-moderate-entries', 'true');
+						update_option( 'gwolle_gb-moderate-entries', 'true', true );
 					} else {
-						update_option('gwolle_gb-moderate-entries', 'false');
+						update_option( 'gwolle_gb-moderate-entries', 'false', true );
 					}
 
 					if (isset($_POST['refuse-spam']) && $_POST['refuse-spam'] === 'on') {
-						update_option('gwolle_gb-refuse-spam', 'true');
+						update_option( 'gwolle_gb-refuse-spam', 'true', true );
 					} else {
-						update_option('gwolle_gb-refuse-spam', 'false');
+						update_option( 'gwolle_gb-refuse-spam', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_honeypot']) && $_POST['gwolle_gb_honeypot'] === 'on') {
-						update_option('gwolle_gb-honeypot', 'true');
+						update_option( 'gwolle_gb-honeypot', 'true', true );
 					} else {
-						update_option('gwolle_gb-honeypot', 'false');
+						update_option( 'gwolle_gb-honeypot', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_nonce']) && $_POST['gwolle_gb_nonce'] === 'on') {
-						update_option('gwolle_gb-nonce', 'true');
+						update_option( 'gwolle_gb-nonce', 'true', true );
 					} else {
-						update_option('gwolle_gb-nonce', 'false');
+						update_option( 'gwolle_gb-nonce', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_longtext']) && $_POST['gwolle_gb_longtext'] === 'on') {
-						update_option('gwolle_gb-longtext', 'true');
+						update_option( 'gwolle_gb-longtext', 'true', true );
 					} else {
-						update_option('gwolle_gb-longtext', 'false');
+						update_option( 'gwolle_gb-longtext', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_linkchecker']) && $_POST['gwolle_gb_linkchecker'] === 'on') {
-						update_option('gwolle_gb-linkchecker', 'true');
+						update_option( 'gwolle_gb-linkchecker', 'true', true );
 					} else {
-						update_option('gwolle_gb-linkchecker', 'false');
+						update_option( 'gwolle_gb-linkchecker', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_timeout']) && $_POST['gwolle_gb_timeout'] === 'on') {
-						update_option('gwolle_gb-timeout', 'true');
+						update_option( 'gwolle_gb-timeout', 'true', true );
 					} else {
-						update_option('gwolle_gb-timeout', 'false');
+						update_option( 'gwolle_gb-timeout', 'false', true );
 					}
 
 					if (isset($_POST['akismet-active']) && $_POST['akismet-active'] === 'on') {
-						update_option('gwolle_gb-akismet-active', 'true');
+						update_option( 'gwolle_gb-akismet-active', 'true', true );
 					} else {
-						update_option('gwolle_gb-akismet-active', 'false');
+						update_option( 'gwolle_gb-akismet-active', 'false', true );
 					}
 
 					if (isset($_POST['gwolle_gb_sfs']) && $_POST['gwolle_gb_sfs'] === 'on') {
-						update_option('gwolle_gb-sfs', 'true');
+						update_option( 'gwolle_gb-sfs', 'true', true );
 					} else {
-						update_option('gwolle_gb-sfs', 'false');
-					}
-
-					if (isset($_POST['cleantalk-active']) && $_POST['cleantalk-active'] === 'on') {
-						update_option('gwolle_gb-cleantalk-active', 'true');
-					} else {
-						update_option('gwolle_gb-cleantalk-active', 'false');
+						update_option( 'gwolle_gb-sfs', 'false', true );
 					}
 
 					$form_setting = gwolle_gb_get_setting( 'form' );
@@ -399,13 +393,13 @@ function gwolle_gb_page_settings_update() {
 					} else {
 						$form_setting['form_antispam_enabled'] = 'false';
 					}
-					update_option( 'gwolle_gb-form', $form_setting );
+					update_option( 'gwolle_gb-form', $form_setting, true );
 
 					if ( isset($_POST['antispam-question']) ) {
-						update_option('gwolle_gb-antispam-question', gwolle_gb_sanitize_input($_POST['antispam-question']));
+						update_option( 'gwolle_gb-antispam-question', gwolle_gb_sanitize_input($_POST['antispam-question']), true );
 					}
 					if ( isset($_POST['antispam-answer']) ) {
-						update_option('gwolle_gb-antispam-answer', gwolle_gb_sanitize_input($_POST['antispam-answer']));
+						update_option( 'gwolle_gb-antispam-answer', gwolle_gb_sanitize_input($_POST['antispam-answer']), true );
 					}
 
 					if ( isset($_POST['gb_moderation_keys']) ) {
@@ -414,7 +408,7 @@ function gwolle_gb_page_settings_update() {
 						$blocklist = array_filter( array_map( 'trim', $blocklist ) );
 						$blocklist = array_unique( $blocklist );
 						$blocklist = implode( "\n", $blocklist );
-						update_option('gwolle_gb_addon-moderation_keys', $blocklist);
+						update_option( 'gwolle_gb_addon-moderation_keys', $blocklist, true );
 					}
 					break;
 
@@ -422,7 +416,7 @@ function gwolle_gb_page_settings_update() {
 					/* Check Nonce */
 					$verified = false;
 					if ( isset($_POST['gwolle_gb_page_settings_emailtab']) ) {
-						$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_emailtab'], 'gwolle_gb_page_settings_emailtab' );
+						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_emailtab'] ) ), 'gwolle_gb_page_settings_emailtab' );
 					}
 					if ( $verified === false ) {
 						// Nonce is invalid.
@@ -434,7 +428,7 @@ function gwolle_gb_page_settings_update() {
 						$admin_mail_from = gwolle_gb_sanitize_input( $_POST['admin_mail_from'] );
 						if ( filter_var( $admin_mail_from, FILTER_VALIDATE_EMAIL ) ) {
 							// Valid Email address.
-							update_option('gwolle_gb-mail-from', $admin_mail_from);
+							update_option( 'gwolle_gb-mail-from', $admin_mail_from, true );
 						}
 					}
 
@@ -456,7 +450,7 @@ function gwolle_gb_page_settings_update() {
 						}
 
 						$user_ids = implode( ',', $user_ids );
-						update_option('gwolle_gb-notifyByMail', $user_ids);
+						update_option( 'gwolle_gb-notifyByMail', $user_ids, true );
 					}
 
 					if ( isset($_POST['subscribe']) && $_POST['subscribe'] > 0 ) {
@@ -478,45 +472,45 @@ function gwolle_gb_page_settings_update() {
 						$user_ids[] = $user_id; // Really add it.
 
 						$user_ids = implode( ',', $user_ids );
-						update_option('gwolle_gb-notifyByMail', $user_ids);
+						update_option( 'gwolle_gb-notifyByMail', $user_ids, true );
 					}
 
 					if (isset($_POST['gwolle_gb-notify-with-spam']) && $_POST['gwolle_gb-notify-with-spam'] === 'on') {
-						update_option('gwolle_gb-notify-with-spam', 'true');
+						update_option( 'gwolle_gb-notify-with-spam', 'true', true );
 					} else {
-						update_option('gwolle_gb-notify-with-spam', 'false');
+						update_option( 'gwolle_gb-notify-with-spam', 'false', true );
 					}
 
 					if ( isset($_POST['adminMailContent']) ) {
 						$mail_content = gwolle_gb_sanitize_input( $_POST['adminMailContent'], 'setting_textarea' );
-						update_option('gwolle_gb-adminMailContent', $mail_content);
+						update_option( 'gwolle_gb-adminMailContent', $mail_content, true );
 					}
 
 					if (isset($_POST['mail_author']) && $_POST['mail_author'] === 'on') {
-						update_option('gwolle_gb-mail_author', 'true');
+						update_option( 'gwolle_gb-mail_author', 'true', true );
 					} else {
-						update_option('gwolle_gb-mail_author', 'false');
+						update_option( 'gwolle_gb-mail_author', 'false', true );
 					}
 
 					if ( isset($_POST['authorMailContent']) ) {
 						$mail_content = gwolle_gb_sanitize_input( $_POST['authorMailContent'], 'setting_textarea' );
-						update_option('gwolle_gb-authorMailContent', $mail_content);
+						update_option( 'gwolle_gb-authorMailContent', $mail_content, true );
 					}
 
 					if (isset($_POST['mail_author_moderation']) && $_POST['mail_author_moderation'] === 'on') {
-						update_option('gwolle_gb-mail_author_moderation', 'true');
+						update_option( 'gwolle_gb-mail_author_moderation', 'true', true );
 					} else {
-						update_option('gwolle_gb-mail_author_moderation', 'false');
+						update_option( 'gwolle_gb-mail_author_moderation', 'false', true );
 					}
 
 					if ( isset($_POST['authormoderationcontent']) ) {
 						$mail_content = gwolle_gb_sanitize_input( $_POST['authormoderationcontent'], 'setting_textarea' );
-						update_option('gwolle_gb-authormoderationcontent', $mail_content);
+						update_option( 'gwolle_gb-authormoderationcontent', $mail_content, true );
 					}
 
 					if ( isset($_POST['gwolle_gb-mail_admin_replyContent']) ) {
 						$mail_content = gwolle_gb_sanitize_input( $_POST['gwolle_gb-mail_admin_replyContent'], 'setting_textarea' );
-						update_option('gwolle_gb-mail_admin_replyContent', $mail_content);
+						update_option( 'gwolle_gb-mail_admin_replyContent', $mail_content, true );
 					}
 					break;
 
@@ -527,7 +521,7 @@ function gwolle_gb_page_settings_update() {
 					/* Check Nonce */
 					$verified = false;
 					if ( isset($_POST['gwolle_gb_page_settings_uninstalltab']) ) {
-						$verified = wp_verify_nonce( $_POST['gwolle_gb_page_settings_uninstalltab'], 'gwolle_gb_page_settings_uninstalltab' );
+						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_page_settings_uninstalltab'] ) ), 'gwolle_gb_page_settings_uninstalltab' );
 					}
 					if ( $verified === false ) {
 						// Nonce is invalid.

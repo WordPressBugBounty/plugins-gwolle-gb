@@ -69,7 +69,7 @@ function gwolle_gb_page_settingstab_email() {
 							if ( $user_info->ID === get_current_user_id() ) {
 								$username .= ' ' . esc_html__('You', 'gwolle-gb');
 							}
-							echo '<option value="' . (int) $user_info->ID . '">' . $username . '</option>';
+							echo '<option value="' . (int) $user_info->ID . '">' . esc_html( $username ) . '</option>';
 						}
 					} ?>
 				</select><br />
@@ -90,8 +90,9 @@ function gwolle_gb_page_settingstab_email() {
 				<?php
 				// Check if function mail() exists. If not, display a hint to the user.
 				if ( ! function_exists('mail') ) {
+					/* translators: %s is for the code element */
 					echo '<p class="setting-description">' .
-						__('Sorry, but the function <code>mail()</code> required to notify you by mail is not enabled in your PHP configuration. You might want to install a WordPress plugin that uses SMTP instead of <code>mail()</code>. Or you can contact your hosting provider to change this.', 'gwolle-gb')
+						sprintf( esc_html__('Sorry, but the function %smail()%s required to notify you by mail is not enabled in your PHP configuration. You might want to install a WordPress plugin that uses SMTP instead of %smail()%s. Or you can contact your hosting provider.', 'gwolle-gb'), '<code>', '</code>', '<code>', '</code>' )
 						. '</p>';
 				} ?>
 				<select name="unsubscribe" id="unsubscribe">

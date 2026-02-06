@@ -2,8 +2,8 @@
 Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, therab, robinnatter, ronr1999, slavum, chris0815, cleantalk, alexclassroom, rhialto
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
-Tested up to: 6.8
-Stable tag: 4.9.3
+Tested up to: 6.9
+Stable tag: 4.10.0
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -449,6 +449,30 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 4.10.0 =
+* 2025-12-23
+* Remove support for Cleantalk antispam service, merged in their plugin.
+  (since v6.68 released on 13.11.2025).
+* Rewrite most jQuery code into vanilla JavaScript.
+* Use CSS transition for main button of form.
+* Use CSS transition for metabox.
+* Use CSS transition for readmore links.
+* Use button to toggle metabox on frontend.
+* Improve blocklist.
+* Add function gwolle_gb_check_ip_on_blocklist().
+* Always show ajax icon in metabox, even if not logged in.
+* Change a few class names for gwolle-gb-messages.
+* Better sanitizing of settings.
+* Add function gwolle_gb_setting_array_sanitize.
+* Add function gwolle_gb_markitup_replace for backwards compatibility.
+* Use plugin_dir_path instead of WP_PLUGIN_DIR.
+* Verify Nonces correctly.
+* Remove upgrading old options that don't exist anymore.
+* Set autoload explicitly for options.
+* Reset character counter for textarea after submitting new entry.
+* Remove deprecated gwolle_gb_scroll_callback (as jQuery.Callbacks() ).
+* Cleanup old strings for Add-On.
 
 = 4.9.3 =
 * 2025-06-23

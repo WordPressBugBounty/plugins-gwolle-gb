@@ -20,6 +20,7 @@
 
 .gwolle-gb-write-button {
 	margin: 20px 0 10px;
+	overflow: hidden;
 }
 html body div.gwolle-gb div.gwolle-gb-write-button input[type="button"].button {
 	float: none; /* To avoid problems with too invasive themes. */
@@ -31,6 +32,7 @@ html body div.gwolle-gb div.gwolle-gb-write-button input[type="button"].button {
 	position: relative;
 	margin-top: 20px;
 	text-align: left;
+	overflow: hidden;
 }
 
 html body div.gwolle-gb form.gwolle-gb-write button.gb-notice-dismiss {
@@ -46,11 +48,15 @@ html body div.gwolle-gb form.gwolle-gb-write button.gb-notice-dismiss {
 	background-color: #888;
 	display: inline-block;
 	speak: none;
-	line-height: 16px;
-	height: 16px;
-	width: 14px;
-	font-size: 11px;
+	line-height: 20px;
+	height: 20px;
+	width: 20px;
+	font-size: 16px;
 	text-align: center;
+	font-weight: 600;
+}
+html body div.gwolle-gb form.gwolle-gb-write button.gb-notice-dismiss:focus {
+	border: 1px solid blue;
 }
 
 .gwolle-gb-float .label,
@@ -252,29 +258,37 @@ body .gwolle-gb-content a {
 .gwolle-gb .gb-entry .gb-highlight {
 	background-color: #ddff00;
 }
-
+.gb-entry-full-content,
+.gb-admin_reply-full-content {
+	overflow: hidden
+}
 
 /* Metabox */
 
-div.gb-metabox-handle {
+button.gb-metabox-handle {
 	position: absolute;
 	top: 0;
 	right: 0;
 	padding: 10px;
 	cursor: pointer;
 	font-weight: bold;
-}
-div.gb-metabox-handle:focus {
+	color: currentColor;
+	background-color: transparent;
+	border-width: 0px;
 	outline-color: currentColor;
-	outline-style: solid;
+	outline-style: none;
 	outline-width: thin;
+}
+button.gb-metabox-handle:focus {
+	outline-style: solid; /* used for Tab */
 }
 
 div.gb-metabox {
-	display: none;
+	visibility: hidden;
+	opacity: 0;
 	position: absolute;
 	top: 0;
-	right: 30px;
+	right: 33px;
 	width: 200px;
 	box-sizing: border-box;
 	z-index: 10;

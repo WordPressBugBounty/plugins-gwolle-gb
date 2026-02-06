@@ -9,49 +9,48 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * Register Settings
  */
 function gwolle_gb_register_settings() {
-	//                                      option_name                   sanitize       default value
-	register_setting( 'gwolle_gb_options', 'gwolle_gb_addon-moderation_keys', 'strval' ); // 'true', taken from the Add-On since 4.0.4
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-admin_style',       'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-adminMailContent',  'strval' ); // empty by default
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-akismet-active',    'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-antispam-question', 'strval' ); // empty string
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-antispam-answer',   'strval' ); // empty string
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-authorMailContent', 'strval' ); // empty by default
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-authormoderationcontent', 'strval' ); // empty by default
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-cleantalk-active',  'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-entries_per_page',  'intval' ); // 20
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-entriesPerPage',    'intval' ); // 20
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-excerpt_length',    'intval' ); // 0
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-form',              'array'  ); // serialized array, but initially empty
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-form_ajax',         'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-header',            'strval' ); // string, but initially empty
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-honeypot',          'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-honeypot_value',    'intval' ); // random 1 - 100
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-labels_float',      'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-linkAuthorWebsite', 'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-linkchecker',       'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-longtext',          'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail-from',         'strval' ); // empty string
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_admin_replyContent', 'strval' ); // empty by default
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_author',       'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_author_moderation', 'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-moderate-entries',  'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-navigation',        'intval' ); // 0 or 1, default is 0
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-nonce',             'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-notifyByMail',      'strval' ); // comma separated list of User IDs, initially empty
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-notify-with-spam',  'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-notice',            'strval' ); // string, but initially empty
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-paginate_all',      'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-read',              'array'  ); // serialized array, but initially empty
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-refuse-spam',       'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-require_login',     'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-sfs',               'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-store_ip',          'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-showEntryIcons',    'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-showLineBreaks',    'strval' ); // 'false'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-showSmilies',       'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb-timeout',           'strval' ); // 'true'
-	register_setting( 'gwolle_gb_options', 'gwolle_gb_version',           'strval' ); // string, mind the underscore
+	//                                      option_name                          sanitize                   default value
+	register_setting( 'gwolle_gb_options', 'gwolle_gb_addon-moderation_keys',   'wp_kses_post' );        // empty by default, taken from the Add-On since 4.0.4
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-admin_style',             'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-adminMailContent',        'wp_kses_post' );        // empty by default
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-akismet-active',          'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-antispam-question',       'sanitize_text_field' ); // empty string
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-antispam-answer',         'sanitize_text_field' ); // empty string
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-authorMailContent',       'wp_kses_post' );        // empty by default
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-authormoderationcontent', 'wp_kses_post' );        // empty by default
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-entries_per_page',        'intval' );              // 20
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-entriesPerPage',          'intval' );              // 20
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-excerpt_length',          'intval' );              // 0
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-form',                    'gwolle_gb_setting_array_sanitize' ); // serialized array, but initially empty
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-form_ajax',               'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-header',                  'sanitize_text_field' ); // string, but initially empty
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-honeypot',                'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-honeypot_value',          'intval' );              // random 1 - 100
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-labels_float',            'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-linkAuthorWebsite',       'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-linkchecker',             'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-longtext',                'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail-from',               'sanitize_email' );      // empty string
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_admin_replyContent', 'wp_kses_post' );        // empty by default
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_author',             'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-mail_author_moderation',  'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-moderate-entries',        'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-navigation',              'intval' );              // 0 or 1, default is 0
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-nonce',                   'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-notifyByMail',            'sanitize_text_field' ); // comma separated list of User IDs, initially empty
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-notify-with-spam',        'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-notice',                  'sanitize_text_field' ); // string, but initially empty
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-paginate_all',            'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-read',                    'gwolle_gb_setting_array_sanitize' ); // serialized array, but initially empty
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-refuse-spam',             'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-require_login',           'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-sfs',                     'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-store_ip',                'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-showEntryIcons',          'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-showLineBreaks',          'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-showSmilies',             'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-timeout',                 'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_options', 'gwolle_gb_version',                 'sanitize_text_field' ); // string, mind the underscore
 }
 add_action( 'admin_init', 'gwolle_gb_register_settings' );
 
@@ -129,5 +128,52 @@ function gwolle_gb_get_setting( $request ) {
 		}
 	}
 	return false;
+
+}
+
+
+/*
+ * Sanitize arrays.
+ *
+ * @since 4.9.4
+ */
+function gwolle_gb_setting_array_sanitize( $data ) {
+
+	$new_data = array();
+
+	if ( is_object( $data ) ) {
+		$data = get_object_vars( $data );
+	}
+
+	if ( is_array( $data ) ) {
+		foreach ( $data as $key => $val ) {
+
+			if ( is_string( $key ) ) {
+				$key = sanitize_text_field( $key ); // do not use sanitize_key, it is way too strict for the strings option.
+			} else if ( is_int( $key ) ) {
+				// $key = $key; // yes, no need to sanitize.
+			} else {
+				return array(); // does this even exist and happen?
+			}
+
+			if ( is_array( $val ) ) {
+				// recursive; array in an array. happens with the social media option.
+				$new_data[$key] = gwolle_gb_setting_array_sanitize( $val );
+			} else if ( is_string( $val ) ) {
+				$new_data[$key] = gwolle_gb_sanitize_input( $val, 'setting_textarea' );
+			} else if ( is_bool( $val ) || is_int( $val ) || is_float( $val ) ) {
+				$new_data[$key] = $val; // no need to sanitize.
+			}
+			// no other data types accepted.
+
+		}
+	} else if ( is_string( $data ) ) {
+			$new_data[] = gwolle_gb_sanitize_input( $data, 'setting_textarea' );
+	} else if ( is_bool( $data ) || is_int( $data ) || is_float( $data ) ) {
+			$new_data[] = $data; // no need to sanitize.
+	}
+	// no other data types accepted.
+
+	return $new_data;
 
 }

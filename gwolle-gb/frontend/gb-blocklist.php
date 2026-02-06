@@ -17,20 +17,21 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  */
 function gwolle_gb_blocklist( $entry ) {
 
-	$wp_mod_keys = trim( get_option( 'moderation_keys' ) );
-	$gb_mod_keys = trim( get_option( 'gwolle_gb_addon-moderation_keys' ) );
+	// WordPress Core.
+	$mod_keys = trim( get_option( 'moderation_keys', '' ) );
+	$mod_keys .= "\n";
+	$mod_keys .= trim( get_option( 'disallowed_keys', '' ) );
+	$mod_keys .= "\n";
+	// Own IP blocklist.
+	$mod_keys .= trim( get_option( 'gwolle_gb_addon-moderation_keys', '' ) );
+
 	$send_to_moderation = false;
 
 	// If moderation 'keys' (keywords) are set, process them.
-	$wp_words = array();
-	$gb_words = array();
-	if ( ! empty( $wp_mod_keys ) ) {
-		$wp_words = explode( "\n", $wp_mod_keys );
+	$words = array();
+	if ( ! empty( $mod_keys ) ) {
+		$words = explode( "\n", $mod_keys );
 	}
-	if ( ! empty( $gb_mod_keys ) ) {
-		$gb_words = explode( "\n", $gb_mod_keys );
-	}
-	$words = array_merge( $wp_words, $gb_words );
 
 	if ( ! empty( $words ) ) {
 		foreach ( (array) $words as $word ) {
@@ -106,3 +107,71 @@ function gwolle_gb_disable_addon_blocklist() {
 
 }
 add_action('init', 'gwolle_gb_disable_addon_blocklist');
+
+
+/*
+ * Check on frontend for blocklisted IP address.
+ * Borrowed from wp-includes/comment.php check_comment().
+ * Uses blocklisted IP address from WordPress Core Comments.
+ *
+ * @uses static $ip_on_blocklist we only run this function once per request to save on CPU cycles.
+
+ * @since 4.9.4
+ *
+ * @return bool true when on blocklist, false when not.
+ */
+function gwolle_gb_check_ip_on_blocklist() {
+
+	static $ip_on_blocklist;
+
+	if ( isset( $ip_on_blocklist ) ) { // not null.
+		return $ip_on_blocklist;
+	}
+
+	// WordPress Core.
+	$mod_keys = trim( get_option( 'moderation_keys', '' ) );
+	$mod_keys .= "\n";
+	$mod_keys .= trim( get_option( 'disallowed_keys', '' ) );
+	$mod_keys .= "\n";
+	// Own IP blocklist.
+	$mod_keys .= trim( get_option( 'gwolle_gb_addon-moderation_keys', '' ) );
+
+	// If moderation 'keys' (keywords) are set, process them.
+	$words = array();
+	if ( ! empty( $mod_keys ) ) {
+		$words = explode( "\n", $mod_keys );
+	}
+
+	if ( ! empty( $words ) ) {
+		foreach ( (array) $words as $word ) {
+			$word = trim( $word );
+
+			// Skip empty lines.
+			if ( empty( $word ) ) {
+				continue;
+			}
+
+			/*
+			 * Do some escaping magic so that '#' (number of) characters in the spam
+			 * words don't break things:
+			 */
+			$word = preg_quote( $word, '#' );
+
+			/*
+			 * Check the comment fields for moderation keywords. If any are found,
+			 * fail the check for the given field by returning false.
+			 */
+			$pattern = "#$word#i";
+
+			$user_ip = gwolle_gb_get_user_ip();
+			if ( preg_match( $pattern, $user_ip ) ) {
+				$ip_on_blocklist = true;
+				return true;
+			}
+		}
+	}
+
+	$ip_on_blocklist = false;
+	return false;
+
+}

@@ -87,9 +87,9 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	if ( $gwolle_gb_errors ) {
 		$messageclass = 'error';
 	}
-	$output .= '<div class="gwolle_gb_messages_top_container">';
+	$output .= '<div class="gwolle_gb_messages_top_container gwolle-gb-messages-top-container">';
 	if ( isset($gwolle_gb_messages) && $gwolle_gb_messages !== '') {
-		$output .= '<div class="gwolle_gb_messages ' . $messageclass . '">';
+		$output .= '<div class="gwolle_gb_messages gwolle-gb-messages ' . $messageclass . '">';
 		$output .= $gwolle_gb_messages;
 		$output .= '</div>';
 	}
@@ -131,7 +131,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 	if ( ( $shortcode_atts['button'] === 'true' ) && ( ! $gwolle_gb_errors ) ) {
 		$button = '
 			<div class="gwolle-gb-write-button">
-				<input type="button" name="gwolle-gb-write-button" class="button btn btn-default ' . esc_attr( $button_class ) . '" value="' . esc_attr( $button_text ) . '" />
+				<input type="button" name="gwolle-gb-write-button" class="button btn btn-default ' . esc_attr( $button_class ) . '" value="' . esc_attr( $button_text ) . '" aria-expanded="false" />
 			</div>';
 		$output .= apply_filters( 'gwolle_gb_button', $button);
 
@@ -473,7 +473,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 
 	/* Submit button and message container */
 	$output .= '
-			<div class="gwolle_gb_messages_bottom_container"></div>
+			<div class="gwolle_gb_messages_bottom_container gwolle-gb-messages-bottom-container"></div>
 
 			<noscript><div class="no-js">' . esc_html__( 'Warning: This form can only be used if JavaScript is enabled in your browser.', 'gwolle-gb' ) . '</div></noscript>
 

@@ -574,7 +574,7 @@ function gwolle_gb_page_editor_update( $entry ) {
 	/* Check Nonce */
 	$verified = false;
 	if ( isset($_POST['gwolle_gb_wpnonce']) ) {
-		$verified = wp_verify_nonce( $_POST['gwolle_gb_wpnonce'], 'gwolle_gb_page_editor' );
+		$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_wpnonce'] ) ), 'gwolle_gb_page_editor' );
 	}
 	if ( $verified === false ) {
 		// Nonce is invalid.

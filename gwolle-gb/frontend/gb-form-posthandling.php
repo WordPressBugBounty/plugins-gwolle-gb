@@ -268,23 +268,6 @@ function gwolle_gb_frontend_posthandling() {
 		}
 
 
-		/* Cleantalk: check for spam and set accordingly */
-		$marked_by_cleantalk = false;
-		if ( get_option( 'gwolle_gb-cleantalk-active', 'false' ) === 'true' ) {
-			$isspam = gwolle_gb_cleantalk( $entry );
-			if ( $isspam ) {
-				// Returned true, so considered spam
-				$entry->set_isspam(true);
-				$marked_by_cleantalk = true;
-				if (get_option( 'gwolle_gb-refuse-spam', 'false') === 'true') {
-					gwolle_gb_add_message( '<p class="refuse-spam-cleantalk"><strong>' . esc_html__('Your entry was marked as spam. Please try again.', 'gwolle-gb') . '</strong></p>', true, false );
-					do_action( 'gwolle_gb_notsaved_entry_frontend', $entry );
-					return false;
-				}
-			}
-		}
-
-
 		/* Honeypot: check for spam and set accordingly. */
 		$marked_by_honeypot = false;
 		if (get_option( 'gwolle_gb-honeypot', 'true') === 'true') {
@@ -318,7 +301,7 @@ function gwolle_gb_frontend_posthandling() {
 		$marked_by_nonce = false;
 		if (get_option( 'gwolle_gb-nonce', 'true') === 'true') {
 			$field_name = gwolle_gb_get_field_name( 'nonce' );
-			$verified = wp_verify_nonce( $_POST["$field_name"], 'gwolle_gb_add_entry' );
+			$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST["$field_name"] ) ), 'gwolle_gb_add_entry' );
 			if ( $verified === false ) {
 				// Nonce is invalid, so considered spam
 				$entry->set_isspam(true);
@@ -480,9 +463,6 @@ function gwolle_gb_frontend_posthandling() {
 			}
 			if ( $marked_by_sfs ) {
 				gwolle_gb_add_log_entry( $entry->get_id(), 'marked-by-sfs' );
-			}
-			if ( $marked_by_cleantalk ) {
-				gwolle_gb_add_log_entry( $entry->get_id(), 'marked-by-cleantalk' );
 			}
 			if ( $marked_by_honeypot ) {
 				gwolle_gb_add_log_entry( $entry->get_id(), 'marked-by-honeypot' );

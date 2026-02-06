@@ -340,7 +340,7 @@ function gwolle_gb_ajax_callback() {
 	/* Check Nonce */
 	$verified = false;
 	if ( isset($_POST['security']) ) {
-		$verified = wp_verify_nonce( $_POST['security'], 'gwolle_gb_ajax' );
+		$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'gwolle_gb_ajax' );
 	}
 	if ( $verified === false ) {
 		// Nonce is invalid.
