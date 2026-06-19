@@ -11,7 +11,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
-
 /*
  * Install plugin structure.
  */
@@ -72,9 +71,33 @@ function gwolle_gb_install() {
 		add_option( 'gwolle_gb_version', GWOLLE_GB_VER, '', true );
 	}
 
+	/* Add-on */
+
+	// Declare database table names
+	$wpdb->gwolle_gb_meta = $wpdb->prefix . 'gwolle_gb_meta';
+
+	$sql = "
+		CREATE TABLE IF NOT EXISTS
+			" . $wpdb->gwolle_gb_meta . "
+		(
+			meta_id bigint(20) NOT NULL auto_increment,
+			entry_id bigint(20) NOT NULL,
+			meta_key varchar(255) NOT NULL default '0',
+			meta_value longtext NOT NULL,
+			PRIMARY KEY  (meta_id)
+		) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+	$result = $wpdb->query($sql);
+
+	/* Save plugin version to database only when we did install. */
+	$result_after3 = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_meta'");
+	if ( $result_after3 != 0 ) {
+		update_option( 'gwolle_gb_addon_version', GWOLLE_GB_ADDON_VER, true );
+	}
+
 	/* Call flush_rules() as a method of the $wp_rewrite object for the RSS Feed. */
 	global $wp_rewrite;
 	$wp_rewrite->flush_rules( false );
+
 }
 
 
@@ -83,10 +106,12 @@ function gwolle_gb_install() {
  * Called from the settingspage or from multisite uninstall function.
  */
 function gwolle_gb_uninstall() {
+
 	// Delete the plugin's tables
 	global $wpdb;
 	$wpdb->query("DROP TABLE " . $wpdb->prefix . "gwolle_gb_log");
 	$wpdb->query("DROP TABLE " . $wpdb->prefix . "gwolle_gb_entries");
+	$wpdb->query("DROP TABLE " . $wpdb->prefix . "gwolle_gb_meta");
 
 	// Delete the plugin's preferences and version-nr in the wp-options table
 	$wpdb->query("
@@ -100,6 +125,7 @@ function gwolle_gb_uninstall() {
 
 	// Deactivate ourselves
 	deactivate_plugins( GWOLLE_GB_FOLDER . '/gwolle-gb.php' );
+
 }
 
 
@@ -404,11 +430,21 @@ function gwolle_gb_upgrade() {
 		delete_option('gwolle_gb-cleantalk-active');
 	}
 
+	if (version_compare($installed_ver, '5.0.0', '<')) {
+		/*
+		 * 4.10.1->5.0.0
+		 * Add-on is now integrated into main plugin.
+		 */
+		deactivate_plugins( GWOLLE_GB_ADDON_FOLDER . '/gwolle-gb-addon.php' );
+	}
+
+
 	/* Upgrade to new shiny db collation. Since WP 4.2 */
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	if ( function_exists('maybe_convert_table_to_utf8mb4') ) {
 		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_entries );
 		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_log );
+		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_meta );
 	}
 
 	/* Set default options if not set yet. */
@@ -416,6 +452,37 @@ function gwolle_gb_upgrade() {
 
 	/* Update the plugin version option. */
 	update_option( 'gwolle_gb_version', GWOLLE_GB_VER, true );
+
+
+	/* Add-on */
+	$installed_addon = get_option('gwolle_gb_addon_version');
+
+	if (version_compare($installed_addon, '2.0.0', '<')) {
+		/*
+		 * 1.5.1->2.0.0
+		 * Fix serialized options.
+		 */
+		$options = array(
+			'gwolle_gb_addon-form_top',
+			'gwolle_gb_addon-form_name',
+			'gwolle_gb_addon-form_city',
+			'gwolle_gb_addon-form_email',
+			'gwolle_gb_addon-form_website',
+			'gwolle_gb_addon-form_message',
+			'gwolle_gb_addon-reading',
+			'gwolle_gb_addon-social_services',
+			'gwolle_gb_addon-strings',
+		);
+		foreach ( $options as $option ) {
+			$value = get_option( $option, array() );
+			$value = maybe_unserialize( $value );
+			update_option( $option, $value, true );
+		}
+	}
+
+	/* Update the plugin version option */
+	update_option( 'gwolle_gb_addon_version', GWOLLE_GB_ADDON_VER, true );
+
 }
 
 
@@ -432,6 +499,9 @@ function gwolle_gb_set_defaults() {
 	}
 	if ( get_option('gwolle_gb-akismet-active', false) === false ) {
 		update_option( 'gwolle_gb-akismet-active', 'false', true );
+	}
+	if ( get_option('gwolle_gb-double_entry', false) === false ) {
+		update_option( 'gwolle_gb-double_entry', 'true', true );
 	}
 	if ( get_option('gwolle_gb-entries_per_page', false) === false ) {
 		update_option( 'gwolle_gb-entries_per_page', 20, false ); // admin
@@ -546,4 +616,92 @@ function gwolle_gb_set_defaults() {
 	if ( get_option('gwolle_gb-timeout', false) === false ) {
 		update_option( 'gwolle_gb-timeout', 'true', true );
 	}
+
+	/* Add-on */
+	if ( get_option('gwolle_gb_addon-auto_anonymize', false) === false ) {
+		update_option( 'gwolle_gb_addon-auto_anonymize', 'false', false );
+	}
+	if ( get_option('gwolle_gb_addon-auto_delete', false) === false ) {
+		update_option( 'gwolle_gb_addon-auto_delete', 'false', false );
+	}
+	if ( get_option('gwolle_gb_addon-delete_link', false) === false ) {
+		update_option( 'gwolle_gb_addon-delete_link', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-delete_link_author', false) === false ) {
+		update_option( 'gwolle_gb_addon-delete_link_author', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-email', false) === false ) {
+		update_option( 'gwolle_gb_addon-email', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-upload', false) === false ) {
+		update_option( 'gwolle_gb_addon-upload', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-report', false) === false ) {
+		update_option( 'gwolle_gb_addon-report', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-preview', false) === false ) {
+		update_option( 'gwolle_gb_addon-preview', 'true', true );
+	}
+	if ( get_option('gwolle_gb_addon-permalink', false) === false ) {
+		update_option( 'gwolle_gb_addon-permalink', 'true', true );
+	}
+	if ( get_option('gwolle_gb_addon-likes', false) === false ) {
+		update_option( 'gwolle_gb_addon-likes', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-likes_loc', false) === false ) {
+		update_option( 'gwolle_gb_addon-likes_loc', 1, true );
+	}
+	if ( get_option('gwolle_gb_addon-social_media', false) === false ) {
+		update_option( 'gwolle_gb_addon-social_media', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-social_media_loc', false) === false ) {
+		update_option( 'gwolle_gb_addon-social_media_loc', 2, true );
+	}
+	if ( get_option('gwolle_gb_addon-social_services', false) === false ) {
+		update_option( 'gwolle_gb_addon-social_services', array(), true );
+	}
+	if ( get_option('gwolle_gb_addon-starrating', false) === false ) {
+		update_option( 'gwolle_gb_addon-starrating', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-starrating_avg', false) === false ) {
+		update_option( 'gwolle_gb_addon-starrating_avg', 'false', true );
+	}
+	if ( get_option('gwolle_gb_addon-starrating_loc', false) === false ) {
+		update_option( 'gwolle_gb_addon-starrating_loc', 2, true );
+	}
+	if ( get_option('gwolle_gb_addon-strings', false) === false ) {
+		update_option( 'gwolle_gb_addon-strings', 'false', true );
+	}
+
 }
+
+
+/*
+ * Support uninstall for MultiSite through a filter.
+ * Take Note: This will do an uninstall on all sites.
+ * Only run on admin_init, no need for the frontend.
+ *
+ * @since 2.1.0
+ */
+function gwolle_gb_multisite_uninstall() {
+	global $wpdb;
+
+	if ( is_admin() ) {
+		if ( is_multisite() ) {
+			$do_uninstall = apply_filters( 'gwolle_gb_multisite_uninstall', false );
+			if ( $do_uninstall ) {
+				$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+				foreach ($blogids as $blog_id) {
+					switch_to_blog($blog_id);
+					gwolle_gb_uninstall();
+					restore_current_blog();
+				}
+				// Avoid database errors and PHP notices, don't run these actions anymore.
+				remove_action( 'admin_menu', 'gwolle_gb_adminmenu', 10 );
+				remove_action( 'wp_dashboard_setup', 'gwolle_gb_dashboard_setup', 10 );
+				remove_action( 'admin_bar_menu', 'gwolle_gb_admin_bar_menu', 61 );
+			}
+		}
+	}
+}
+add_action('admin_init', 'gwolle_gb_multisite_uninstall', 99);

@@ -504,7 +504,7 @@ function gwolle_gb_page_import_post() {
 						$handle = fopen($_FILES['start_import_gwolle_file']['tmp_name'], 'r');
 						$row = 0;
 
-						while ( ( $data = fgetcsv( $handle, 2000, ',', '"' ) ) !== FALSE ) {
+						while ( ( $data = fgetcsv( $handle, 2000, ',', '"', '\\' ) ) !== FALSE ) {
 							$num = count($data);
 							if ($row === 0) {
 								// Check the headerrow. $testrow_old is version 1.4.1 and older.
@@ -640,11 +640,11 @@ function gwolle_gb_page_import_post() {
 							$save = $entry->save();
 							if ( $save ) {
 								// We have been saved to the Database
-								if ( isset( $metas ) && function_exists( 'gwolle_gb_addon_save_meta' ) ) {
+								if ( isset( $metas ) ) {
 									$metas = maybe_unserialize( $metas );
 									if ( ! empty( $metas ) && is_array( $metas ) ) {
 										foreach ( $metas as $meta ) {
-											gwolle_gb_addon_save_meta( $entry->get_id(), $meta['meta_key'], $meta['meta_value'] );
+											gwolle_gb_addon_save_meta_v2( $entry->get_id(), $meta['meta_key'], $meta['meta_value'] );
 										}
 									}
 								}

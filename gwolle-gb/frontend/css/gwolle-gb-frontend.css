@@ -493,3 +493,40 @@ div.gb-social-media-share img {
 	}
 
 }
+
+
+/*
+ * CSS for the Frontend of Gwolle Guestbook plugin Add-On.
+ */
+
+
+div.gwolle-gb-starrating-result {
+	position: absolute;
+	top: 0;
+	right: 30px;
+	width: 200px;
+	padding: 3px 6px;
+	box-sizing: border-box;
+	z-index: 5;
+}
+
+div.gb-social-media-share img {
+	float: left;
+	cursor: pointer;
+}
+
+a.gwolle-gb-like-link,
+a.gwolle-gb-unlike-link {
+	border-radius: 3px;
+	border: 1px solid transparent;
+	padding: 2px;
+}
+a.gwolle-gb-like-link.gb-already-liked {
+	border: 1px solid #00a32a;
+}
+a.gwolle-gb-like-link.gb-already-liked img {
+
+}
+a.gwolle-gb-unlike-link.gb-already-unliked {
+	border: 1px solid #d63638;
+}

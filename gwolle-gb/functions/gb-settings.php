@@ -19,6 +19,7 @@ function gwolle_gb_register_settings() {
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-authorMailContent',       'wp_kses_post' );        // empty by default
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-authormoderationcontent', 'wp_kses_post' );        // empty by default
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-entries_per_page',        'intval' );              // 20
+	register_setting( 'gwolle_gb_options', 'gwolle_gb-double_entry',            'sanitize_text_field' ); // 'true'
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-entriesPerPage',          'intval' );              // 20
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-excerpt_length',          'intval' );              // 0
 	register_setting( 'gwolle_gb_options', 'gwolle_gb-form',                    'gwolle_gb_setting_array_sanitize' ); // serialized array, but initially empty
@@ -53,6 +54,45 @@ function gwolle_gb_register_settings() {
 	register_setting( 'gwolle_gb_options', 'gwolle_gb_version',                 'sanitize_text_field' ); // string, mind the underscore
 }
 add_action( 'admin_init', 'gwolle_gb_register_settings' );
+
+
+/*
+ * Register Settings
+ */
+function gwolle_gb_addon_register_settings_v2() {
+	//                                           option_name                           sanitize                 default value
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-auto_delete',        'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-auto_delete_time',   'intval' );              // 5
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-auto_anonymize',     'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-auto_anonymize_time','intval' );              // 5
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-delete_link',        'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-delete_link_author', 'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-email',              'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-form_top',           'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-form_name',          'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-form_city',          'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-form_email',         'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-form_website',       'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-form_message',       'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-likes',              'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-likes_loc',          'intval' );              // 1
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-permalink',          'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-preview',            'sanitize_text_field' ); // 'true'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-reading',            'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-report',             'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-social_media',       'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-social_media_loc',   'intval' );              // 2
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-social_services',    'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-starrating',         'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-starrating_avg',     'sanitize_text_field' ); // 'false' or int
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-starrating_loc',     'intval' );              // 2
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-starrating_type',    'sanitize_text_field' ); // ''
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-strings',            'gwolle_gb_setting_array_sanitize' );               // serialized array
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-upload',             'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-version',            'sanitize_text_field' ); // string
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-widget',             'gwolle_gb_setting_array_sanitize' );               // serialized array
+}
+add_action( 'admin_init', 'gwolle_gb_addon_register_settings_v2' );
 
 
 /*

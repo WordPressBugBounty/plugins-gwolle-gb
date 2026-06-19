@@ -3,7 +3,7 @@
 Plugin Name: Gwolle Guestbook
 Plugin URI: https://zenoweb.nl/
 Description: Gwolle Guestbook is not just another guestbook for WordPress. The goal is to provide an easy and slim way to integrate a guestbook into your WordPress powered site. Don't use your 'comment' section the wrong way - install Gwolle Guestbook and have a real guestbook.
-Version: 4.10.1
+Version: 5.0.0
 Author: Marcel Pol
 Author URI: https://zenoweb.nl
 License: GPLv2 or later
@@ -44,7 +44,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 // Plugin Version
-define('GWOLLE_GB_VER', '4.10.1');
+define('GWOLLE_GB_VER', '5.0.0');
+define('GWOLLE_GB_ADDON_VER', '2.10.2');
 
 
 /*
@@ -94,11 +95,44 @@ define('GWOLLE_GB_VER', '4.10.1');
 
 
 /*
+ * Todo list Add-on and random ideas:
+ *
+ * - Consider a title field.
+ * - Consider meta fields under Custom Quizz.
+ * - String replacement
+ *   - Support html entities?
+ * - Improved Multibooks??
+ * - Multi-Lingual support??:
+ *   - Polylang
+ *   - WPML
+ *   - Qtranslate
+ *   - Settings support
+ * - Infinite scroll settingstab:
+ *   - Element to regard as bottom of page.
+ *   - Offset from end of page.
+ * - Add options for CSS in the settings (using some themes?).
+ * - Extend edit to all fields.
+ * - Add quote in bbcode.
+ * - Add search in meta fields to main search widget.
+ * - Replace social icons with inline svg.
+ *   https://github.com/tabler/tabler-icons
+ * - Consider supporting embeds from WP Core.
+ *   https://wordpress.org/support/topic/youtube-embed-16
+ * - Consider button to delete uploaded image again from media library.
+ *
+ */
+
+
+/*
  * Definitions
  */
 define('GWOLLE_GB_FOLDER', plugin_basename( __DIR__ ));
 define('GWOLLE_GB_DIR', plugin_dir_path( __FILE__ ));
 define('GWOLLE_GB_URL', plugins_url( '/', __FILE__ ));
+
+define('GWOLLE_GB_ADDON_FOLDER', plugin_basename( __DIR__ ));
+define('GWOLLE_GB_ADDON_DIR', plugin_dir_path( __FILE__ ));
+define('GWOLLE_GB_ADDON_URL', plugins_url( '/', __FILE__ ));
 
 
 global $wpdb;
@@ -106,37 +140,59 @@ global $wpdb;
 // Declare database table names
 $wpdb->gwolle_gb_entries = $wpdb->prefix . 'gwolle_gb_entries';
 $wpdb->gwolle_gb_log = $wpdb->prefix . 'gwolle_gb_log';
+$wpdb->gwolle_gb_meta = $wpdb->prefix . 'gwolle_gb_meta';
 
 
 // Classes
 require_once GWOLLE_GB_DIR . '/functions/gb-class-entry.php';
 
 // Functions for the frontend
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-admin-reply.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-delete.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-entry-edit.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-infinite-scroll.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-likes.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-live-refresh.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-preview.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-ajax-report-abuse.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-blocklist.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-email.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-form.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-form-ajax.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-form-posthandling.php';
-require_once GWOLLE_GB_DIR . '/frontend/gb-shortcode-widget.php';
-require_once GWOLLE_GB_DIR . '/frontend/gb-shortcodes.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-meta-fields-display.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-meta-fields-form.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-meta-fields-posthandling.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-pagination.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-permalink.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-read.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-rss.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-shortcode-widget.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-shortcodes.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-social-media.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-starrating-average.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-starrating.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-strings.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-total.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-upload-media.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-widget.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-widget-filters.php';
 require_once GWOLLE_GB_DIR . '/frontend/gb-widget-search.php';
+require_once GWOLLE_GB_DIR . '/frontend/gb-widget-starrating-average.php';
 
 // Functions and pages for the backend
 if ( is_admin() ) {
 	require_once GWOLLE_GB_DIR . '/admin/gb-ajax-management.php';
+	require_once GWOLLE_GB_DIR . '/admin/gb-ajax-report-abuse.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-dashboard-widget.php';
-	require_once GWOLLE_GB_DIR . '/admin/gb-page-add-on.php';
+	require_once GWOLLE_GB_DIR . '/admin/gb-metabox-metafields.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-page-editor.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-page-entries.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-page-export.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-page-gwolle-gb.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-page-import.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-page-settings.php';
+	require_once GWOLLE_GB_DIR . '/admin/gb-page-settings-add-on.php';
 	require_once GWOLLE_GB_DIR . '/admin/gb-pagination.php';
 	require_once GWOLLE_GB_DIR . '/admin/gwolle-gb-hooks.php';
 }
@@ -151,10 +207,20 @@ if ( is_admin() ) {
 	require_once GWOLLE_GB_DIR . '/admin/tabs/gb-emailtab.php';
 	require_once GWOLLE_GB_DIR . '/admin/tabs/gb-debugtab.php';
 	require_once GWOLLE_GB_DIR . '/admin/tabs/gb-uninstalltab.php';
+
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-abusetab.php';
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-formtab.php';
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-misctab.php';
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-readingtab.php';
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-socialtab.php';
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-starratingtab.php';
+	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-stringstab.php';
 }
 
 // General Functions
 require_once GWOLLE_GB_DIR . '/functions/gb-akismet.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-auto-anonymize.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-auto-delete.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-bbcode_emoji.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-book_id.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-cache.php';
@@ -169,10 +235,18 @@ require_once GWOLLE_GB_DIR . '/functions/gb-log.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-mail.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-messages.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-metabox.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-meta-fields.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-post-meta.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-privacy.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-report-abuse.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-settings.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-single-view.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-all-in-one-seo-pack.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-autodescription.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-google-sitemap-generator.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-wordpress.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-xml-sitemap-feed.php';
+require_once GWOLLE_GB_DIR . '/functions/gb-social-media.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-stop-forum-spam.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-user.php';
 require_once GWOLLE_GB_DIR . '/functions/gb-user-ip.php';
@@ -209,3 +283,18 @@ function gwolle_gb_activation( $networkwide ) {
 	}
 }
 register_activation_hook(__FILE__, 'gwolle_gb_activation');
+
+
+/*
+ * Yoast SEO sitemap provider for Gwolle Guestbook.
+ *
+ * @since 1.1.0
+ */
+function gwolle_gb_addon_yoast_seo_sitemap_v2( $providers ) {
+	if ( interface_exists('WPSEO_Sitemap_Provider') ) {
+		require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-yoast-seo.php';
+		$providers[] = new WPSEO_Gwolle_GB_Sitemap_Provider_v2();
+	}
+	return $providers;
+}
+add_filter( 'wpseo_sitemaps_providers', 'gwolle_gb_addon_yoast_seo_sitemap_v2' );

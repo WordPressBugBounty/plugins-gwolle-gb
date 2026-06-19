@@ -44,8 +44,23 @@ function gwolle_gb_frontend_callback_function() {
 	}
 
 	// For add-on.
-	if ( typeof gwolle_gb_addon_frontend_callback_function === 'function' ) {
-		gwolle_gb_addon_frontend_callback_function();
+	if ( typeof gwolle_gb_addon_admin_reply === 'function' ) {
+		gwolle_gb_addon_admin_reply();
+	}
+	if ( typeof gwolle_gb_addon_delete === 'function' ) {
+		gwolle_gb_addon_delete();
+	}
+	if ( typeof gwolle_gb_addon_entry_edit === 'function' ) {
+		gwolle_gb_addon_entry_edit();
+	}
+	if ( typeof gwolle_gb_addon_like === 'function' ) {
+		gwolle_gb_addon_like();
+	}
+	if ( typeof gwolle_gb_addon_rateit === 'function' ) {
+		gwolle_gb_addon_rateit();
+	}
+	if ( typeof gwolle_gb_addon_report === 'function' ) {
+		gwolle_gb_addon_report();
 	}
 
 }
@@ -738,3 +753,1020 @@ function gwolle_gb_markitup_replace( target, bbcode ) {
 	}
 
 }
+
+
+/*
+ * JavaScript for Gwolle Guestbook Add-On Frontend.
+ */
+
+
+/*
+ * Upload media in form.
+ *
+ * With help from:
+ * https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
+ *
+ * @since 2.3.0
+ *
+ * @uses markitup library, should be enabled in settings (bbcode).
+ */
+document.addEventListener('DOMContentLoaded', function() {
+
+	const upload_buttons = document.querySelectorAll( 'div.gwolle-gb input.gwolle-gb-addon-upload-button' );
+	upload_buttons.forEach( upload_button => {
+		upload_button.addEventListener( 'click', function( event ) {
+
+			const target = event.target;
+			const main_div = target.closest( 'div.gwolle-gb' );
+
+			const message_div = main_div.querySelector( 'div.gwolle-gb-addon-upload-message' );
+			if ( message_div ) {
+				message_div.innerHTML = '';
+			}
+
+			if ( ! window.File || ! window.Blob) {
+				message_div.innerHTML = '<div class="gwolle-gb-messages error">The File APIs are not fully supported in this browser.</div>';
+				return;
+			}
+
+			var parent = this.parentNode;
+			var input = parent.querySelector('.gwolle-gb-write input[type="file"]');
+			if ( ! input ) {
+				message_div.innerHTML = '<div class="gwolle-gb-messages error">It seems there is no file input element.</div>';
+				return;
+			} else if ( ! input.files ) {
+				message_div.innerHTML = '<div class="gwolle-gb-messages error">This browser does not seem to support the `files` property of file inputs.</div>';
+				return;
+			} else if ( ! input.files[0] ) {
+				var no_file_chosen = gwolle_gb_frontend_script.no_file_chosen;
+				message_div.innerHTML = '<div class="gwolle-gb-messages error">' + no_file_chosen + '</div>';
+				return;
+			}
+
+			// Set Ajax icon on visible
+			const ajax_icon = main_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+			if (ajax_icon) {
+				ajax_icon.style.display = 'inline';
+			}
+
+			const fieldname_nonce = gwolle_gb_frontend_script.nonce;
+			const input_nonce = main_div.querySelector( 'input.' + fieldname_nonce );
+			const nonce = input_nonce.value;
+
+			const file = input.files[0];
+
+			file instanceof File; // true
+			file instanceof Blob; // true
+
+			const formData = new FormData();
+			formData.append( 'action', 'gwolle_gb_addon_upload_media' );
+			formData.append( 'nonce', nonce );
+			formData.append( 'gwolle-gb-addon-upload-media', file );
+
+			fetch( gwolle_gb_frontend_script.ajax_url, {
+				method: 'POST',
+				body: formData,
+				permalink: window.location.href,
+				processData: false,
+				contentType: false, // set to false so we have boundaries in the form as is standard.
+			})
+			.then(response => response.text())
+			.then(responseText => {
+
+				// console.table( responseText );
+
+				if ( gwolle_gb_is_json( responseText ) ) {
+					data = JSON.parse( responseText );
+
+					if ( ( typeof data['image_url'] === 'string' ) && typeof data['gwolle_gb_messages'] === 'string' ) {
+
+						var image_url          = data['image_url'];
+						var gwolle_gb_messages = data['gwolle_gb_messages'];
+						var image_url_length   = image_url.length;
+
+						if ( image_url_length > 0 ) {
+
+							// We have an image url.
+
+							// Append image to the content field for the upload form.
+							var target = main_div.querySelector( 'textarea.gwolle_gb_content' );
+							var bbcode = '\r\n[img]' + image_url + '[/img]\r\n';
+
+							if ( typeof gwolle_gb_markitup_replace === 'function' ) { // gwolle v4.10.0 and later
+								gwolle_gb_markitup_replace( target, bbcode );
+								message_div.innerHTML = '<div class="gwolle-gb-messages">' + gwolle_gb_messages + '</div>';
+								message_div.classList.remove( 'error' );
+							} else if ( typeof jQuery.markItUp === 'function' ) { // gwolle v4.10.0 and earlier
+								jQuery.markItUp( { target:target, replaceWith:bbcode } );
+								message_div.innerHTML = '<div class="gwolle-gb-messages">' + gwolle_gb_messages + '</div>';
+								message_div.classList.remove( 'error' );
+							} else {
+								message_div.innerHTML = '<div class="gwolle-gb-messages">Error, something failed. Please contact the admin of the website. Most probably the guestbook add-on is not compatible with the main plugin.</div>';
+								message_div.classList.add( 'error' );
+							}
+
+						} else {
+
+							// No image was saved...
+							message_div.innerHTML = '<div class="gwolle-gb-messages error">' + gwolle_gb_messages + '</div>';
+							message_div.classList.add( 'error' );
+
+						}
+					} else {
+						message_div.innerHTML = '<div class="gwolle-gb-messages">Gwolle Error: Something unexpected happened. (not the data that is expected)</div>';
+						message_div.classList.add( 'error' );
+					}
+
+				} else {
+					message_div.innerHTML = '<div class="gwolle-gb-messages">Gwolle Error: Something unexpected happened. (not the data that is expected)</div>';
+					message_div.classList.add( 'error' );
+				}
+
+				if (ajax_icon) {
+					ajax_icon.style.display = 'none';
+				}
+
+			});
+		});
+	});
+});
+
+
+/*
+ * Preview in the form.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+
+	const preview_buttons = document.querySelectorAll( 'div.gwolle_gb_submit input.gwolle_gb_preview' );
+
+	preview_buttons.forEach( function (button) {
+		button.addEventListener( 'click', function (event) {
+
+			const main_div = button.closest( 'div.gwolle-gb' );
+			const ajax_icon = main_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+			if (ajax_icon) {
+				ajax_icon.style.display = 'inline';
+			}
+
+			const form = main_div.querySelector( 'form.gwolle-gb-write' );
+			const formData = new FormData(); // Use an object, arrays are only indexed by integers.
+
+			const fieldname_nonce = gwolle_gb_frontend_script.nonce;
+			const input_nonce = form.querySelector( 'input.' + fieldname_nonce );
+			const nonce = input_nonce.value;
+
+			formData.append( 'permalink', window.location.href );
+			formData.append( 'action', 'gwolle_gb_preview' );
+			formData.append( 'nonce', nonce );
+
+			const inputs = form.querySelectorAll( 'input' );
+			inputs.forEach(function (input) {
+				const type = input.type;
+				const name = input.name;
+				const val = input.value;
+
+				if (type === 'checkbox') {
+					if (input.checked) {
+						formData.append( name, 'on' ); // Mimick standard $_POST value.
+					}
+				} else if (type === 'radio') {
+					if (input.checked) {
+						formData.append( name, val );
+					}
+				} else {
+					formData.append( name, val );
+				}
+			});
+
+			const textareas = form.querySelectorAll( 'textarea' );
+			textareas.forEach(function (textarea) {
+				formData.append( textarea.name, textarea.value );
+			});
+
+			const selects = form.querySelectorAll( 'select' );
+			selects.forEach(function (select) {
+				formData.append( select.name, select.value );
+			});
+
+			fetch( gwolle_gb_frontend_script.ajax_url, {
+				method: 'POST',
+				body: formData,
+			})
+			.then(response => response.text())
+			.then(responseText => {
+
+				// Prepend entry to the entry list if desired.
+				if ( typeof responseText === 'string' ) {
+					const gwolle_gb_reads = main_div.querySelectorAll( '.gwolle-gb-read' );
+					gwolle_gb_reads.forEach( function (gwolle_gb_read) {
+						gwolle_gb_read.insertAdjacentHTML( 'afterbegin', responseText );
+					});
+				}
+
+				if (typeof gwolle_gb_frontend_callback_function === 'function') {
+					// Run callback for after ajax event. Used for metabox-handle for new entries among other things.
+					gwolle_gb_frontend_callback_function();
+				}
+
+			});
+
+			if (ajax_icon) {
+				ajax_icon.style.display = 'none';
+			}
+
+			event.preventDefault();
+			return false;
+
+		});
+
+	});
+
+});
+
+
+/*
+ * Admin Reply function in metabox.
+ */
+function gwolle_gb_addon_admin_reply() {
+
+	const admin_reply_links = document.querySelectorAll( 'div.gb-metabox-line a.gwolle_gb_admin_reply' );
+
+	admin_reply_links.forEach( admin_reply_link => {
+		admin_reply_link.removeEventListener( 'click', gwolle_gb_addon_admin_reply_event );
+		admin_reply_link.addEventListener( 'click', gwolle_gb_addon_admin_reply_event );
+	});
+
+}
+function gwolle_gb_addon_admin_reply_event( event ) {
+
+	const target = event.target;
+	const entry_id = target.getAttribute( 'data-entry-id' );
+
+	const textarea  = '<?php echo $textarea; ?>';
+	const entry_div = target.closest( 'div.gb-entry' );
+	const main_div = target.closest( 'div.gwolle-gb' );
+	const input_nonce = main_div.querySelector( 'input.gwolle_gb_addon_frontend_list_nonce' );
+	const nonce = input_nonce.value;
+
+	// Remove old textareas.
+	const textareas = entry_div.querySelectorAll( 'div#admin_reply_ajax' );
+	textareas.forEach( textarea => {
+		textarea.remove();
+	});
+
+	// Copy textarea.
+	const contents = entry_div.querySelectorAll( '.gb-entry-content' );
+	const prefab_textarea = document.getElementById( 'admin_reply_ajax_prefab_textarea' );
+	const admin_reply_container = document.getElementById( 'admin-reply-container-' + entry_id );
+	admin_reply_container.innerHTML = prefab_textarea.innerHTML;
+
+	// Add event to just created cancel button.
+	const admin_reply_cancels = entry_div.querySelectorAll( 'input#gwolle_gb_admin_reply_cancel' );
+	admin_reply_cancels.forEach( admin_reply_cancel => {
+		admin_reply_cancel.addEventListener( 'click', function( event ) {
+
+			// Hide Ajax icon and textarea again.
+			const ajax_icon = entry_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+			if ( ajax_icon ) {
+				ajax_icon.style.display = 'none';
+			}
+
+			const old_admin_reply_ajaxs = entry_div.querySelectorAll( 'div#admin_reply_ajax' );
+			old_admin_reply_ajaxs.forEach( old_admin_reply_ajax => {
+				old_admin_reply_ajax.remove();
+			});
+
+			event.preventDefault();
+			return false;
+		});
+	});
+
+	const content_textareas = entry_div.querySelectorAll( 'div#admin_reply_ajax textarea' );
+	content_textareas.forEach( content_textarea => {
+		content_textarea.focus();
+	});
+
+	const admin_reply_submits = entry_div.querySelectorAll( 'input#gwolle_gb_admin_reply_submit' );
+	admin_reply_submits.forEach( admin_reply_submit => {
+		admin_reply_submit.addEventListener( 'click', function( event ) {
+
+			const ajax_icon = entry_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+			if (ajax_icon) {
+				ajax_icon.style.display = 'inline';
+			}
+
+			const formData = new FormData(); // Use an object, arrays are only indexed by integers.
+
+			const gwolle_gb_admin_reply_text = document.querySelector( '#gwolle_gb_admin_reply_text' );
+			const admin_reply_text = gwolle_gb_admin_reply_text.value;
+
+			formData.append( 'permalink', window.location.href );
+			formData.append( 'action', 'gwolle_gb_admin_reply' );
+			formData.append( 'nonce', nonce );
+			formData.append( 'id', entry_id );
+			formData.append( 'admin_reply', admin_reply_text );
+
+			fetch( gwolle_gb_frontend_script.ajax_url, {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => response.text())
+			.then(responseText => {
+
+				const gwolle_gb_messages = entry_div.querySelectorAll( 'div#admin_reply_ajax .gwolle-gb-messages' );
+				gwolle_gb_messages.forEach( gwolle_gb_message => {
+					gwolle_gb_message.remove();
+				});
+
+				responseText = responseText.trim();
+				var response_slice = responseText.slice(0, 5);
+				var response_error = 'error';
+				if ( response_slice == response_error ) {
+
+					responseText = '<div class="gwolle-gb-messages error">' + responseText + '</div>';
+
+					const old_admin_reply_ajaxs = entry_div.querySelectorAll( 'div#admin_reply_ajax' );
+					old_admin_reply_ajaxs.forEach( old_admin_reply_ajax => {
+						old_admin_reply_ajax.insertAdjacentHTML( 'beforeend', responseText );
+					});
+
+				} else {
+
+					const entry_contents = main_div.querySelectorAll( '.gb-entry_' + entry_id + ' .gb-entry-content' );
+					entry_contents.forEach( entry_content => {
+						entry_content.insertAdjacentHTML( 'beforeend', responseText );
+					});
+
+					// Hide Ajax icon and remove textarea.
+					const ajax_icon = entry_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+					if (ajax_icon) {
+						ajax_icon.style.display = 'none';
+					}
+					const old_admin_reply_ajaxs = entry_div.querySelectorAll( 'div#admin_reply_ajax' );
+					old_admin_reply_ajaxs.forEach( old_admin_reply_ajax => {
+						old_admin_reply_ajax.remove();
+					});
+
+					// Remove metabox line for admin-reply.
+					const metabox_lines = entry_div.querySelectorAll( '.gb-entry_' + entry_id + ' .gb-metabox-line-admin-reply' );
+					metabox_lines.forEach( metabox_line => {
+						metabox_line.remove();
+					});
+
+				}
+
+			});
+
+			if (ajax_icon) {
+				ajax_icon.style.display = 'none';
+			}
+
+			event.preventDefault();
+			return false;
+
+		});
+
+	});
+
+	event.preventDefault();
+	return false;
+
+}
+
+
+/*
+ * Entry Edit function in metabox.
+ */
+function gwolle_gb_addon_entry_edit() {
+
+	const edit_links = document.querySelectorAll( 'div.gb-metabox-line a.gwolle-gb-entry-edit' );
+
+	edit_links.forEach( edit_link => {
+		edit_link.removeEventListener( 'click', gwolle_gb_addon_entry_edit_event );
+		edit_link.addEventListener( 'click', gwolle_gb_addon_entry_edit_event );
+	});
+
+}
+function gwolle_gb_addon_entry_edit_event( event ) {
+
+	const target = event.target;
+	const entry_div = target.closest( 'div.gb-entry' );
+	const entry_id = target.getAttribute( 'data-entry-id' );
+	const main_div = target.closest( 'div.gwolle-gb' );
+	const input_nonce = main_div.querySelector( 'input.gwolle_gb_addon_frontend_list_nonce' );
+	const nonce = input_nonce.value;
+
+	// Remove old textareas from entries.
+	const textareas = entry_div.querySelectorAll( 'div#gwolle-gb-entry-edit-ajax' );
+	textareas.forEach( textarea => {
+		textarea.remove();
+	});
+
+	// Copy textarea.
+	const prefab_textarea = document.getElementById( 'gwolle-gb-entry-edit-prefab' );
+	const entry_edit_container = document.getElementById( 'gwolle-gb-entry-edit-container-' + entry_id );
+	entry_edit_container.innerHTML = prefab_textarea.innerHTML;
+
+	// Copy context from hidden textareas.
+	const raw_content = entry_div.querySelector( '.gwolle-gb-entry-edit-content-raw' );
+	const raw_content_text = raw_content.innerText;
+	const edit_contents = entry_div.querySelectorAll( 'textarea.gwolle-gb-entry-edit-content' );
+	edit_contents.forEach( edit_content => {
+		edit_content.innerText = raw_content_text;
+	});
+	const raw_author_name = entry_div.querySelector( '.gwolle-gb-entry-edit-author-name-raw' );
+	const raw_author_name_text = raw_author_name.innerText;
+	const edit_author_names = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-author-name' );
+	edit_author_names.forEach( edit_author_name => {
+		edit_author_name.value = raw_author_name_text;
+	});
+	const raw_origin = entry_div.querySelector( '.gwolle-gb-entry-edit-origin-raw' );
+	const raw_origin_text = raw_origin.innerText;
+	const edit_origins = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-origin' );
+	edit_origins.forEach( edit_origin => {
+		edit_origin.value = raw_origin_text;
+	});
+
+	// Add event to just created cancel button.
+	const edit_cancels = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-cancel' );
+	edit_cancels.forEach( edit_cancel => {
+		edit_cancel.addEventListener( 'click', function( event ) {
+
+			// Hide Ajax icon and textarea again.
+			const ajax_icon = entry_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+			if (ajax_icon) {
+				ajax_icon.style.display = 'none';
+			}
+
+			const textareas = entry_div.querySelectorAll( 'div#gwolle-gb-entry-edit-ajax' );
+			textareas.forEach( textarea => {
+				textarea.remove();
+			});
+
+			event.preventDefault();
+			return false;
+
+		});
+	});
+
+	// Set focus to content textarea for edit.
+	const content_textareas = entry_div.querySelectorAll( 'div#gwolle-gb-entry-edit-ajax textarea.gwolle-gb-entry-edit-content' );
+	content_textareas.forEach( content_textarea => {
+		content_textarea.focus();
+	});
+
+	const submit_buttons = entry_div.querySelectorAll( '#gwolle-gb-entry-edit-ajax input.gwolle-gb-entry-edit-submit' );
+	submit_buttons.forEach( submit_button => {
+		submit_button.addEventListener( 'click', function( event ) {
+
+			const ajax_icon = entry_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+			if (ajax_icon) {
+				ajax_icon.style.display = 'inline';
+			}
+
+			const formData = new FormData(); // Use an object, arrays are only indexed by integers.
+
+			const edit_content_value = entry_div.querySelector( 'textarea.gwolle-gb-entry-edit-content' );
+			formData.append( 'content', edit_content_value.value );
+			const edit_author_name_value = entry_div.querySelector( 'input.gwolle-gb-entry-edit-author-name' );
+			formData.append( 'author_name', edit_author_name_value.value );
+			const edit_origin_value = entry_div.querySelector( 'input.gwolle-gb-entry-edit-origin' );
+			formData.append( 'origin', edit_origin_value.value );
+
+			formData.append( 'permalink', window.location.href );
+			formData.append( 'action', 'gwolle_gb_entry_edit' );
+			formData.append( 'nonce', nonce );
+			formData.append( 'id', entry_id );
+
+			fetch( gwolle_gb_frontend_script.ajax_url, {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => response.text())
+			.then(responseText => {
+
+				const gwolle_gb_messages = entry_div.querySelectorAll( 'div#gwolle-gb-entry-edit-ajax .gwolle-gb-messages' );
+				gwolle_gb_messages.forEach( gwolle_gb_message => {
+					gwolle_gb_message.remove();
+				});
+
+				responseText = responseText.trim();
+
+				var response_slice = responseText.slice(0, 5);
+				var response_error = 'error';
+
+				if ( response_slice == response_error ) {
+
+					errorText = '<div class="gwolle-gb-messages error">error</div>';
+
+					// Hide Ajax icon and remove textarea.
+					const ajax_icon = entry_div.querySelector( '.gwolle-gb-submit-ajax-icon' );
+					if (ajax_icon) {
+						ajax_icon.style.display = 'none';
+					}
+					const textareas = entry_div.querySelectorAll( 'div#gwolle-gb-entry-edit-ajax' );
+					textareas.forEach( textarea => {
+						textarea.insertAdjacentHTML( 'beforeend', errorText );
+					});
+
+				} else {
+
+					const data = JSON.parse( responseText );
+					const entry_content_html = data['entry_content'];
+					const raw_content_html   = data['raw_content'];
+					const author_name_html   = data['author_name'];
+					const origin_html        = data['origin'];
+
+					const entry_content = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gb-entry-content' );
+					if ( entry_content ) {
+						entry_content.innerHTML = entry_content_html;
+					}
+
+					const entry_raw_content = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gwolle-gb-entry-edit-content-raw' );
+					entry_raw_content.innerHTML = raw_content_html;
+
+					const entry_author_name = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gb-author-name' );
+					if ( entry_author_name ) {
+						entry_author_name.innerHTML = author_name_html;
+					}
+
+					const entry_author_name_raw = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gwolle-gb-entry-edit-author-name-raw' );
+					entry_author_name_raw.innerHTML = author_name_html;
+
+					const entry_origin = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gb-author-origin' );
+					if ( entry_origin ) {
+						entry_origin.innerHTML = origin_html;
+					}
+
+					const entry_origin_raw = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gwolle-gb-entry-edit-origin-raw' );
+					entry_origin_raw.innerHTML = origin_html;
+
+					// Hide Ajax icon and remove textarea.
+					const ajax_icon = entry_div.querySelector( '.gwolle_gb_addon_entry_edit_icon' );
+					if (ajax_icon) {
+						ajax_icon.style.display = 'none';
+					}
+					const textareas = entry_div.querySelectorAll( 'div#gwolle-gb-entry-edit-ajax' );
+					textareas.forEach( textarea => {
+						textarea.remove();
+					});
+
+				}
+
+			});
+
+			event.preventDefault();
+			return false;
+
+		});
+
+	});
+
+	event.preventDefault();
+	return false;
+
+}
+
+
+/*
+ * Delete function in metabox.
+ * Only for logged in users.
+ */
+function gwolle_gb_addon_delete() {
+
+	const delete_links = document.querySelectorAll( 'div.gb-metabox-line a.gwolle_gb_delete_link' );
+
+	delete_links.forEach( delete_link => {
+		delete_link.removeEventListener( 'click', gwolle_gb_addon_delete_event );
+		delete_link.addEventListener( 'click', gwolle_gb_addon_delete_event );
+	});
+
+}
+function gwolle_gb_addon_delete_event( event ) {
+
+	const target = event.target;
+	const entry_id = target.getAttribute( 'data-entry-id' );
+
+	const main_div = target.closest( 'div.gwolle-gb' );
+	const input_nonce = main_div.querySelector( 'input.gwolle_gb_addon_frontend_list_nonce' );
+	const nonce = input_nonce.value;
+
+	const formData = new FormData();
+	formData.append( 'action', 'gwolle_gb_delete' );
+	formData.append( 'id', entry_id );
+	formData.append( 'setter', 'trash' );
+	formData.append( 'nonce', nonce );
+
+	// Show loading indicator
+	const ajax_line = document.querySelector( '.gb-entry_' + entry_id + ' div.gb-metabox-line.gb-metabox-line-ajax' );
+	if (ajax_line) {
+		ajax_line.style.display = 'block';
+	}
+
+	fetch( gwolle_gb_frontend_script.ajax_url, {
+		method: 'POST',
+		body: formData,
+	})
+	.then(response => response.text())
+	.then(response => {
+		response = response.trim();
+		if ( response === 'trash' ) {
+			const entry = document.querySelector( '.gb-entry_' + entry_id );
+			if (entry) {
+				entry.style.transition = 'all 0.5s ease';
+				entry.style.opacity = 0;
+				setTimeout(() => {
+					entry.style.display = 'none';
+				}, 500);
+			}
+		}
+		if (ajax_line) {
+			ajax_line.style.display = 'none';
+		}
+	});
+
+	event.preventDefault();
+	return false;
+
+}
+
+
+/*
+ * Likes in metabox.
+ */
+
+// Lock, for likes and unlikes alike.
+var gwolle_gb_addon_like_busy = false;
+
+function gwolle_gb_addon_like() {
+
+	const like_links = document.querySelectorAll( 'div.gwolle-gb a.gwolle-gb-like-link' );
+
+	like_links.forEach( like_link => {
+		like_link.removeEventListener( 'click', gwolle_gb_addon_like_event );
+		like_link.addEventListener( 'click', gwolle_gb_addon_like_event );
+	});
+
+	const unlike_links = document.querySelectorAll( 'div.gwolle-gb a.gwolle-gb-unlike-link' );
+
+	unlike_links.forEach( unlike_link => {
+		unlike_link.removeEventListener( 'click', gwolle_gb_addon_unlike_event );
+		unlike_link.addEventListener( 'click', gwolle_gb_addon_unlike_event );
+	});
+
+}
+function gwolle_gb_addon_like_event( event ) {
+
+	if ( gwolle_gb_addon_like_busy === true ) {
+		return;
+	}
+	gwolle_gb_addon_like_busy = true;
+
+	const target = event.target;
+	const entry_id = this.getAttribute( 'data-entry-id' );
+
+	const main_div = target.closest( 'div.gwolle-gb' );
+	const input_nonce = main_div.querySelector( 'input.gwolle_gb_addon_frontend_list_nonce' );
+	const nonce = input_nonce.value;
+
+	// Set up data to send
+	const formData = new FormData();
+	formData.append( 'action', 'gwolle_gb_like' );
+	formData.append( 'nonce', nonce );
+	formData.append( 'id', entry_id );
+	formData.append( 'setter', 'like' );
+
+	fetch( gwolle_gb_frontend_script.ajax_url, {
+		method: 'POST',
+		body: formData,
+	})
+	.then(response => response.text())
+	.then(responseText => {
+
+		if ( gwolle_gb_is_json( responseText ) ) {
+			data = JSON.parse( responseText );
+
+			if ( ( data['success'] === true )
+				&& typeof data['likes'] === 'number'
+				&& typeof data['unlikes'] === 'number'
+				&& typeof data['class_likes'] === 'string'
+				&& typeof data['class_unlikes'] === 'string') {
+
+				const likes         = data['likes'];
+				const unlikes       = data['unlikes'];
+				const class_likes   = data['class_likes'];
+				const class_unlikes = data['class_unlikes'];
+
+				const entries = document.querySelectorAll( '.gb-entry_' + entry_id );
+				entries.forEach( function(entry) {
+
+					const a_like_links = entry.querySelectorAll( 'a.gwolle-gb-like-link' );
+					a_like_links.forEach( function(a_like_link) {
+						a_like_link.classList.remove( 'gb-already-liked' ); // remove old data
+						if ( class_likes.length > 0 ) {
+							a_like_link.classList.add( class_likes );
+						}
+					});
+
+					const a_unlike_links = entry.querySelectorAll( 'a.gwolle-gb-unlike-link' );
+					a_unlike_links.forEach( function(a_unlike_link) {
+						a_unlike_link.classList.remove( 'gb-already-unliked' ); // remove old data
+						if ( class_unlikes.length > 0 ) {
+							a_unlike_link.classList.add( class_unlikes );
+						}
+					});
+
+					const a_likes = entry.querySelectorAll( 'span.gb-likes' );
+					a_likes.forEach( function(a_like) {
+						a_like.innerHTML = likes;
+					});
+
+					const a_unlikes = entry.querySelectorAll( 'span.gb-unlikes' );
+					a_unlikes.forEach( function(a_unlike) {
+						a_unlike.innerHTML = unlikes;
+					});
+
+				});
+
+			}
+
+		}
+
+	});
+
+	gwolle_gb_addon_like_busy = false;
+
+	event.preventDefault();
+	return false;
+
+}
+function gwolle_gb_addon_unlike_event( event ) {
+
+	if ( gwolle_gb_addon_like_busy === true ) {
+		return;
+	}
+	gwolle_gb_addon_like_busy = true;
+
+	const target = event.target;
+	const entry_id = this.getAttribute( 'data-entry-id' );
+
+	const main_div = target.closest( 'div.gwolle-gb' );
+	const input_nonce = main_div.querySelector( 'input.gwolle_gb_addon_frontend_list_nonce' );
+	const nonce = input_nonce.value;
+
+	// Set up data to send
+	const formData = new FormData();
+	formData.append( 'action', 'gwolle_gb_unlike' );
+	formData.append( 'nonce', nonce );
+	formData.append( 'id', entry_id );
+	formData.append( 'setter', 'unlike' );
+
+	fetch( gwolle_gb_frontend_script.ajax_url, {
+		method: 'POST',
+		body: formData,
+	})
+	.then(response => response.text())
+	.then(responseText => {
+
+		if ( gwolle_gb_is_json( responseText ) ) {
+			data = JSON.parse( responseText );
+
+			if ( ( data['success'] === true )
+				&& typeof data['likes'] === 'number'
+				&& typeof data['unlikes'] === 'number'
+				&& typeof data['class_likes'] === 'string'
+				&& typeof data['class_unlikes'] === 'string') {
+
+				const likes         = data['likes'];
+				const unlikes       = data['unlikes'];
+				const class_likes   = data['class_likes'];
+				const class_unlikes = data['class_unlikes'];
+
+				const entries = document.querySelectorAll( '.gb-entry_' + entry_id );
+				entries.forEach( function(entry) {
+
+					const a_like_links = entry.querySelectorAll( 'a.gwolle-gb-like-link' );
+					a_like_links.forEach( function(a_like_link) {
+						a_like_link.classList.remove( 'gb-already-liked' ); // remove old data
+						if ( class_likes.length > 0 ) {
+							a_like_link.classList.add( class_likes );
+						}
+					});
+
+					const a_unlike_links = entry.querySelectorAll( 'a.gwolle-gb-unlike-link' );
+					a_unlike_links.forEach( function(a_unlike_link) {
+						a_unlike_link.classList.remove( 'gb-already-unliked' ); // remove old data
+						if ( class_unlikes.length > 0 ) {
+							a_unlike_link.classList.add( class_unlikes );
+						}
+					});
+
+					const a_likes = entry.querySelectorAll( 'span.gb-likes' );
+					a_likes.forEach( function(a_like) {
+						a_like.innerHTML = likes;
+					});
+
+					const a_unlikes = entry.querySelectorAll( 'span.gb-unlikes' );
+					a_unlikes.forEach( function(a_unlike) {
+						a_unlike.innerHTML = unlikes;
+					});
+
+				});
+
+			}
+
+		}
+
+	});
+
+	gwolle_gb_addon_like_busy = false;
+
+	event.preventDefault();
+	return false;
+
+}
+
+
+/*
+ * Static var if event is busy still.
+ * @param  int  entry_id the ID of the entry where a report is being made for.
+ * @param  int  call 0=getter, 1=setter true, 2=setter false.
+ * @return bool is this entry busy.
+ *
+ * @since 2.0.0
+ */
+function gwolle_gb_addon_report_busy( entry_id, call ) {
+
+	if ( typeof gwolle_gb_addon_report_busy == 'undefined' ) {
+		gwolle_gb_addon_report_busy = {};
+	}
+	if ( typeof gwolle_gb_addon_report_busy.entry_id == 'undefined' ) {
+		gwolle_gb_addon_report_busy.entry_id = false;
+	}
+
+	if ( call == 0 ) {
+		return gwolle_gb_addon_report_busy.entry_id;
+	} else if ( call == 1 ) {
+		gwolle_gb_addon_report_busy.entry_id = true;
+	} else if ( call == 2 ) {
+		gwolle_gb_addon_report_busy.entry_id = false;
+	}
+
+	return gwolle_gb_addon_report_busy.entry_id;
+
+}
+
+function gwolle_gb_addon_report() {
+
+	const report_links = document.querySelectorAll( 'div.gb-metabox-line a.gwolle-gb-report-abuse' );
+
+	report_links.forEach( report_link => {
+		report_link.removeEventListener( 'click', gwolle_gb_addon_report_event );
+		report_link.addEventListener( 'click', gwolle_gb_addon_report_event );
+	});
+
+}
+function gwolle_gb_addon_report_event( event ) {
+
+	const target = event.target;
+	const entry_id = target.getAttribute( 'data-entry-id' );
+
+	const main_div = target.closest( 'div.gwolle-gb' );
+	const input_nonce = main_div.querySelector( 'input.gwolle_gb_addon_frontend_list_nonce' );
+	const nonce = input_nonce.value;
+
+	const formData = new FormData();
+	formData.append( 'action', 'gwolle_gb_report' );
+	formData.append( 'nonce', nonce );
+	formData.append( 'entry_id', entry_id );
+
+	// Set Ajax icon on visible
+	const ajax_line = document.querySelector( '.gb-entry_' + entry_id + ' div.gb-metabox-line.gb-metabox-line-ajax' );
+	if (ajax_line) {
+		ajax_line.style.display = 'block';
+	}
+
+	// Only one report for each entry at the same time.
+	var busy = gwolle_gb_addon_report_busy( entry_id, 0 );
+	if ( busy ) {
+		event.preventDefault();
+		return false;
+	}
+	busy = gwolle_gb_addon_report_busy( entry_id, 1 );
+
+	fetch( gwolle_gb_frontend_script.ajax_url, {
+		method: 'POST',
+		body: formData,
+	})
+	.then(response => response.text())
+	.then(response => {
+		response = response.trim();
+		if ( response === 'reported' ) { // We got what we wanted
+			const entry = document.querySelector( '.gb-entry_' + entry_id );
+			if ( entry ) {
+				// Show reported message.
+				const report_lines = document.querySelectorAll( '.gb-entry_' + entry_id + ' div.gb-metabox-line-report-abuse' );
+				report_lines.forEach( function (report_line) {
+					report_line.innerHTML = gwolle_gb_frontend_script.message_reported;
+				});
+			}
+		} else {
+			// Show error message.
+			const report_lines = document.querySelectorAll( '.gb-entry_' + entry_id + ' div.gb-metabox-line-report-abuse' );
+			report_lines.forEach( function (report_line) {
+				report_line.innerHTML = gwolle_gb_frontend_script.message_else;
+			});
+		}
+		// Hide Ajax icon again and set busy to false.
+		if (ajax_line) {
+			ajax_line.style.display = 'none';
+		}
+		busy = gwolle_gb_addon_report_busy( entry_id, 2 );
+	});
+
+	event.preventDefault();
+	return false;
+
+}
+
+
+
+
+
+
+
+/*
+ * Automatic Refresh. Get new entries that might have been added after loading the page.
+ * This function does not support multiple lists on one page.
+ */
+var gwolle_gb_refresh_busy = false; // Handle async well. Only one request at a time.
+
+document.addEventListener('DOMContentLoaded', function() {
+
+	const gwolle_gb_read = document.querySelector( '.gwolle-gb-read' );
+
+	if ( gwolle_gb_read && gwolle_gb_read.classList.contains( 'gwolle-gb-entries-list' ) ) {
+
+		var book_id = parseInt( gwolle_gb_read.getAttribute( "data-book_id" ) );
+		var page_num = parseInt( gwolle_gb_read.getAttribute( "data-page_id" ) );
+		if ( page_num !== 1 ) {
+			// console.log( 'page_num: ' + page_num );
+			return;
+		}
+
+		var refresh_interval = parseInt( gwolle_gb_frontend_script.refresh_interval );
+		setInterval(function() {
+			gwolle_gb_addon_automatic_refresh();
+		}, refresh_interval ); // 3 minutes interval by default, see gwolle-gb-addon-hooks.php.
+
+	}
+
+	function gwolle_gb_addon_automatic_refresh() {
+
+		if ( gwolle_gb_refresh_busy ) {
+			return; // previous instance still running, or something happened. Skip this instance for now.
+		}
+
+		gwolle_gb_refresh_busy = true;
+		const gwolle_gb_first = document.querySelector( '.gwolle-gb-first' );
+		var latest_entry_id = parseInt( gwolle_gb_first.getAttribute( "data-entry_id" ) );
+
+		const formData = new FormData();
+		formData.append( 'action', 'gwolle_gb_addon_refresh' );
+		formData.append( 'latest_entry_id', latest_entry_id );
+		formData.append( 'permalink', window.location.href );
+		formData.append( 'book_id', book_id );
+		formData.append( 'pageNum', page_num );
+
+		fetch( gwolle_gb_frontend_script.ajax_url, {
+			method: 'POST',
+			body: formData,
+		})
+		.then(response => response.text())
+		.then(response => {
+			response = response.trim();
+
+			if ( response !== 'false' /* no new entries. */ && response !== 'error' ) {
+
+				gwolle_gb_first.insertAdjacentHTML( 'beforebegin', response );
+				gwolle_gb_first.classList.remove( 'gwolle-gb-first' );
+
+				/*
+				 * Run callback for after ajax event. Used for metabox-handle for new entries.
+				 */
+				if ( typeof gwolle_gb_frontend_callback_function === 'function' ) {
+					gwolle_gb_frontend_callback_function();
+				}
+
+			}
+
+		});
+
+		gwolle_gb_refresh_busy = false;
+
+		return true;
+	}
+
+});
+
+

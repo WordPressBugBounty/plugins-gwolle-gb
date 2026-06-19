@@ -90,7 +90,7 @@ function gwolle_gb_export_postbox() {
 			<li><?php esc_html_e('"is trash" flag', 'gwolle-gb'); ?></li>
 			<li><?php esc_html_e('Admin Reply', 'gwolle-gb'); ?></li>
 			<li><?php esc_html_e('Book ID', 'gwolle-gb'); ?></li>
-			<li><?php esc_html_e('Meta Fields (if the add-on is active)', 'gwolle-gb'); ?></li>
+			<li><?php esc_html_e('Meta Fields', 'gwolle-gb'); ?></li>
 		</ul>
 		<?php esc_html_e('The exporter does not delete any data, so your data will still be here.', 'gwolle-gb'); ?>
 
@@ -209,11 +209,8 @@ function gwolle_gb_export_callback() {
 			$row[] = $entry->get_admin_reply();
 			$row[] = $entry->get_book_id();
 
-			$meta = '';
-			if ( function_exists( 'gwolle_gb_addon_get_meta' ) ) {
-				$meta = gwolle_gb_addon_get_meta( $entry->get_id(), '' );
-				$meta = serialize( $meta );
-			}
+			$meta = gwolle_gb_addon_get_meta_v2( $entry->get_id(), '' );
+			$meta = serialize( $meta );
 			$row[] = $meta;
 
 			fputcsv($output, $row, ',', '"');
@@ -373,11 +370,8 @@ function gwolle_gb_export_user_callback() {
 			$row[] = $entry->get_admin_reply();
 			$row[] = $entry->get_book_id();
 
-			$meta = '';
-			if ( function_exists( 'gwolle_gb_addon_get_meta' ) ) {
-				$meta = gwolle_gb_addon_get_meta( $entry->get_id(), '' );
-				$meta = serialize( $meta );
-			}
+			$meta = gwolle_gb_addon_get_meta_v2( $entry->get_id(), '' );
+			$meta = serialize( $meta );
 			$row[] = $meta;
 
 			fputcsv($output, $row, ',', '"');

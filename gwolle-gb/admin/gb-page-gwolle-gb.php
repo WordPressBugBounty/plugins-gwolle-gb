@@ -32,10 +32,7 @@ function gwolle_gb_welcome() {
 	add_meta_box('gwolle_gb_help', esc_html__('Help', 'gwolle-gb'), 'gwolle_gb_overview_help', 'gwolle_gb_welcome', 'right');
 	add_meta_box('gwolle_gb_support', esc_html__('Support and Translations', 'gwolle-gb'), 'gwolle_gb_overview_support', 'gwolle_gb_welcome', 'right');
 	add_meta_box('gwolle_gb_review', /* translators: Reviews on the plugin page at WordPress.org */ esc_html__('Review', 'gwolle-gb'), 'gwolle_gb_overview_review', 'gwolle_gb_welcome', 'right');
-	$active = is_plugin_active( 'gwolle-gb-addon/gwolle-gb-addon.php' ); // true or false
-	if ( $active ) {
-		add_meta_box('gwolle_gb_addon', esc_html__('The Add-On', 'gwolle-gb'), 'gwolle_gb_overview_addon', 'gwolle_gb_welcome', 'right');
-	} ?>
+	?>
 
 	<div class="wrap gwolle_gb gwolle-gb">
 		<div id="icon-gwolle-gb"><br /></div>
@@ -360,30 +357,6 @@ function gwolle_gb_overview_review() {
 		echo sprintf( esc_html__( 'If this plugin has any value to you, then please leave a review at %1$sthe plugin page%2$s at wordpress.org.', 'gwolle-gb' ), $review, '</a>' ); ?>
 	</p>
 	<?php
-}
-
-
-/*
- * Metabox with overview of Add-On links.
- * Only shown when the Add-On is active.
- *
- * @since 4.0.2
- */
-function gwolle_gb_overview_addon() {
-	echo '<h3>' . esc_html__('Visit the ZenoWeb webshop for the Add-On.', 'gwolle-gb') . '</h3>
-	<ul class="ul-disc">
-		<li><a href="https://zenoweb.nl/changelog/" target="_blank">' . esc_html__( 'Changelog and Updates', 'gwolle-gb' ) . '</a></li>
-		<li><a href="https://zenoweb.nl/faq/" target="_blank">' . esc_html__( 'FAQ', 'gwolle-gb' ) . '</a></li>
-		<li><a href="https://zenoweb.nl/forums/forum/guestbook-add-on/" target="_blank">' . esc_html__( 'Support Forum', 'gwolle-gb' ) . '</a></li>
-		<li><a href="https://zenoweb.nl/reviews/" target="_blank">' . esc_html__( 'Reviews', 'gwolle-gb' ) . '</a></li>
-		<li><a href="https://zenoweb.nl/log-in/" target="_blank">' . esc_html__( 'Log in', 'gwolle-gb' ) . '</a></li>
-		<li><a href="https://zenoweb.nl/register/" target="_blank">' . esc_html__( 'Register', 'gwolle-gb' ) . '</a></li>
-	</ul>
-	';
-	if ( defined( 'GWOLLE_GB_ADDON_VER' ) ) {
-		/* translators: %s is for the version of the add-on */
-		echo sprintf( esc_html__( 'You are currently using v%s of The Add-On.', 'gwolle-gb' ), GWOLLE_GB_ADDON_VER );
-	}
 }
 
 

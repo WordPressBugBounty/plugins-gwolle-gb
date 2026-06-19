@@ -93,14 +93,11 @@ function gwolle_gb_page_editor() {
 						add_meta_box('gwolle_gb_editor_postbox_author', esc_html__('City', 'gwolle-gb'), 'gwolle_gb_editor_postbox_author_origin', 'gwolle_gb_editor', 'normal');
 						add_meta_box('gwolle_gb_editor_postbox_admin_reply', esc_html__('Admin Reply', 'gwolle-gb'), 'gwolle_gb_editor_postbox_admin_reply', 'gwolle_gb_editor', 'normal');
 
-						$active = is_plugin_active( 'gwolle-gb-addon/gwolle-gb-addon.php' ); // true or false
 						$entry_id = $entry->get_id();
-						if ( $active && function_exists( 'gwolle_gb_addon_editor_postbox_preview' ) && $entry_id > 0 ) {
-							add_meta_box('gwolle_gb_editor_postbox_preview', esc_html__('Preview', 'gwolle-gb'), 'gwolle_gb_addon_editor_postbox_preview', 'gwolle_gb_editor', 'normal');
+						if ( $entry_id > 0 ) {
+							add_meta_box('gwolle_gb_addon_editor_postbox_preview', esc_html__('Preview', 'gwolle-gb'), 'gwolle_gb_addon_editor_postbox_preview_v2', 'gwolle_gb_editor', 'normal');
 						}
-						if ( $active && function_exists( 'gwolle_gb_addon_editor_metabox_meta' ) ) {
-							add_meta_box('gwolle_gb_addon_editor_metabox_meta', esc_html__('The Add-On', 'gwolle-gb'), 'gwolle_gb_addon_editor_metabox_meta', 'gwolle_gb_editor', 'normal');
-						}
+						add_meta_box('gwolle_gb_addon_editor_metabox_meta', esc_html__('The Add-On', 'gwolle-gb'), 'gwolle_gb_addon_editor_metabox_meta_v2', 'gwolle_gb_editor', 'normal');
 
 						do_meta_boxes( 'gwolle_gb_editor', 'normal', $entry );
 						?>
@@ -228,6 +225,27 @@ function gwolle_gb_editor_postbox_admin_reply( $entry ) {
 		/* translators: %1$s and %2$s is a link */
 		echo '<p>' . sprintf( esc_html__('Line breaks will not be visible to the visitors due to your %1$ssettings%2$s.', 'gwolle-gb'), $settingslink, '</a>' ) . '</p>';
 	}
+}
+
+
+/*
+ * Add metabox for Preview on the admin editor.
+ *
+ * @since 1.0.0
+ */
+function gwolle_gb_addon_editor_postbox_preview_v2( $entry ) {
+
+	$output = '<div id="gwolle_gb">
+	';
+	$output .= gwolle_gb_single_view( $entry );
+	$output .= '</div>
+	';
+	gwolle_gb_register();
+	wp_enqueue_style( 'gwolle_gb_frontend_css' );
+	wp_enqueue_script( 'gwolle_gb_frontend_js' );
+
+	echo $output;
+
 }
 
 

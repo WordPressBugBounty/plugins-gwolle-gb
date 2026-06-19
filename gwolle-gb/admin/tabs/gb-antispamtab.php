@@ -150,6 +150,25 @@ function gwolle_gb_page_settingstab_antispam() {
 		</tr>
 
 		<tr>
+			<th scope="row"><label for="gwolle_gb_double_entry"><?php esc_html_e('Form Double Entry', 'gwolle-gb'); ?></label></th>
+			<td>
+				<input <?php
+					if (get_option( 'gwolle_gb-double_entry', 'true') === 'true') {
+						echo 'checked="checked"';
+					} ?>
+					type="checkbox" name="gwolle_gb_double_entry" id="gwolle_gb_double_entry">
+				<label for="gwolle_gb_double_entry">
+					<?php esc_html_e('Refuse the same entry twice.', 'gwolle-gb'); ?>
+				</label><br />
+				<span class="setting-description">
+					<?php
+					esc_html_e('When the same user sends in the same entry, this entry will be refused.', 'gwolle-gb');
+					?>
+				</span>
+			</td>
+		</tr>
+
+		<tr>
 			<th scope="row"><label for="gwolle_gb_timeout"><?php esc_html_e('Form Timeout', 'gwolle-gb'); ?></label></th>
 			<td>
 				<input <?php

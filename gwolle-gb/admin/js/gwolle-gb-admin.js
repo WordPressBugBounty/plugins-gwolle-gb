@@ -1,6 +1,6 @@
 
 /*
-Copyright 2014 - 2025  Marcel Pol  (email: marcel@timelord.nl)
+Copyright 2014 - 2026  Marcel Pol  (email: marcel@timelord.nl)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -297,4 +297,165 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 	});
 
+});
+
+
+/*
+ * JavaScript for Gwolle Guestbook: The Add-On for Admin Dashboard.
+ */
+
+
+/*
+ * Remove the selected form field.
+ *
+ * @since 1.0.0.
+ */
+function gwolle_gb_addon_meta_delete( a_el ) {
+	var tr = jQuery( a_el ).parent().parent().parent();
+	var text = gwolle_gb_admin.delete_meta;
+	var confirm_delete = confirm( text );
+	if (confirm_delete) {
+		tr.css('background-color', '#ff0000').fadeOut('normal', function() {
+			tr.remove();
+		});
+	}
+	return false;
+}
+
+
+jQuery(document).ready(function() {
+	gwolle_gb_addon_event_on_formtype();
+	gwolle_gb_addon_is_required();
+});
+
+
+/*
+ * Show textarea for formfield options, only for radio buttons and select dropdown.
+ *
+ * @since 2.0.1.
+ */
+function gwolle_gb_addon_event_on_formtype() {
+	jQuery('select.gb-addon-form-type').off('change');
+	jQuery('select.gb-addon-form-type').on('change', function( el ) {
+		var value = jQuery( this ).val();
+		var td = jQuery( this ).parent();
+		if ( value == 'radio' || value == 'select' ) {
+			jQuery( 'div.gb-addon-form-options', td ).slideDown();
+		} else {
+			jQuery( 'div.gb-addon-form-options', td ).slideUp();
+		}
+	});
+}
+
+
+/*
+ * Use hidden text input for checkbox in form fields for 'required' setting.
+ * When checkbox is not set, it has no value in $_POST. This way it does have a value.
+ *
+ * @since 2.0.1.
+ */
+function gwolle_gb_addon_is_required() {
+	jQuery('input.gwolle-gb-formfield-required-checkbox').off('change');
+	jQuery('input.gwolle-gb-formfield-required-checkbox').on('change', function( el ) {
+		var td = jQuery( this ).parent();
+		var checked = jQuery( this ).prop('checked');
+		if ( checked == true ) {
+			jQuery('input.gwolle-gb-formfield-required-text', td).val( 'on' );
+		} else {
+			jQuery('input.gwolle-gb-formfield-required-text', td).val( 'off' );
+		}
+	});
+}
+
+
+/*
+ * Add new form fields.
+ *
+ * @since 1.0.0.
+ */
+jQuery(document).ready(function() {
+	var gb_form_top_new = jQuery('tr.gb-form-top-new').html();
+	jQuery('span.gb-form-top-add-new').on( 'click', function() {
+		jQuery('tr.gb-form-top-new').before( '<tr class="gb-form-added">' + gb_form_top_new + '</tr>' );
+		gwolle_gb_addon_event_on_formtype();
+		gwolle_gb_addon_is_required();
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-name input' ).prop( 'required', true );
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-slug input' ).prop( 'required', true );
+	});
+
+	var gb_form_name_new = jQuery('tr.gb-form-name-new').html();
+	jQuery('span.gb-form-name-add-new').on( 'click', function() {
+		jQuery('tr.gb-form-name-new').before( '<tr class="gb-form-added">' + gb_form_name_new + '</tr>' );
+		gwolle_gb_addon_event_on_formtype();
+		gwolle_gb_addon_is_required();
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-name input' ).prop( 'required', true );
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-slug input' ).prop( 'required', true );
+	});
+
+	var gb_form_city_new = jQuery('tr.gb-form-city-new').html();
+	jQuery('span.gb-form-city-add-new').on( 'click', function() {
+		jQuery('tr.gb-form-city-new').before( '<tr class="gb-form-added">' + gb_form_city_new + '</tr>' );
+		gwolle_gb_addon_event_on_formtype();
+		gwolle_gb_addon_is_required();
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-name input' ).prop( 'required', true );
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-slug input' ).prop( 'required', true );
+	});
+
+	var gb_form_email_new = jQuery('tr.gb-form-email-new').html();
+	jQuery('span.gb-form-email-add-new').on( 'click', function() {
+		jQuery('tr.gb-form-email-new').before( '<tr class="gb-form-added">' + gb_form_email_new + '</tr>' );
+		gwolle_gb_addon_event_on_formtype();
+		gwolle_gb_addon_is_required();
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-name input' ).prop( 'required', true );
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-slug input' ).prop( 'required', true );
+	});
+
+	var gb_form_website_new = jQuery('tr.gb-form-website-new').html();
+	jQuery('span.gb-form-website-add-new').on( 'click', function() {
+		jQuery('tr.gb-form-website-new').before( '<tr class="gb-form-added">' + gb_form_website_new + '</tr>' );
+		gwolle_gb_addon_event_on_formtype();
+		gwolle_gb_addon_is_required();
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-name input' ).prop( 'required', true );
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-slug input' ).prop( 'required', true );
+	});
+
+	var gb_form_message_new = jQuery('tr.gb-form-message-new').html();
+	jQuery('span.gb-form-message-add-new').on( 'click', function() {
+		jQuery('tr.gb-form-message-new').before( '<tr class="gb-form-added">' + gb_form_message_new + '</tr>' );
+		gwolle_gb_addon_event_on_formtype();
+		gwolle_gb_addon_is_required();
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-name input' ).prop( 'required', true );
+		jQuery( 'tr.gb-form-added tr.gwolle-gb-addon-field-slug input' ).prop( 'required', true );
+	});
+});
+
+
+/*
+ * Function te remove the selected string row.
+ *
+ * @since 1.0.0.
+ */
+function gwolle_gb_addon_string_delete( a_el ) {
+	var tr = jQuery( a_el ).parent().parent().parent();
+	var text = gwolle_gb_admin.delete_string;
+	var confirm_delete = confirm( text );
+	if (confirm_delete) {
+		tr.css('background-color', '#ff0000').fadeOut('normal', function() {
+			tr.remove();
+		});
+	}
+	return false;
+}
+
+
+/*
+ * Add new string row.
+ *
+ * @since 1.0.0.
+ */
+jQuery(document).ready(function(){
+	var gb_string_new = jQuery('tr.gb-string-new').html();
+	jQuery('span.gb-string-add-new').on( 'click', function() {
+		jQuery('tr.gb-string-before').before( '<tr>' + gb_string_new + '</tr>' );
+	});
 });

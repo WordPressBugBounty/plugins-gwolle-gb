@@ -56,6 +56,7 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 			}
 
 			$widget_html .= '
+					<search>
 					<form id="gwolle-gb-widget-search" action="#" method="GET" class="' . esc_attr( $widget_class ) . '" role="search" aria-label="' . esc_html__( 'Guestbook', 'gwolle-gb' ) . '">
 						<div class="label">
 							<label for="gwolle-gb-search-input" class="text-info">' . esc_html__('Search:', 'gwolle-gb') . '</label>
@@ -68,7 +69,8 @@ if (function_exists('register_sidebar') && class_exists('WP_Widget')) {
 								<input type="submit" class="button btn btn-primary" value="' . esc_attr__('Search', 'gwolle-gb') . '" />
 							</div>
 						</div>
-					</form>';
+					</form>
+					</search>';
 
 			$widget_html .= '
 				</div>

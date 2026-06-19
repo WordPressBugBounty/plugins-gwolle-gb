@@ -79,16 +79,24 @@ add_action( 'wp_initialize_site', 'gwolle_gb_wp_initialize_site' );
  */
 function gwolle_gb_register() {
 
+	$refresh_interval = (int) apply_filters( 'gwolle_gb_addon_refresh_interval', 180000 );
+
 	// Register script for frontend. Load it later.
 	wp_register_script( 'gwolle_gb_frontend_js', GWOLLE_GB_URL . 'frontend/js/gwolle-gb-frontend.js', false, GWOLLE_GB_VER, true );
 	$data_to_be_passed = array(
-		'ajax_url'     => admin_url('admin-ajax.php'),
-		'load_message' => /* translators: Infinite Scroll */ esc_html__('Loading more...', 'gwolle-gb'),
-		'end_message'  => /* translators: Infinite Scroll */ esc_html__('No more entries.', 'gwolle-gb'),
-		'honeypot'     => gwolle_gb_get_field_name( 'honeypot' ),
-		'honeypot2'    => gwolle_gb_get_field_name( 'honeypot2' ),
-		'timeout'      => gwolle_gb_get_field_name( 'timeout' ),
-		'timeout2'     => gwolle_gb_get_field_name( 'timeout2' ),
+		'ajax_url'         => admin_url('admin-ajax.php'),
+		'load_message'     => /* translators: Infinite Scroll */ esc_html__('Loading more...', 'gwolle-gb'),
+		'end_message'      => /* translators: Infinite Scroll */ esc_html__('No more entries.', 'gwolle-gb'),
+		'honeypot'         => gwolle_gb_get_field_name( 'honeypot' ),
+		'honeypot2'        => gwolle_gb_get_field_name( 'honeypot2' ),
+		'timeout'          => gwolle_gb_get_field_name( 'timeout' ),
+		'timeout2'         => gwolle_gb_get_field_name( 'timeout2' ),
+		'nonce'            => gwolle_gb_get_field_name( 'nonce' ),
+		/* translators: Message for uploading images */
+		'no_file_chosen'   => esc_html__( 'Please select a file before clicking Upload.', 'gwolle-gb' ),
+		'refresh_interval' => $refresh_interval,
+		'message_reported' => esc_html__('Reported', 'gwolle-gb'),
+		'message_else'     => esc_html__('Error', 'gwolle-gb'),
 	);
 	wp_localize_script( 'gwolle_gb_frontend_js', 'gwolle_gb_frontend_script', $data_to_be_passed );
 
@@ -110,6 +118,11 @@ function gwolle_gb_enqueue() {
 	$enqueue_css = apply_filters( 'gwolle_gb_enqueue_frontend_css', true );
 	if ( $enqueue_css ) {
 		wp_enqueue_style('gwolle_gb_frontend_css');
+	}
+
+	if (get_option( 'gwolle_gb_addon-starrating', 'false') === 'true') {
+		wp_enqueue_script( 'gwolle_gb_addon_rateit_js', plugins_url('assets/rateit/jquery.rateit.js', __FILE__), array( 'jquery' ), GWOLLE_GB_VER, true );
+		wp_enqueue_style('gwolle_gb_addon_rateit_css', plugins_url('assets/rateit/rateit.css', __FILE__), false, GWOLLE_GB_VER,  'screen');
 	}
 
 	wp_enqueue_script('gwolle_gb_frontend_js');
@@ -197,3 +210,40 @@ function gwolle_gb_admin_bar_menu( $wp_admin_bar ) {
 
 }
 add_action( 'admin_bar_menu', 'gwolle_gb_admin_bar_menu', 61 );
+
+
+/*
+ * Add class to frontend form and list of entries to indicate this addon is active.
+ *
+ * @param  string $classes list of classes for both filters used.
+ * @return string $classes updated list of classes for both filters used.
+ *
+ * @since 2.2.1
+ */
+function gwolle_gb_addon_add_class_v2( $classes ) {
+
+	$classes .= ' gwolle-gb-addon';
+	return $classes;
+
+}
+add_filter( 'gwolle_gb_entries_list_class', 'gwolle_gb_addon_add_class_v2', 10, 1 );
+add_filter( 'gwolle_gb_formclass', 'gwolle_gb_addon_add_class_v2', 10, 1 );
+
+
+/*
+ * Add nonce to the list of entries, so we can use this for AJAX handling of entries.
+ *
+ * @param  string $output html added to the list of entries.
+ * @return string $output updated html added to the list of entries.
+ *
+ * @since 2.10.2
+ */
+function gwolle_gb_addon_add_nonce_to_entries_list_v2( $output ) {
+
+	$nonce = wp_create_nonce( 'gwolle_gb_addon_frontend_list_nonce' );
+	$output .= '<input type="hidden" class="gwolle_gb_addon_frontend_list_nonce" id="gwolle_gb_addon_frontend_list_nonce" name="gwolle_gb_addon_frontend_list_nonce" value="' . esc_attr( $nonce ) . '" />';
+
+	return $output;
+
+}
+add_filter( 'gwolle_gb_entries_read', 'gwolle_gb_addon_add_nonce_to_entries_list_v2' );

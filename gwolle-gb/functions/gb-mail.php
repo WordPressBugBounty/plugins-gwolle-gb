@@ -490,3 +490,293 @@ function gwolle_gb_gwolle_gb_check_by_email() {
 }
 add_action( 'wp_ajax_gwolle_gb_check_by_email', 'gwolle_gb_gwolle_gb_check_by_email' );
 add_action( 'wp_ajax_nopriv_gwolle_gb_check_by_email', 'gwolle_gb_gwolle_gb_check_by_email' );
+
+
+/*
+ * Send the Notification Mail to moderators that have subscribed when a report for abuse was made.
+ *
+ * @param object $entry   instance of gwolle_gb_entry
+ * @param int    $reports number of reports, including this one
+ *
+ * @since 1.2.0
+ */
+function gwolle_gb_addon_mail_moderators_report_abuse_v2( $entry, $reports ) {
+	$isspam = $entry->get_isspam();
+	if ( ! $isspam ) {
+		$subscribers = array();
+		$recipients = get_option('gwolle_gb-notifyByMail');
+		if ( strlen($recipients) > 0 ) {
+			$recipients = explode( ',', $recipients );
+		}
+		if ( is_array( $recipients ) && count( $recipients ) > 0 ) {
+			foreach ( $recipients as $recipient ) {
+				if ( is_numeric($recipient) ) {
+					$userdata = get_userdata( (int) $recipient );
+					$subscribers[] = $userdata->user_email;
+				}
+			}
+		} else {
+			return;
+		}
+
+		@ini_set('sendmail_from', get_bloginfo('admin_mail'));
+
+		// Set the Mail Content
+		$mailtags = array( 'user_email', 'user_name', 'author_ip', 'status', 'entry_management_url', 'blog_name', 'blog_url', 'wp_admin_url', 'entry_content', 'reports' );
+		$mail_body = esc_html__('
+Hello,
+
+There was a report for abuse for a guestbook entry at %blog_name%.
+You can check it at %entry_management_url%.
+
+Have a nice day.
+Your Gwolle-GB-Mailer
+
+
+Website address: %blog_url%
+User name: %user_name%
+User email: %user_email%
+Entry status: %status%
+Reports: %reports%
+Reporter IP address: %author_ip%
+Entry content:
+%entry_content%
+', 'gwolle-gb');
+		$mail_body = apply_filters( 'gwolle_gb_mail_moderators_report_abuse_body', $mail_body, $entry );
+
+		// Set the Mail Headers
+		$subject = '[' . gwolle_gb_format_values_for_mail(get_bloginfo('name')) . '] ' . esc_html__('Report Abuse', 'gwolle-gb');
+
+		$header = "Content-Type: text/plain; charset=UTF-8\r\n"; // Encoding of the mail.
+		if ( get_option('gwolle_gb-mail-from', false) ) {
+			$header .= 'From: ' . gwolle_gb_format_values_for_mail(get_bloginfo('name')) . ' <' . get_option('gwolle_gb-mail-from') . ">\r\n";
+		}
+
+		$author_email = $entry->get_author_email();
+		if ( $author_email ) {
+			$header .= 'Reply-To: "' . gwolle_gb_format_values_for_mail($entry->get_author_name()) . '" <' . $author_email . ">\r\n"; // Set Reply-To for easy answering.
+		}
+
+		$info = array();
+		// Replace the tags from the mailtemplate with real data from the website and entry
+		$info['user_name'] = gwolle_gb_sanitize_output( $entry->get_author_name() );
+		$info['user_email'] = $author_email;
+		$info['author_ip'] = gwolle_gb_get_user_ip();
+		$info['blog_name'] = get_bloginfo('name');
+		$postid = gwolle_gb_get_postid( (int) $entry->get_book_id() );
+		if ( $postid ) {
+			$permalink = gwolle_gb_get_permalink( $postid );
+			if ( is_wp_error( $permalink ) ) {
+				$info['blog_url'] = get_bloginfo('wpurl') . '?p=' . $postid;
+			} else {
+				$info['blog_url'] = $permalink;
+			}
+		} else {
+			$info['blog_url'] = get_bloginfo('wpurl');
+		}
+
+		$wpadmin = apply_filters( 'gwolle_gb_wpadmin_url', admin_url( 'admin.php' ) );
+		$info['wp_admin_url'] = $wpadmin;
+		$info['entry_management_url'] = $wpadmin . '?page=gwolle-gb/editor.php&entry_id=' . $entry->get_id();
+		$info['entry_content'] = gwolle_gb_format_values_for_mail(gwolle_gb_sanitize_output( $entry->get_content(), 'content' ));
+
+		if ( $entry->get_ischecked() ) {
+			$info['status'] = esc_html__('Checked', 'gwolle-gb');
+		} else {
+			$info['status'] = esc_html__('Unchecked', 'gwolle-gb');
+		}
+		$info['reports'] = (string) $reports . ' (max 3)';
+
+		// The last tags are bloginfo-based
+		$mailtags_count = count($mailtags);
+		for ($tagnum = 0; $tagnum < $mailtags_count; $tagnum++) {
+			$tagname = $mailtags["$tagnum"];
+			$mail_body = str_replace('%' . $tagname . '%', $info["$tagname"], $mail_body);
+		}
+		$mail_body = gwolle_gb_format_values_for_mail( $mail_body );
+
+		// Add logging to mail
+		$log_entries = gwolle_gb_get_log_entries( $entry->get_id() );
+		if ( is_array($log_entries) && ! empty($log_entries) ) {
+			$mail_body .= "\r\n\r\n" . esc_html__('Log messages:', 'gwolle-gb') . "\r\n";
+			if ($entry->get_datetime() > 0) {
+				$mail_body .= date_i18n( get_option('date_format'), $entry->get_datetime() ) . ', ';
+				$mail_body .= date_i18n( get_option('time_format'), $entry->get_datetime() );
+				$mail_body .= ': ' . esc_html__('Written', 'gwolle-gb') . "\r\n";
+			}
+			foreach ($log_entries as $log_entry) {
+				$mail_body .= $log_entry['msg_html'] . "\r\n";
+			}
+		}
+
+		if ( is_array($subscribers) && ! empty($subscribers) ) {
+			foreach ( $subscribers as $subscriber ) {
+				wp_mail($subscriber, $subject, $mail_body, $header);
+			}
+		}
+	}
+}
+
+
+/*
+ * Add meta fields to all mail notifications.
+ * Requires Gwolle 2.6.1.
+ *
+ * @since 1.2.1
+ */
+function gwolle_gb_addon_mail_notification_metafields_v2( $mail_body, $entry ) {
+
+	$newline = "\r\n";
+	$meta_fields = $newline . $newline;
+
+	$meta_fields .= __('The Add-On', 'gwolle-gb') . $newline . $newline;
+
+	if (get_option( 'gwolle_gb_addon-starrating', 'false') == 'true') {
+		$label = apply_filters( 'gwolle_gb_addon_starrating_label', __('Rating', 'gwolle-gb') );
+		$meta = gwolle_gb_addon_get_meta_v2( $entry->get_id(), 'starrating' );
+		if ( $meta ) {
+			$meta_fields .= $label . ': ' . $meta . $newline . $newline;
+		}
+	}
+
+	if (get_option( 'gwolle_gb_addon-likes', 'false') == 'true') {
+		$label = __('Likes', 'gwolle-gb');
+		$meta = gwolle_gb_addon_get_meta_v2( $entry->get_id(), 'likes' );
+		if ( is_array($meta) && ! empty($meta) ) {
+			$meta = count($meta);
+			$meta_fields .= $label . ': ' . $meta . $newline . $newline;
+		}
+	}
+
+	$fields = gwolle_gb_addon_get_meta_fields_all_v2();
+	if ( is_array( $fields ) && ! empty( $fields ) ) {
+		foreach ( $fields as $field ) {
+			if ( ! isset( $field['slug']) || ! isset( $field['name']) ) {
+				continue;
+			}
+			$slug = 'gwolle_gb_addon_' . $field['slug'];
+			$label = $field['name'];
+			$meta = gwolle_gb_addon_get_meta_v2( $entry->get_id(), $field['slug'] );
+			if ( $meta ) {
+				$meta_fields .= $label . ': ' . $meta . $newline;
+			}
+		}
+		$meta_fields .= $newline;
+	}
+
+	if (get_option( 'gwolle_gb_addon-report', 'false') == 'true') {
+		$reports = gwolle_gb_addon_get_meta_v2( $entry->get_id(), 'report-abuse', true );
+
+		if ( $reports == -1 ) {
+			$meta_fields .= esc_html__('Abuse Reports', 'gwolle-gb') . ': -1  (' . esc_html__('Already moderated', 'gwolle-gb') . ')' . $newline;
+		}
+		if ( $reports > 0 ) {
+			$meta_fields .= esc_html__('Abuse Reports', 'gwolle-gb') . ': ' . $reports . $newline;
+		}
+		$meta_fields .= $newline;
+	}
+
+	$mail_body .= $meta_fields;
+	return $mail_body;
+
+}
+add_filter( 'gwolle_gb_mail_moderators_body', 'gwolle_gb_addon_mail_notification_metafields_v2', 10, 2 );
+add_filter( 'gwolle_gb_mail_author_body', 'gwolle_gb_addon_mail_notification_metafields_v2', 10, 2 );
+add_filter( 'gwolle_gb_mail_author_on_admin_reply_body', 'gwolle_gb_addon_mail_notification_metafields_v2', 10, 2 );
+add_filter( 'gwolle_gb_mail_moderators_report_abuse_body', 'gwolle_gb_addon_mail_notification_metafields_v2', 10, 2 );
+
+
+/*
+ * Send the Notification Mail to moderators after media has been uploaded and added to the media library.
+ *
+ * @since 2.3.1
+ *
+ * @param int    $attachment_id        ID of the uploaded attachment.
+ * @param string $attachment_src_large URL of the uploaded attachment as media source (large).
+ */
+function gwolle_gb_addon_mail_moderators_on_upload_media_v2( $attachment_id, $attachment_src_large ) {
+
+	if ( $attachment_id === 0 ) {
+		return;
+	}
+	if ( strlen( $attachment_src_large ) === 0 ) {
+		return;
+	}
+
+	$current_user = wp_get_current_user();
+	if ( ! ( $current_user instanceof WP_User ) ) {
+		return;
+	}
+
+	$subscribers = array();
+	$recipients = get_option('gwolle_gb-notifyByMail');
+	if ( strlen($recipients) > 0 ) {
+		$recipients = explode( ',', $recipients );
+	}
+	if ( is_array( $recipients ) && count( $recipients ) > 0 ) {
+		foreach ( $recipients as $recipient ) {
+			if ( is_numeric($recipient) ) {
+				$userdata = get_userdata( (int) $recipient );
+				$subscribers[] = $userdata->user_email;
+			}
+		}
+	} else {
+		return;
+	}
+
+	@ini_set('sendmail_from', get_bloginfo('admin_mail'));
+
+	// Set the Mail Content
+	$mailtags = array( 'blog_name', 'media_library', 'attachment_src_large', 'attachment_id', 'blog_url', 'user_name', 'user_email', 'author_ip' );
+	$mail_body = esc_html__('
+Hello,
+
+An image has been uploaded into the Media Library at %blog_name%.
+
+Media Library: %media_library%.
+Image file: %attachment_src_large%.
+Attachment ID: %attachment_id%.
+
+Have a nice day.
+Your Gwolle-GB-Mailer
+
+
+Website address: %blog_url%
+User name: %user_name%
+User email: %user_email%
+User IP address: %author_ip%
+', 'gwolle-gb');
+	$mail_body = apply_filters( 'gwolle_gb_addon_mail_moderators_on_upload_media_body', $mail_body, $attachment_id, $attachment_src_large );
+
+	// Set the Mail Headers
+	$subject = '[' . gwolle_gb_format_values_for_mail(get_bloginfo('name')) . '] ' . esc_html__('Media file was uploaded for the guestbook', 'gwolle-gb');
+
+	$header = "Content-Type: text/plain; charset=UTF-8\r\n"; // Encoding of the mail.
+	if ( get_option('gwolle_gb-mail-from', false) ) {
+		$header .= 'From: ' . gwolle_gb_format_values_for_mail(get_bloginfo('name')) . ' <' . get_option('gwolle_gb-mail-from') . ">\r\n";
+	}
+
+	$wpadmin = apply_filters( 'gwolle_gb_wpadmin_url', admin_url() );
+	$info['attachment_id'] = $attachment_id;
+	$info['attachment_src_large'] = $attachment_src_large;
+	$info['media_library'] = $wpadmin . '/post.php?post=' . $attachment_id . '&action=edit';
+	$info['user_name'] = esc_html( $current_user->display_name );
+	$info['user_email'] = esc_html( $current_user->user_email );
+	$info['author_ip'] = gwolle_gb_get_user_ip();
+	$info['blog_name'] = get_bloginfo('name');
+	$info['blog_url'] = get_bloginfo('wpurl');
+
+	$mailtags_count = count($mailtags);
+	for ($tagnum = 0; $tagnum < $mailtags_count; $tagnum++) {
+		$tagname = $mailtags["$tagnum"];
+		$mail_body = str_replace('%' . $tagname . '%', $info["$tagname"], $mail_body);
+	}
+	$mail_body = gwolle_gb_format_values_for_mail( $mail_body );
+
+	if ( is_array($subscribers) && ! empty($subscribers) ) {
+		foreach ( $subscribers as $subscriber ) {
+			wp_mail($subscriber, $subject, $mail_body, $header);
+		}
+	}
+}
+add_action( 'gwolle_gb_addon_upload_media', 'gwolle_gb_addon_mail_moderators_on_upload_media_v2', 10, 2 );

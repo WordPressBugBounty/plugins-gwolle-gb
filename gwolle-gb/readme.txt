@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, ther
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 6.9
-Stable tag: 4.10.1
+Stable tag: 5.0.0
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -33,7 +33,7 @@ Current features include:
 * MultiSite is supported.
 * Localization. Own languages can be added very easily through [GlotPress](https://translate.wordpress.org/projects/wp-plugins/gwolle-gb).
 * Admins can add a reply to each entry.
-* A log for each entry, so that you know which member of the staff released and edited a guestbook-entry to the public and when.
+* A log for each entry, so that you know which member of the staff released and edited a guestbook entry to the public and when.
 * IP-address and host-logging with link to WHOIS query site.
 * RSS Feed.
 * BBcode, Emoji and Smiley integration (optional).
@@ -95,7 +95,7 @@ Current features include:
 * Auto Anonymize timer (optional).
 * Auto Delete timer (optional).
 
-You can buy the Add-On at [ZenoWeb Webshop](https://zenoweb.nl/downloads/gwolle-guestbook-add-on/) for only 15 Euro.
+Since version 5.0.0 the Add-On is included in the main plugin.
 
 = Demo with Add-On =
 
@@ -121,14 +121,6 @@ This plugin is also available in [Codeberg](https://codeberg.org/cyclotouriste/g
 
 As an alternative for the shortcode, you can use the function `show_gwolle_gb();` to show the guestbook in your templates.
 It couldn't be easier.
-
-= Updating from an old version =
-
-With version 1.0 there have been some changes:
-
-* Gwolle Guestbook uses the Shortcode API now. Make sure your Guestbook page uses '[gwolle_gb]' instead of the old one.
-* The entries that are visible to visitors have changed. Make sure to check if you have everything visible that you want and nothing more.
-* CSS has changed somewhat. If you have custom CSS, you want to check if it still applies.
 
 = License =
 
@@ -436,6 +428,27 @@ Sure you can if you want to. In my personal opinion however it can be a good thi
 So if you already have a blog with comments, the guestbook entries might get lost in there, and keeping a separate guestbook can be good.
 But if you don't use standard comments, you can just as easily use the comment section for a guestbook.
 
+= Which SEO/Sitemap plugins are supported? =
+
+* [WordPress Core Sitemaps since WP 5.5](https://wordpress.org/plugins/core-sitemaps/).
+* [The SEO Framework](https://wordpress.org/plugins/autodescription/).
+* [All In One SEO Pack](https://wordpress.org/plugins/all-in-one-seo-pack/).
+* [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/).
+* [XML Sitemap Generator for Google](https://wordpress.org/plugins/google-sitemap-generator/).
+* [XML Sitemap & Google News](https://wordpress.org/plugins/xml-sitemap-feed/).
+
+= The preview and submit do nothing. =
+
+If you check in your console's tab for network, you might see a reply with `saved:null`. This can happen when you entered some strings in the string replacement settings that are also part of the html. For example, if you enter as old string `entry` and new string `review`, this error will occur.
+
+Please be carefull which strings you want replaced.
+
+= What about uploading files? =
+
+Please be aware that you want uploading of images restricted to trusted users, that means users that are logged in and have the capability 'gwolle_gb_upload_files'. Most often these will only be Authors, Editors or Administrators. It won't be great when the website becomes a haven for image spam or worse, that is why this restriction in place.
+
+For users that are not logged in, it is still advised to use the image option in the BBcode menu, where they can link to an image elsewhere on the web.
+
 
 == Screenshots ==
 
@@ -449,6 +462,16 @@ But if you don't use standard comments, you can just as easily use the comment s
 
 
 == Changelog ==
+
+= 5.0.0 =
+* 2026-06-19
+* Integrate version 2.10.2 of the Add-On.
+* Rename all add-on functions to _v2 to avoid conflicts.
+* Deactivate separate add-on plugin.
+* Add checkbox to enable or disable double entry check.
+* Fix warning in Sitemap for Yoast SEO.
+* Use <search> element for search form in widget.
+* Set default escape character for importing from CSV.
 
 = 4.10.1 =
 * 2026-02-06

@@ -522,6 +522,10 @@ function gwolle_gb_check_double_entry( $entry ) {
 
 	$form_setting = gwolle_gb_get_setting( 'form' );
 
+	if ( get_option( 'gwolle_gb-double_entry', 'true') === 'false' ) {
+		return $entry;
+	}
+
 	if ( isset($form_setting['form_message_mandatory']) && $form_setting['form_message_mandatory'] === 'true' ) {
 		$entries = gwolle_gb_get_entries(array(
 				'email'   => $entry->get_author_email(),

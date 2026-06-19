@@ -375,6 +375,12 @@ function gwolle_gb_page_settings_update() {
 						update_option( 'gwolle_gb-timeout', 'false', true );
 					}
 
+					if (isset($_POST['gwolle_gb_double_entry']) && $_POST['gwolle_gb_double_entry'] === 'on') {
+						update_option( 'gwolle_gb-double_entry', 'true', true );
+					} else {
+						update_option( 'gwolle_gb-double_entry', 'false', true );
+					}
+
 					if (isset($_POST['akismet-active']) && $_POST['akismet-active'] === 'on') {
 						update_option( 'gwolle_gb-akismet-active', 'true', true );
 					} else {

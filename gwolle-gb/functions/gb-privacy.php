@@ -37,7 +37,9 @@ function gwolle_gb_add_privacy_policy_content() {
 	$content = sprintf(
 		'<p>' . esc_html__( 'When visitors leave entries on the site we collect the data entered in the guestbook form and possibly the IP address and hostname of the visitor to help spam detection.', 'gwolle-gb' ) . '</p>' .
 		'<p>' . esc_html__( 'An anonymized string created from your email address (also called a hash) may be provided to the Gravatar service to see if you are using it. The Gravatar service privacy policy is available here: https://automattic.com/privacy/. After approval of your entry, your profile picture is visible to the public in the context of your guestbook entry.', 'gwolle-gb' ) . '</p>' .
-		'<p>' . esc_html__( 'The entered entry and its metadata may be sent to third parties like Akismet and Stop Forum Spam to help spam detection. Their respective privacy policies are at https://automattic.com/privacy/ and https://www.stopforumspam.com/privacy.', 'gwolle-gb' ) . '</p>'
+		'<p>' . esc_html__( 'The entered entry and its metadata may be sent to third parties like Akismet and Stop Forum Spam to help spam detection. Their respective privacy policies are at https://automattic.com/privacy/ and https://www.stopforumspam.com/privacy.', 'gwolle-gb' ) . '</p>' .
+		'<p>' . esc_html__( 'When visitors report an entry as abusive, the entry ID will be stored in a cookie in the browser. Also, the IP address will be saved temporarily in the database together with the number of reports.', 'gwolle-gb' ) . '</p>' .
+		'<p>' . esc_html__( 'When visitors like an entry, the IP address will be saved in the database.', 'gwolle-gb' ) . '</p>'
 	);
 
 	wp_add_privacy_policy_content(
