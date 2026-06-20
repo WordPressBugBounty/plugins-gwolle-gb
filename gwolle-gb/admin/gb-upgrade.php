@@ -430,12 +430,13 @@ function gwolle_gb_upgrade() {
 		delete_option('gwolle_gb-cleantalk-active');
 	}
 
-	if (version_compare($installed_ver, '5.0.0', '<')) {
+	if (version_compare($installed_ver, '5.0.1', '<')) {
 		/*
-		 * 4.10.1->5.0.0
+		 * 4.10.1->5.0.1
 		 * Add-on is now integrated into main plugin.
+		 * Use real slug, constant might not exist anymore.
 		 */
-		deactivate_plugins( GWOLLE_GB_ADDON_FOLDER . '/gwolle-gb-addon.php' );
+		deactivate_plugins( 'gwolle-gb-addon/gwolle-gb-addon.php' );
 	}
 
 
@@ -451,7 +452,7 @@ function gwolle_gb_upgrade() {
 	gwolle_gb_set_defaults();
 
 	/* Update the plugin version option. */
-	update_option( 'gwolle_gb_version', GWOLLE_GB_VER, true );
+	//update_option( 'gwolle_gb_version', GWOLLE_GB_VER, true );
 
 
 	/* Add-on */

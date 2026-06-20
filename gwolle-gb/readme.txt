@@ -2,8 +2,8 @@
 Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, therab, robinnatter, ronr1999, slavum, chris0815, cleantalk, alexclassroom, rhialto
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
-Tested up to: 6.9
-Stable tag: 5.0.0
+Tested up to: 7.0
+Stable tag: 5.0.1
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -463,6 +463,12 @@ For users that are not logged in, it is still advised to use the image option in
 
 == Changelog ==
 
+= 5.0.1 =
+* 2026-06-20
+* Remove constants from Add-On.
+* Use real slug for disabling Add-On, constant might not exist anymore.
+* Do not define GWOLLE_GB_ADDON_VER constant twice.
+
 = 5.0.0 =
 * 2026-06-19
 * Integrate version 2.10.2 of the Add-On.
@@ -470,7 +476,7 @@ For users that are not logged in, it is still advised to use the image option in
 * Deactivate separate add-on plugin.
 * Add checkbox to enable or disable double entry check.
 * Fix warning in Sitemap for Yoast SEO.
-* Use <search> element for search form in widget.
+* Use search element for search form in widget.
 * Set default escape character for importing from CSV.
 
 = 4.10.1 =

@@ -20,7 +20,7 @@ function my_gwolle_gb_addon_social_media( $list ) {
 	
 	$list['my_medium'] = array(
 		'name'  => 'My Medium',
-		'icon'  => GWOLLE_GB_ADDON_URL . 'assets/social-icons/my_medium.png',
+		'icon'  => GWOLLE_GB_URL . 'assets/social-icons/my_medium.png',
 		'url'   => 'https://www.my_medium.com/sharer.php?u=',
 		'check' => 'true',
 		'order' => 0,

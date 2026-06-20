@@ -95,15 +95,13 @@ function gwolle_gb_debug_info() {
 				$nonexist .= '<li>gwolle_gb_log</li>';
 			}
 
-			$active = is_plugin_active( 'gwolle-gb-addon/gwolle-gb-addon.php' ); // true or false
-			if ( $active ) {
-				$table = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_meta'");
-				if ( $table != 0 ) {
-					$exist .= '<li>gwolle_gb_meta</li>';
-				} else {
-					$nonexist .= '<li>gwolle_gb_meta</li>';
-				}
+			$table = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_meta'");
+			if ( $table != 0 ) {
+				$exist .= '<li>gwolle_gb_meta</li>';
+			} else {
+				$nonexist .= '<li>gwolle_gb_meta</li>';
 			}
+
 			echo esc_html__('MySQL Tables that exist:', 'gwolle-gb');
 			echo '<ul class="ul-disc">';
 			echo $exist;

@@ -90,7 +90,7 @@ function gwolle_gb_entry_likes_get_link_v2( $entry ) {
 
 	$like_link = '
 							<a class="gwolle-gb-like-link' . $class . '" href="#" data-entry-id="' . (int) $entry->get_id() . '" title="' . esc_attr__('Like this entry', 'gwolle-gb') . '">
-								<img src="' . GWOLLE_GB_ADDON_URL . 'assets/like/like.png" alt="' . esc_attr__('Like this entry', 'gwolle-gb') . '" style="margin-top:-2px;width:20px;" />
+								<img src="' . GWOLLE_GB_URL . 'assets/like/like.png" alt="' . esc_attr__('Like this entry', 'gwolle-gb') . '" style="margin-top:-2px;width:20px;" />
 								<span class="gb-likes">' . (int) $count_likes . '</span>
 							</a>&nbsp;&nbsp;&nbsp;';
 
@@ -109,7 +109,7 @@ function gwolle_gb_entry_likes_get_link_v2( $entry ) {
 
 	$unlike_link = '
 							<a class="gwolle-gb-unlike-link' . $class . '" href="#" data-entry-id="' . (int) $entry->get_id() . '" title="' . esc_attr__('Unlike this entry', 'gwolle-gb') . '">
-								<img src="' . GWOLLE_GB_ADDON_URL . 'assets/like/unlike.png" alt="' . esc_attr__('Unlike this entry', 'gwolle-gb') . '" style="margin-top:2px;width:20px;" />
+								<img src="' . GWOLLE_GB_URL . 'assets/like/unlike.png" alt="' . esc_attr__('Unlike this entry', 'gwolle-gb') . '" style="margin-top:2px;width:20px;" />
 								<span class="gb-unlikes">' . (int) $count_unlikes . '</span>
 							</a>';
 

@@ -47,11 +47,11 @@ function gwolle_gb_addon_editor_metabox_meta_v2( $entry ) {
 		$output .= '
 						<div class="gwolle-gb-likes">
 							<span class="gwolle-gb-like-link">
-								<img src="' . GWOLLE_GB_ADDON_URL . 'assets/like/like.png" style="margin-top:-2px;width:20px;" />
+								<img src="' . GWOLLE_GB_URL . 'assets/like/like.png" style="margin-top:-2px;width:20px;" />
 								<span class="gb-likes">&nbsp;' . (int) $likes . '</span>
 							</span>&nbsp;&nbsp;&nbsp;
 							<span class="gwolle-gb-unlike-link">
-								<img src="' . GWOLLE_GB_ADDON_URL . 'assets/like/unlike.png" style="margin-top:2px;width:20px;" />
+								<img src="' . GWOLLE_GB_URL . 'assets/like/unlike.png" style="margin-top:2px;width:20px;" />
 								<span class="gb-unlikes">&nbsp;' . (int) $unlikes . '</span>
 							</span>
 						</div>
