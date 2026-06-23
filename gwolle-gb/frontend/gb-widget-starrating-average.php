@@ -58,6 +58,9 @@ if ( function_exists('register_sidebar') && class_exists('WP_Widget') ) {
 
 			echo $widget_html;
 
+			// Make sure to load it with the widget, also on non-guestbook pages and even when it is disabled.
+			gwolle_gb_enqueue_starrating();
+
 		}
 
 		/** @see WP_Widget::update */

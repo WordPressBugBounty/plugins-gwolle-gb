@@ -80,6 +80,7 @@ function gwolle_gb_addon_register_settings_v2() {
 	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-preview',            'sanitize_text_field' ); // 'true'
 	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-reading',            'gwolle_gb_setting_array_sanitize' );               // serialized array
 	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-report',             'sanitize_text_field' ); // 'false'
+	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-sitemap',            'sanitize_text_field' ); // 'true'
 	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-social_media',       'sanitize_text_field' ); // 'false'
 	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-social_media_loc',   'intval' );              // 2
 	register_setting( 'gwolle_gb_addon_options', 'gwolle_gb_addon-social_services',    'gwolle_gb_setting_array_sanitize' );               // serialized array

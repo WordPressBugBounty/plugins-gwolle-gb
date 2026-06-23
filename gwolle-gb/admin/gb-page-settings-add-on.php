@@ -38,7 +38,7 @@ function gwolle_gb_addon_page_settings_v2() {
 	<div class="wrap gwolle_gb">
 
 		<div id="icon-gwolle-gb"><br /></div>
-		<h1><?php esc_html_e('Add-On Settings', 'gwolle-gb'); ?></h1>
+		<h1><?php esc_html_e('Add-On Settings', 'gwolle-gb'); ?> (Gwolle Guestbook) - v<?php echo GWOLLE_GB_VER; ?></h1>
 
 		<?php
 		if ( $gwolle_gb_errors ) {
@@ -62,7 +62,6 @@ function gwolle_gb_addon_page_settings_v2() {
 			<a href="#" role="tab" class="nav-tab <?php if ($active_tab === 'gwolle_gb_reading')    { echo "nav-tab-active";} ?>" rel="gwolle_gb_reading"><?php /* translators: Settings page tab */ esc_html_e('Reading Fields', 'gwolle-gb'); ?></a>
 			<a href="#" role="tab" class="nav-tab <?php if ($active_tab === 'gwolle_gb_social')     { echo "nav-tab-active";} ?>" rel="gwolle_gb_social"><?php /* translators: Settings page tab */ esc_html_e('Social Media', 'gwolle-gb'); ?></a>
 			<a href="#" role="tab" class="nav-tab <?php if ($active_tab === 'gwolle_gb_starrating') { echo "nav-tab-active";} ?>" rel="gwolle_gb_starrating"><?php /* translators: Settings page tab */ esc_html_e('Star Rating', 'gwolle-gb'); ?></a>
-			<a href="#" role="tab" class="nav-tab <?php if ($active_tab === 'gwolle_gb_abuse')      { echo "nav-tab-active";} ?>" rel="gwolle_gb_abuse"><?php /* translators: Settings page tab */ esc_html_e('Abuse', 'gwolle-gb'); ?></a>
 			<a href="#" role="tab" class="nav-tab <?php if ($active_tab === 'gwolle_gb_misc')       { echo "nav-tab-active";} ?>" rel="gwolle_gb_misc"><?php /* translators: Settings page tab */ esc_html_e('Miscellaneous', 'gwolle-gb'); ?></a>
 			<a href="#" role="tab" class="nav-tab <?php if ($active_tab === 'gwolle_gb_strings')    { echo "nav-tab-active";} ?>" rel="gwolle_gb_strings"><?php /* translators: Settings page tab */ esc_html_e('Strings', 'gwolle-gb'); ?></a>
 		</h2>
@@ -84,10 +83,6 @@ function gwolle_gb_addon_page_settings_v2() {
 
 		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_starrating <?php if ($active_tab === 'gwolle_gb_starrating') { echo "active";} ?>" method="post" action="#">
 			<?php gwolle_gb_addon_page_settingstab_starrating_v2(); ?>
-		</form>
-
-		<form name="gwolle_gb_options" role="tabpanel" class="gwolle_gb_options gwolle_gb_abuse <?php if ($active_tab === 'gwolle_gb_abuse') { echo "active";} ?>" method="post" action="#">
-			<?php gwolle_gb_addon_page_settingstab_abuse_v2(); ?>
 		</form>
 
 
@@ -286,27 +281,6 @@ function gwolle_gb_addon_page_settings_update_v2() {
 					}
 					break;
 
-				case 'gwolle_gb_abuse':
-					/* Abuse */
-
-					/* Check Nonce */
-					$verified = false;
-					if ( isset($_POST['gwolle_gb_addon_abuse_nonce']) ) {
-						$verified = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gwolle_gb_addon_abuse_nonce'] ) ), 'gwolle_gb_addon_abuse_nonce' );
-					}
-					if ( $verified == false ) {
-						// Nonce is invalid.
-						gwolle_gb_add_message( '<p>' . esc_html__('The Nonce did not validate. Please reload the page and try again.', 'gwolle-gb') . '</p>', true, false);
-						break;
-					}
-
-					if (isset($_POST['gb_report']) && $_POST['gb_report'] == 'on') {
-						update_option( 'gwolle_gb_addon-report', 'true', true );
-					} else {
-						update_option( 'gwolle_gb_addon-report', 'false', true );
-					}
-					break;
-
 				case 'gwolle_gb_misc':
 					/* Misc Settings */
 
@@ -339,6 +313,12 @@ function gwolle_gb_addon_page_settings_update_v2() {
 						update_option( 'gwolle_gb_addon-email', 'false', true );
 					}
 
+					if (isset($_POST['gb_report']) && $_POST['gb_report'] == 'on') {
+						update_option( 'gwolle_gb_addon-report', 'true', true );
+					} else {
+						update_option( 'gwolle_gb_addon-report', 'false', true );
+					}
+
 					if (isset($_POST['gb_upload']) && $_POST['gb_upload'] == 'on') {
 						update_option( 'gwolle_gb_addon-upload', 'true', true );
 					} else {
@@ -353,6 +333,12 @@ function gwolle_gb_addon_page_settings_update_v2() {
 
 					if (isset($_POST['gwolle_gb_addon_likes_loc'])) {
 						update_option( 'gwolle_gb_addon-likes_loc', (int) $_POST['gwolle_gb_addon_likes_loc'], true );
+					}
+
+					if (isset($_POST['gwolle-gb-sitemap']) && $_POST['gwolle-gb-sitemap'] == 'on') {
+						update_option( 'gwolle_gb_addon-sitemap', 'true', true );
+					} else {
+						update_option( 'gwolle_gb_addon-sitemap', 'false', true );
 					}
 
 					if (isset($_POST['delete_link']) && $_POST['delete_link'] == 'on') {

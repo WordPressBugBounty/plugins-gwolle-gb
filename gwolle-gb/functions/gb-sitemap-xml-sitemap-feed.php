@@ -102,4 +102,6 @@ function gwolle_gb_addon_xml_sitemap_feed_get_sitemap_v2( $pages ) {
 	return $pages;
 
 }
-add_filter( 'xmlsf_custom_urls', 'gwolle_gb_addon_xml_sitemap_feed_get_sitemap_v2' );
+if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+	add_filter( 'xmlsf_custom_urls', 'gwolle_gb_addon_xml_sitemap_feed_get_sitemap_v2' );
+}

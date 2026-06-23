@@ -452,7 +452,7 @@ function gwolle_gb_upgrade() {
 	gwolle_gb_set_defaults();
 
 	/* Update the plugin version option. */
-	//update_option( 'gwolle_gb_version', GWOLLE_GB_VER, true );
+	update_option( 'gwolle_gb_version', GWOLLE_GB_VER, true );
 
 
 	/* Add-on */
@@ -651,6 +651,9 @@ function gwolle_gb_set_defaults() {
 	}
 	if ( get_option('gwolle_gb_addon-likes_loc', false) === false ) {
 		update_option( 'gwolle_gb_addon-likes_loc', 1, true );
+	}
+	if ( get_option('gwolle_gb_addon-sitemap', false) === false ) {
+		update_option( 'gwolle_gb_addon-sitemap', 'true', true );
 	}
 	if ( get_option('gwolle_gb_addon-social_media', false) === false ) {
 		update_option( 'gwolle_gb_addon-social_media', 'false', true );

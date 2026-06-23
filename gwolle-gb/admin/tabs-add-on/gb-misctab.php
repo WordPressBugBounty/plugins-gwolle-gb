@@ -77,6 +77,23 @@ function gwolle_gb_addon_page_settingstab_misc_v2() {
 		</tr>
 
 		<tr>
+			<th scope="row"><label for="gb_report"><?php esc_html_e('Report Abuse', 'gwolle-gb'); ?></label></th>
+			<td>
+				<input <?php
+					if (get_option( 'gwolle_gb_addon-report', 'false') === 'true') {
+						echo 'checked="checked"';
+					} ?>
+					type="checkbox" name="gb_report" id="gb_report">
+				<label for="gb_report">
+					<?php esc_html_e('Enable report abuse link in Metabox.', 'gwolle-gb'); ?>
+				</label><br />
+				<span class="setting-description">
+					<?php esc_html_e('Visitors can report abusive entries through a link in the metabox.', 'gwolle-gb'); ?>
+				</span>
+			</td>
+		</tr>
+
+		<tr>
 			<th scope="row"><label for="gb_upload"><?php /* translators: Settings page, option for uploading of images */ esc_html_e('Upload Images', 'gwolle-gb'); ?></label></th>
 			<td>
 				<input <?php
@@ -124,6 +141,23 @@ function gwolle_gb_addon_page_settingstab_misc_v2() {
 				<label>
 					<input type="radio" id="gwolle_gb_addon_likes_loc" name="gwolle_gb_addon_likes_loc" value="3" <?php echo checked('3', $option, false); ?> /><?php esc_html_e('None.', 'gwolle-gb'); ?>
 				</label><br />
+			</td>
+		</tr>
+
+		<tr>
+			<th scope="row"><label for="gwolle-gb-sitemap"><?php /* translators: Settings page, option for sitemap */ esc_html_e('Sitemap', 'gwolle-gb'); ?></label></th>
+			<td>
+				<input <?php
+					if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+						echo 'checked="checked"';
+					} ?>
+					type="checkbox" name="gwolle-gb-sitemap" id="gwolle-gb-sitemap">
+				<label for="gwolle-gb-sitemap">
+					<?php esc_html_e('Enable sitemap for guestbook pages.', 'gwolle-gb'); ?>
+				</label><br />
+				<span class="setting-description">
+					<?php esc_html_e('This option will enable generation of sitemap for the guestbook pages. The sitemap in WordPress Core is supported, while several sitemap plugins are also supported.', 'gwolle-gb'); ?><br />
+				</span>
 			</td>
 		</tr>
 

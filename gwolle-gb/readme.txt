@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, ther
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 7.0
-Stable tag: 5.0.1
+Stable tag: 5.0.2
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -462,6 +462,15 @@ For users that are not logged in, it is still advised to use the image option in
 
 
 == Changelog ==
+
+= 5.0.2 =
+* 2026-06-23
+* Fix update on older versions of WordPress.
+* Add option to enable/disable sitemap.
+* Always show starrating in starrating widget.
+* Change order of postboxes on admin import page.
+* List Rate It as third party library.
+* Merge abuse-tab with misc-tab in Add-On settings.
 
 = 5.0.1 =
 * 2026-06-20

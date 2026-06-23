@@ -3,7 +3,7 @@
 Plugin Name: Gwolle Guestbook
 Plugin URI: https://zenoweb.nl/
 Description: Gwolle Guestbook is not just another guestbook for WordPress. The goal is to provide an easy and slim way to integrate a guestbook into your WordPress powered site. Don't use your 'comment' section the wrong way - install Gwolle Guestbook and have a real guestbook.
-Version: 5.0.1
+Version: 5.0.2
 Author: Marcel Pol
 Author URI: https://zenoweb.nl
 License: GPLv2 or later
@@ -25,6 +25,7 @@ Copyright 2025         chris0815
 Copyright 2025         cleantalk
 Copyright 2025         alexclassroom
 Copyright 2025         rhialto
+Copyright 2026         olafw
 
 
 This program is free software; you can redistribute it and/or modify
@@ -44,11 +45,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 // Plugin Version
-define('GWOLLE_GB_VER', '5.0.1');
+define('GWOLLE_GB_VER', '5.0.2');
+
 
 $active_plugins = get_option('active_plugins');
-$active = is_plugin_active( 'gwolle-gb-addon/gwolle-gb-addon.php' ); // true or false
-if ( ! $active ) {
+if ( ! in_array('gwolle-gb-addon/gwolle-gb-addon.php', $active_plugins) ) {
 	define('GWOLLE_GB_ADDON_VER', '2.10.2');
 }
 
@@ -209,7 +210,6 @@ if ( is_admin() ) {
 	require_once GWOLLE_GB_DIR . '/admin/tabs/gb-debugtab.php';
 	require_once GWOLLE_GB_DIR . '/admin/tabs/gb-uninstalltab.php';
 
-	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-abusetab.php';
 	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-formtab.php';
 	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-misctab.php';
 	require_once GWOLLE_GB_DIR . '/admin/tabs-add-on/gb-readingtab.php';
@@ -292,10 +292,14 @@ register_activation_hook(__FILE__, 'gwolle_gb_activation');
  * @since 1.1.0
  */
 function gwolle_gb_addon_yoast_seo_sitemap_v2( $providers ) {
-	if ( interface_exists('WPSEO_Sitemap_Provider') ) {
-		require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-yoast-seo.php';
-		$providers[] = new WPSEO_Gwolle_GB_Sitemap_Provider_v2();
+
+	if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+		if ( interface_exists('WPSEO_Sitemap_Provider') ) {
+			require_once GWOLLE_GB_DIR . '/functions/gb-sitemap-yoast-seo.php';
+			$providers[] = new WPSEO_Gwolle_GB_Sitemap_Provider_v2();
+		}
 	}
 	return $providers;
+
 }
 add_filter( 'wpseo_sitemaps_providers', 'gwolle_gb_addon_yoast_seo_sitemap_v2' );

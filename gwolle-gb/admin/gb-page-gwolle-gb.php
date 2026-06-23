@@ -264,6 +264,7 @@ function gwolle_gb_overview_thanks() {
 		<li><a href="https://akismet.com/tos/" target="_blank">' . esc_html__( 'Akismet', 'gwolle-gb' ) . '</a></li>
 		<li><a href="https://www.stopforumspam.com" target="_blank">' . esc_html__( 'Stop Forum Spam', 'gwolle-gb' ) . '</a></li>
 		<li><a href="https://markitup.jaysalvat.com/" target="_blank">' . esc_html__( 'MarkItUp', 'gwolle-gb' ) . '</a></li>
+		<li><a href="https://github.com/gjunge/rateit.js/" target="_blank">' . esc_html__( 'Rate It', 'gwolle-gb' ) . '</a></li>
 		<li><a href="https://supersimpleslider.com/" target="_blank">' . esc_html__( 'Super Simple Slider', 'gwolle-gb' ) . '</a></li>
 	</ul>';
 }

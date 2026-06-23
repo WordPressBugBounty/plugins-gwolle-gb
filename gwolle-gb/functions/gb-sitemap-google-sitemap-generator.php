@@ -98,4 +98,6 @@ function gwolle_gb_addon_google_sitemap_generator_get_sitemap_v2() {
 	}
 
 }
-add_action( 'sm_buildmap', 'gwolle_gb_addon_google_sitemap_generator_get_sitemap_v2' );
+if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+	add_action( 'sm_buildmap', 'gwolle_gb_addon_google_sitemap_generator_get_sitemap_v2' );
+}

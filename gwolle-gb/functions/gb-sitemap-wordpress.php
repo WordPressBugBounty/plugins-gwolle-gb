@@ -126,7 +126,9 @@ function gwolle_gb_addon_wp_sitemaps_register_providers_v2() {
 	}
 
 }
-add_action( 'init', 'gwolle_gb_addon_wp_sitemaps_register_providers_v2' );
+if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+	add_action( 'init', 'gwolle_gb_addon_wp_sitemaps_register_providers_v2' );
+}
 
 
 }

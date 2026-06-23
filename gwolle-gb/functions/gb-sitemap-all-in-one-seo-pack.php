@@ -96,4 +96,6 @@ function gwolle_gb_addon_all_in_one_get_sitemap_v2( $pages ) {
 	return $pages;
 
 }
-add_filter( 'aioseo_sitemap_additional_pages', 'gwolle_gb_addon_all_in_one_get_sitemap_v2' );
+if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+	add_filter( 'aioseo_sitemap_additional_pages', 'gwolle_gb_addon_all_in_one_get_sitemap_v2' );
+}

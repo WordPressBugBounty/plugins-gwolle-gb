@@ -121,13 +121,24 @@ function gwolle_gb_enqueue() {
 	}
 
 	if (get_option( 'gwolle_gb_addon-starrating', 'false') === 'true') {
-		wp_enqueue_script( 'gwolle_gb_addon_rateit_js', plugins_url('assets/rateit/jquery.rateit.js', __FILE__), array( 'jquery' ), GWOLLE_GB_VER, true );
-		wp_enqueue_style('gwolle_gb_addon_rateit_css', plugins_url('assets/rateit/rateit.css', __FILE__), false, GWOLLE_GB_VER,  'screen');
+		gwolle_gb_enqueue_starrating();
 	}
 
 	wp_enqueue_script('gwolle_gb_frontend_js');
 
 	do_action( 'gwolle_gb_enqueue', $enqueue_css );
+
+}
+
+/*
+ * Enqueue JS and CSS for starrating.
+ *
+ * @since 5.0.2
+ */
+function gwolle_gb_enqueue_starrating() {
+
+	wp_enqueue_script( 'gwolle_gb_addon_rateit_js', plugins_url('assets/rateit/jquery.rateit.js', __FILE__), array( 'jquery' ), GWOLLE_GB_VER, true );
+	wp_enqueue_style('gwolle_gb_addon_rateit_css', plugins_url('assets/rateit/rateit.css', __FILE__), false, GWOLLE_GB_VER,  'screen');
 
 }
 

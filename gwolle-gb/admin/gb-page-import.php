@@ -50,9 +50,9 @@ function gwolle_gb_page_import() {
 		<div id="poststuff" class="gwolle_gb_import metabox-holder">
 			<div class="postbox-container">
 				<?php
-				add_meta_box( 'gwolle_gb_import_postbox_dms', esc_html__('Import guestbook entries from DMSGuestbook', 'gwolle-gb'), 'gwolle_gb_import_postbox_dms', 'gwolle_gb_import', 'normal' );
-				add_meta_box( 'gwolle_gb_import_postbox_wp', esc_html__('Import guestbook entries from WordPress comments', 'gwolle-gb'), 'gwolle_gb_import_postbox_wp', 'gwolle_gb_import', 'normal' );
 				add_meta_box( 'gwolle_gb_import_postbox_gwolle', esc_html__('Import guestbook entries from Gwolle-GB', 'gwolle-gb'), 'gwolle_gb_import_postbox_gwolle', 'gwolle_gb_import', 'normal' );
+				add_meta_box( 'gwolle_gb_import_postbox_wp', esc_html__('Import guestbook entries from WordPress comments', 'gwolle-gb'), 'gwolle_gb_import_postbox_wp', 'gwolle_gb_import', 'normal' );
+				add_meta_box( 'gwolle_gb_import_postbox_dms', esc_html__('Import guestbook entries from DMSGuestbook', 'gwolle-gb'), 'gwolle_gb_import_postbox_dms', 'gwolle_gb_import', 'normal' );
 
 				do_meta_boxes( 'gwolle_gb_import', 'normal', '' );
 				?>

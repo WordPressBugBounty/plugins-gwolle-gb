@@ -90,4 +90,6 @@ function gwolle_gb_addon_autodescription_sitemap_v2( $pages ) {
 	return $pages;
 
 }
-add_filter( 'the_seo_framework_sitemap_additional_urls', 'gwolle_gb_addon_autodescription_sitemap_v2' );
+if (get_option( 'gwolle_gb_addon-sitemap', 'true') === 'true') {
+	add_filter( 'the_seo_framework_sitemap_additional_urls', 'gwolle_gb_addon_autodescription_sitemap_v2' );
+}

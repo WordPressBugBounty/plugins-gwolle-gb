@@ -2,6 +2,7 @@
 /*
  * @package WPSEO\XML_Sitemaps
  * https://wordpress.org/plugins/wordpress-seo/
+ * Included from extra function in /gwolle-gb.php
  * Available under /sitemap_index.xml and /guestbook-sitemap.xml
  */
 
