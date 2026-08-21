@@ -2,8 +2,8 @@
 Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, therab, robinnatter, ronr1999, slavum, chris0815, cleantalk, alexclassroom, rhialto
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
-Tested up to: 7.0
-Stable tag: 5.0.2
+Tested up to: 7.1
+Stable tag: 5.1.0
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -374,6 +374,7 @@ The CSS can be added in Appearance > Customizer > Custom CSS.
 		color: #fff; /* white */
 		background-color: #f00; /* red */
 		border: 1px solid #0f0; /* green */
+		border-radius: 5px;
 	}
 
 	html body div.gwolle-gb form.gwolle-gb-write div.input input[type="text"],
@@ -382,6 +383,7 @@ The CSS can be added in Appearance > Customizer > Custom CSS.
 	html body div.gwolle-gb form.gwolle-gb-write div.input textarea,
 	html body div.gwolle-gb form.gwolle-gb-write div.input select {
 		border: 1px solid #0f0; /* green */
+		border-radius: 3px;
 	}
 
 = I use the Autoptimize plugin =
@@ -462,6 +464,13 @@ For users that are not logged in, it is still advised to use the image option in
 
 
 == Changelog ==
+
+= 5.1.0 =
+* 2026-
+* Rewrite template function gwolle_gb_entry_template for better translations.
+* If you use a custom template, please merge the updates.
+* Add filter gwolle_gb_upload_files_free_for_all.
+* Fix entry edit on frontend when city/origin is disabled from view.
 
 = 5.0.2 =
 * 2026-06-23

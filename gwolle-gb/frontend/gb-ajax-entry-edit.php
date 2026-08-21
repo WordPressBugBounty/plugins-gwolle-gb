@@ -52,7 +52,7 @@ function gwolle_gb_entry_metabox_lines_entry_edit_v2( $gb_metabox, $entry ) {
 					<div class="gb-metabox-line gb-metabox-line-entry-edit">
 						<a class="gwolle-gb-entry-edit" href="#" data-entry-id="' . (int) $entry->get_id() . '" title="' . esc_attr__('Edit entry', 'gwolle-gb') . '">' . esc_html__('Edit entry', 'gwolle-gb') . '</a>
 						' . $content_field . $name_field . $origin_field . '
-						<span class="gwolle_gb_addon_entry_edit_icon"></span>
+						<span class="gwolle_gb_addon_entry_edit_icon gwolle-gb-addon-entry-edit-icon"></span>
 					</div>';
 	}
 

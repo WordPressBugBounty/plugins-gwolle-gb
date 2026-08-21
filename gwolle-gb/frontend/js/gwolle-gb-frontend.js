@@ -1169,23 +1169,29 @@ function gwolle_gb_addon_entry_edit_event( event ) {
 
 	// Copy context from hidden textareas.
 	const raw_content = entry_div.querySelector( '.gwolle-gb-entry-edit-content-raw' );
-	const raw_content_text = raw_content.innerText;
-	const edit_contents = entry_div.querySelectorAll( 'textarea.gwolle-gb-entry-edit-content' );
-	edit_contents.forEach( edit_content => {
-		edit_content.innerText = raw_content_text;
-	});
+	if ( raw_content ) {
+		const raw_content_text = raw_content.innerText;
+		const edit_contents = entry_div.querySelectorAll( 'textarea.gwolle-gb-entry-edit-content' );
+		edit_contents.forEach( edit_content => {
+			edit_content.innerText = raw_content_text;
+		});
+	}
 	const raw_author_name = entry_div.querySelector( '.gwolle-gb-entry-edit-author-name-raw' );
-	const raw_author_name_text = raw_author_name.innerText;
-	const edit_author_names = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-author-name' );
-	edit_author_names.forEach( edit_author_name => {
-		edit_author_name.value = raw_author_name_text;
-	});
+	if ( raw_author_name ) {
+		const raw_author_name_text = raw_author_name.innerText;
+		const edit_author_names = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-author-name' );
+		edit_author_names.forEach( edit_author_name => {
+			edit_author_name.value = raw_author_name_text;
+		});
+	}
 	const raw_origin = entry_div.querySelector( '.gwolle-gb-entry-edit-origin-raw' );
-	const raw_origin_text = raw_origin.innerText;
-	const edit_origins = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-origin' );
-	edit_origins.forEach( edit_origin => {
-		edit_origin.value = raw_origin_text;
-	});
+	if ( raw_origin ) { // only available when origin/city is enabled in Settings > View-tab.
+		const raw_origin_text = raw_origin.innerText;
+		const edit_origins = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-origin' );
+		edit_origins.forEach( edit_origin => {
+			edit_origin.value = raw_origin_text;
+		});
+	}
 
 	// Add event to just created cancel button.
 	const edit_cancels = entry_div.querySelectorAll( 'input.gwolle-gb-entry-edit-cancel' );

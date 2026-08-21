@@ -202,11 +202,11 @@ body .gwolle-gb-content a {
 
 /* Read section */
 
-.gwolle-gb .gwolle-gb-read {
+body .gwolle-gb .gwolle-gb-read {
 	position: relative;
 }
 
-.gwolle-gb .admin-entry {
+body .gwolle-gb .admin-entry {
 	color: #333;
 	background-color: #e6e6e6;
 	background-repeat: repeat-x;
@@ -217,47 +217,50 @@ body .gwolle-gb-content a {
 	background-image: linear-gradient(top, #f4f4f4, #e6e6e6);
 	padding-left: 5px;
 }
-.gwolle-gb .admin-entry a {
+body .gwolle-gb .admin-entry a {
 	color: #666;
 }
-.gwolle-gb .gb-entry {
+body .gwolle-gb .gb-entry {
 	position: relative;
 	border-top: 1px #ddd solid;
 	padding: 10px 0;
 	margin: 0;
 	clear: left;
 }
-.gwolle-gb .gwolle-gb-first {
+body .gwolle-gb .gwolle-gb-first {
 	border-width: 0px;
 }
-.gwolle-gb .gb-entry-count_0 {
+body .gwolle-gb .gb-entry-count_0 {
 	border-bottom: 1px #ddd solid; /* Ajax added entry */
 }
 
-.gwolle-gb .gb-entry .gb-author-info,
-.gwolle-gb .gb-entry .gb-entry-content {
+body .gwolle-gb .gb-entry .gb-author-info,
+body .gwolle-gb .gb-entry .gb-entry-content {
 	display: block;
 }
-.gwolle-gb .gb-entry .gb-author-info .gb-author-avatar {
+body .gwolle-gb .gb-entry .gb-author-info .gb-author-avatar {
 	margin: 0 0 8px 0;
 }
-.gwolle-gb .gb-entry .gb-author-info .gb-author-name {
+body .gwolle-gb .gb-entry .gb-author-info .gb-author-name {
 	padding-left: 10px;
 	font-weight: bold;
 }
-.gwolle-gb .gb-entry .gb-entry-content {
+body .gwolle-gb .gb-entry .gb-author-info .gb-datetime {
+	color: #666;
+}
+body .gwolle-gb .gb-entry .gb-entry-content {
 	padding-left: 10px;
 }
-.gwolle-gb .gb-entry .gb-entry-content img {
+body .gwolle-gb .gb-entry .gb-entry-content img {
 	max-width: 100%;
 	max-height: 700px;
 	display: inline-block;
 }
-.gwolle-gb .gb-entry .gb-highlight {
+body .gwolle-gb .gb-entry .gb-highlight {
 	background-color: #ddff00;
 }
-.gb-entry-full-content,
-.gb-admin_reply-full-content {
+body .gb-entry-full-content,
+body .gb-admin_reply-full-content {
 	overflow: hidden
 }
 
@@ -461,7 +464,7 @@ li.gwolle-gb-widget.ssslide {
 }
 
 
-/* Add-On */
+/* CSS for the Frontend of Gwolle Guestbook plugin Add-On. */
 
 div.gwolle-gb-starrating-result {
 	position: absolute;
@@ -472,9 +475,30 @@ div.gwolle-gb-starrating-result {
 	box-sizing: border-box;
 	z-index: 5;
 }
+
 div.gb-social-media-share img {
 	float: left;
 	cursor: pointer;
+}
+
+div.gb-metabox-content.gb-metabox-content-likes {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+a.gwolle-gb-like-link,
+a.gwolle-gb-unlike-link {
+	border-radius: 3px;
+	border: 1px solid transparent;
+	padding: 2px;
+}
+a.gwolle-gb-like-link.gb-already-liked {
+	border: 1px solid #00a32a;
+}
+a.gwolle-gb-like-link.gb-already-liked img {
+
+}
+a.gwolle-gb-unlike-link.gb-already-unliked {
+	border: 1px solid #d63638;
 }
 
 
@@ -492,41 +516,4 @@ div.gb-social-media-share img {
 		display: none;
 	}
 
-}
-
-
-/*
- * CSS for the Frontend of Gwolle Guestbook plugin Add-On.
- */
-
-
-div.gwolle-gb-starrating-result {
-	position: absolute;
-	top: 0;
-	right: 30px;
-	width: 200px;
-	padding: 3px 6px;
-	box-sizing: border-box;
-	z-index: 5;
-}
-
-div.gb-social-media-share img {
-	float: left;
-	cursor: pointer;
-}
-
-a.gwolle-gb-like-link,
-a.gwolle-gb-unlike-link {
-	border-radius: 3px;
-	border: 1px solid transparent;
-	padding: 2px;
-}
-a.gwolle-gb-like-link.gb-already-liked {
-	border: 1px solid #00a32a;
-}
-a.gwolle-gb-like-link.gb-already-liked img {
-
-}
-a.gwolle-gb-unlike-link.gb-already-unliked {
-	border: 1px solid #d63638;
 }

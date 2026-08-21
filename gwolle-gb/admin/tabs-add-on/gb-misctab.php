@@ -106,7 +106,8 @@ function gwolle_gb_addon_page_settingstab_misc_v2() {
 				</label><br />
 				<span class="setting-description">
 					<?php esc_html_e('Offer uploading of images. This will only be offered for users with the capability `gwolle_gb_upload_files`, which ususally is limited to Author, Editor and Administrator.', 'gwolle-gb'); ?><br />
-					<?php esc_html_e('Images can be added through the form and will be uploaded to the Media Library and added to the content of the entry.', 'gwolle-gb'); ?>
+					<?php esc_html_e('Images can be added through the form and will be uploaded to the Media Library and added to the content of the entry.', 'gwolle-gb'); ?><br />
+					<?php esc_html_e('Please also enable the Visual formatting and Emoji in the main Form settings, image upload depends on that for BBcode support.', 'gwolle-gb'); ?>
 				</span>
 			</td>
 		</tr>

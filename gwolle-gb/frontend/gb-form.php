@@ -275,7 +275,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 			$field_name = gwolle_gb_get_field_name( 'email' );
 			$field_id = gwolle_gb_get_field_id( $field_name );
 			// For logged in users, just save the email anyway.
-			$output .= '<input value="' . esc_attr( $email ) . '" type="hidden" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '" class="gwolle_gb_author_email" />';
+			$output .= '<input value="' . esc_attr( $email ) . '" type="hidden" id="' . esc_attr( $field_id ) . '" name="' . esc_attr( $field_name ) . '" class="gwolle_gb_author_email gwolle-gb-author-email" />';
 		}
 	}
 	$output .= apply_filters( 'gwolle_gb_write_add_after_email', '' );
@@ -457,7 +457,7 @@ function gwolle_gb_frontend_write( $shortcode_atts, $shortcode ) {
 		$output .= '
 				<div class="gwolle_gb_privacy gwolle-gb-privacy">
 					<div class="label"><label for="' . esc_attr( $field_id ) . '" class="text-info">' . $label . $required_indicator . '</label></div>
-					<div class="input"><input type="checkbox" id="' . esc_attr( $field_id ) . '" name="gwolle_gb_privacy" class="gwolle_gb_privacy" required' . $checked . ' /></div>
+					<div class="input"><input type="checkbox" id="' . esc_attr( $field_id ) . '" name="gwolle_gb_privacy" class="gwolle_gb_privacy gwolle-gb-privacy" required' . $checked . ' /></div>
 					<div class="clearBoth">&nbsp;</div>
 				</div>';
 	}

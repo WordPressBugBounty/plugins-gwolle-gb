@@ -47,6 +47,7 @@
 /***************************************************************************************/
 /* first row of buttons */
 .gwolle-gb .markItUpHeader ul li,
+#content .gwolle-gb .markItUpHeader ul li, /* make it more specific with an id */
 #gwolle_gb_editor .markItUpHeader ul li {
 	/* Reset for theme's CSS */
 	margin: 0;

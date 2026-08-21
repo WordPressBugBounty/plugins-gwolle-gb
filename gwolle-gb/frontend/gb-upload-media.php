@@ -25,7 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  */
 function gwolle_gb_addon_write_add_after_content_upload_media_v2( $form_html ) {
 
-	if ( ( ! current_user_can( 'gwolle_gb_upload_files' ) ) ) {
+	$gwolle_gb_upload_files_free_for_all = apply_filters( 'gwolle_gb_upload_files_free_for_all', false );
+
+	if ( ( ! current_user_can( 'gwolle_gb_upload_files' ) ) && ( ! $gwolle_gb_upload_files_free_for_all ) ) {
 		return $form_html;
 	}
 
@@ -66,11 +68,14 @@ add_filter( 'gwolle_gb_write_add_after_content', 'gwolle_gb_addon_write_add_afte
  * @since 2.3.0
  */
 add_action( 'wp_ajax_gwolle_gb_addon_upload_media', 'gwolle_gb_addon_upload_media_v2' );
+add_action( 'wp_ajax_nopriv_gwolle_gb_addon_upload_media', 'gwolle_gb_addon_upload_media_v2' );
 function gwolle_gb_addon_upload_media_v2() {
 
 	$image_url = '';
 
-	if ( ( ! current_user_can( 'gwolle_gb_upload_files' ) ) ) {
+	$gwolle_gb_upload_files_free_for_all = apply_filters( 'gwolle_gb_upload_files_free_for_all', false );
+
+	if ( ( ! current_user_can( 'gwolle_gb_upload_files' ) ) && ( ! $gwolle_gb_upload_files_free_for_all ) ) {
 		return 'error: no-permission';
 	}
 

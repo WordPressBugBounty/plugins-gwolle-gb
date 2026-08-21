@@ -16,7 +16,7 @@ function gwolle_gb_addon_write_add_after_submit_preview( $html ) {
 	if (get_option( 'gwolle_gb_addon-preview', 'true') === 'true') {
 		$html .= '
 					<input type="button" name="gwolle_gb_preview" class="gwolle_gb_preview button btn" value="' . esc_attr__('Preview', 'gwolle-gb') . '" />
-					<span class="gwolle_gb_addon_preview_ajax_icon"></span>
+					<span class="gwolle_gb_addon_preview_ajax_icon gwolle-gb-addon-preview-ajax-icon"></span>
 			';
 	}
 

@@ -76,49 +76,78 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 		}
 
 		// Author Name
+		$author_name_html = '';
+		$show_name = false;
 		if ( isset($read_setting['read_name']) && $read_setting['read_name'] === 'true' ) {
+			$show_name = true;
 			$author_name_html = gwolle_gb_get_author_name_html($entry);
-			$entry_output .= '
+			$author_name_html = '
 						<span class="gb-author-name">' . $author_name_html . '
 						</span>';
 		}
 
 		// Author Origin
+		$author_origin_html = '';
+		$show_origin = false;
 		if ( isset($read_setting['read_city']) && $read_setting['read_city'] === 'true' ) {
-			$origin = $entry->get_author_origin();
-			if ( strlen(str_replace(' ', '', $origin)) > 0 ) {
-				$entry_output .= '
+			$author_origin_html = $entry->get_author_origin();
+			if ( strlen( str_replace(' ', '', $author_origin_html) ) > 0 ) {
+				$show_origin = true;
+				$author_origin_html = '
 						<span class="gb-author-origin">
-							<span class="gb-author-origin-from-text"> ' . /* translators: city or origin */ esc_html__('from', 'gwolle-gb') . '</span>
-							<span class="gb-author-origin-text"> ' . gwolle_gb_sanitize_output($origin) . '</span>
+							<span class="gb-author-origin-text"> ' . gwolle_gb_sanitize_output($author_origin_html) . '</span>
 						</span>';
 			}
 		}
 
+		// Merge author name and origin for simpler and less code.
+		if ( ( $show_name === true ) && ( $show_origin === true ) ) {
+			/* translators: entry heading with author info, %1$s is the author name and %2$s is the origin or city of that author */
+			$entry_output .= sprintf( esc_html__( '%1$s from %2$s', 'gwolle-gb' ), $author_name_html, $author_origin_html );
+		} else if ( ( $show_name === true ) && ( $show_origin !== true ) ) {
+			$entry_output .= $author_name_html;
+		} else if ( ( $show_name !== true ) && ( $show_origin === true ) ) {
+			$entry_output .= $author_origin_html;
+		}
+
 		// Entry Date and Time
+		$date_html = '';
+		$time_html = '';
+		$show_time = false;
+		$show_date = false;
 		if ( ( isset($read_setting['read_datetime']) && $read_setting['read_datetime'] === 'true' ) || ( isset($read_setting['read_date']) && $read_setting['read_date'] === 'true' ) ) {
-			$entry_output .= '
+			$show_date = true;
+			$date_html .= '
 						<span class="gb-datetime">
-							<span class="gb-date">';
-			if ( isset($read_setting['read_name']) && $read_setting['read_name'] === 'true' ) {
-				$entry_output .= '<span class="gb-date-wrote-text"> ' . /* translators: on a certain date */ esc_html__('wrote on', 'gwolle-gb') . '</span>';
-			}
-			$entry_output .= '<span class="gb-date-text"> ' . date_i18n( get_option('date_format'), $entry->get_datetime() ) . '</span>
+							<span class="gb-date">
+								<span class="gb-date-text"> ' . date_i18n( get_option('date_format'), $entry->get_datetime() ) . '</span>
 							</span>';
 			if ( isset($read_setting['read_datetime']) && $read_setting['read_datetime'] === 'true' ) {
-				// Use 'at'. Follow WordPress Core: class-walker-comment.php
-				$entry_output .= '<span class="gb-time">
-									<span class="gb-time-at-text"> ' . /* translators: at a certain time */ esc_html__('at', 'gwolle-gb') . '</span>
-									<span class="gb-time-text"> ' . trim(date_i18n( get_option('time_format'), $entry->get_datetime() )) . '</span>
-								</span>';
+				$show_time = true;
+				$time_html .= '
+							<span class="gb-time">
+								<span class="gb-time-text"> ' . trim(date_i18n( get_option('time_format'), $entry->get_datetime() )) . '</span>
+							</span>';
 			}
-			$entry_output .= '
-						</span> ';
+		}
+
+		if ( ( $show_name === true ) || ( $show_origin === true ) ) {
+			if ( $show_date === true ) {
+				$entry_output .= '<br />';
+			}
+		}
+
+		if ( $show_time === true ) {
+			/* translators: entry heading with date and time, %1$s is the date of the entry, %2$s the time of the entry */
+			$entry_output .= sprintf( esc_html__( '%1$s at %2$s', 'gwolle-gb' ), $date_html, $time_html ) . '</span>';
+		} else if ( $show_date === true ) {
+			$entry_output .= $date_html . '</span>';
 		}
 
 		$entry_output .= apply_filters( 'gwolle_gb_entry_read_author_info_after', '', $entry );
 		$entry_output .= '
 					</div>'; // end <div class="gb-author-info">
+
 
 		// Main Content
 		if ( isset($read_setting['read_content']) && $read_setting['read_content'] === 'true' ) {
@@ -222,8 +251,8 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 
 					$admin_reply_excerpt = wp_trim_words( $admin_reply_content, $excerpt_length, $readmore );
 					$admin_reply .= '
-						<div class="gb-admin_reply-excerpt">' . $admin_reply_excerpt . '</div>
-						<div class="gb-admin_reply-full-content gwolle-gb-hide">
+						<div class="gb-admin_reply-excerpt gb-admin-reply-excerpt">' . $admin_reply_excerpt . '</div>
+						<div class="gb-admin_reply-full-content gb-admin-reply-full-content gwolle-gb-hide">
 						' . $admin_reply_content . $readless . '
 						</div>';
 				} else {
@@ -266,3 +295,23 @@ if ( ! function_exists('gwolle_gb_entry_template') ) {
 		return $entry_output;
 	}
 }
+
+
+/*
+ * Deprecated copy of gwolle_gb_entry_template()
+ * Is used only for keeping translation strings in GlotPress, should someone use a custom template.
+ *
+ */
+function gwolle_gb_entry_template_deprecated_translations() {
+
+	/* translators: city or origin (deprecated) */
+	esc_html__('from', 'gwolle-gb');
+
+	/* translators: on a certain date (deprecated) */
+	esc_html__('wrote on', 'gwolle-gb');
+
+	/* translators: at a certain time (deprecated) */
+	esc_html__('at', 'gwolle-gb');
+
+}
+
