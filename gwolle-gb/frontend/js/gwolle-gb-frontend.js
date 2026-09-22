@@ -1289,7 +1289,9 @@ function gwolle_gb_addon_entry_edit_event( event ) {
 					}
 
 					const entry_raw_content = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gwolle-gb-entry-edit-content-raw' );
-					entry_raw_content.innerHTML = raw_content_html;
+					if ( entry_raw_content ) {
+						entry_raw_content.innerHTML = raw_content_html;
+					}
 
 					const entry_author_name = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gb-author-name' );
 					if ( entry_author_name ) {
@@ -1297,7 +1299,9 @@ function gwolle_gb_addon_entry_edit_event( event ) {
 					}
 
 					const entry_author_name_raw = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gwolle-gb-entry-edit-author-name-raw' );
-					entry_author_name_raw.innerHTML = author_name_html;
+					if ( entry_author_name_raw ) {
+						entry_author_name_raw.innerHTML = author_name_html;
+					}
 
 					const entry_origin = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gb-author-origin' );
 					if ( entry_origin ) {
@@ -1305,7 +1309,9 @@ function gwolle_gb_addon_entry_edit_event( event ) {
 					}
 
 					const entry_origin_raw = entry_div.querySelector( '.gb-entry_' + entry_id + ' .gwolle-gb-entry-edit-origin-raw' );
-					entry_origin_raw.innerHTML = origin_html;
+					if ( entry_origin_raw ) {
+						entry_origin_raw.innerHTML = origin_html;
+					}
 
 					// Hide Ajax icon and remove textarea.
 					const ajax_icon = entry_div.querySelector( '.gwolle_gb_addon_entry_edit_icon' );

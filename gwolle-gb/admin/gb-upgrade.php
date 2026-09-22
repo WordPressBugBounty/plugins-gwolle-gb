@@ -439,13 +439,42 @@ function gwolle_gb_upgrade() {
 		deactivate_plugins( 'gwolle-gb-addon/gwolle-gb-addon.php' );
 	}
 
+	if (version_compare($installed_ver, '5.1.1', '<')) {
+		/*
+		 * 4.10.1->5.1.1
+		 * Add-on is now integrated into main plugin.
+		 * Make sure database table does exist for meta fields.
+		 */
+		$wpdb->gwolle_gb_meta = $wpdb->prefix . 'gwolle_gb_meta';
+
+		$sql = "
+			CREATE TABLE IF NOT EXISTS
+				" . $wpdb->gwolle_gb_meta . "
+			(
+				meta_id bigint(20) NOT NULL auto_increment,
+				entry_id bigint(20) NOT NULL,
+				meta_key varchar(255) NOT NULL default '0',
+				meta_value longtext NOT NULL,
+				PRIMARY KEY  (meta_id)
+			) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+		$result = $wpdb->query($sql);
+	}
 
 	/* Upgrade to new shiny db collation. Since WP 4.2 */
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	if ( function_exists('maybe_convert_table_to_utf8mb4') ) {
-		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_entries );
-		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_log );
-		maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_meta );
+		$table = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_entries'");
+		if ( $table != 0 ) {
+			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_entries );
+		}
+		$table = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_log'");
+		if ( $table != 0 ) {
+			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_log );
+		}
+		$table = $wpdb->query("SHOW TABLES LIKE '" . $wpdb->prefix . "gwolle_gb_meta'");
+		if ( $table != 0 ) {
+			maybe_convert_table_to_utf8mb4( $wpdb->gwolle_gb_meta );
+		}
 	}
 
 	/* Set default options if not set yet. */

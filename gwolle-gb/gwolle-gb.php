@@ -3,7 +3,7 @@
 Plugin Name: Gwolle Guestbook
 Plugin URI: https://zenoweb.nl/
 Description: Gwolle Guestbook is not just another guestbook for WordPress. The goal is to provide an easy and slim way to integrate a guestbook into your WordPress powered site. Don't use your 'comment' section the wrong way - install Gwolle Guestbook and have a real guestbook.
-Version: 5.1.0
+Version: 5.1.1
 Author: Marcel Pol
 Author URI: https://zenoweb.nl
 License: GPLv2 or later
@@ -26,6 +26,7 @@ Copyright 2025         cleantalk
 Copyright 2025         alexclassroom
 Copyright 2025         rhialto
 Copyright 2026         olafw
+Copyright 2026         floenzens
 
 
 This program is free software; you can redistribute it and/or modify
@@ -45,7 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 // Plugin Version
-define('GWOLLE_GB_VER', '5.1.0');
+define('GWOLLE_GB_VER', '5.1.1');
 
 
 $active_plugins = get_option('active_plugins');
@@ -262,12 +263,11 @@ require_once GWOLLE_GB_DIR . '/gwolle-gb-hooks.php';
 function gwolle_gb_activation( $networkwide ) {
 	global $wpdb;
 
-	$current_version = get_option( 'gwolle_gb_version' );
-
 	if ( is_multisite() ) {
 		$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
 		foreach ($blogids as $blog_id) {
 			switch_to_blog($blog_id);
+			$current_version = get_option( 'gwolle_gb_version' );
 			if ( $current_version === false ) {
 				gwolle_gb_install();
 			} else if ($current_version !== GWOLLE_GB_VER) {
@@ -276,6 +276,7 @@ function gwolle_gb_activation( $networkwide ) {
 			restore_current_blog();
 		}
 	} else {
+		$current_version = get_option( 'gwolle_gb_version' );
 		if ( $current_version === false ) {
 			gwolle_gb_install();
 		} else if ($current_version !== GWOLLE_GB_VER) {

@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, ther
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 7.1
-Stable tag: 5.1.0
+Stable tag: 5.1.1
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -465,8 +465,12 @@ For users that are not logged in, it is still advised to use the image option in
 
 == Changelog ==
 
+= 5.1.1 =
+* 2026-09-22
+* Fix meta fields on update (thanks @floenzens).
+
 = 5.1.0 =
-* 2026-
+* 2026-08-21
 * Rewrite template function gwolle_gb_entry_template for better translations.
 * If you use a custom template, please merge the updates.
 * Add filter gwolle_gb_upload_files_free_for_all.
