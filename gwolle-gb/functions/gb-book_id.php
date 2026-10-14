@@ -178,7 +178,7 @@ function gwolle_gb_get_permalinks() {
  * Wrapper for get_permalink.
  *
  * @param int $postid ID of the post that is requested a permalink for.
- * @return string permalink of post.
+ * @return string|false The permalink URL. False if the post does not exist.
  *
  * @since 3.1.2
  */

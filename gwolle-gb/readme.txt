@@ -3,7 +3,7 @@ Contributors: Gwolle, mpol, dbonovas, haraldreingruber, roots84, dedotombo, ther
 Tags: guestbook, guest book, livre d'or, Gästebuch, review
 Requires at least: 4.1
 Tested up to: 7.1
-Stable tag: 5.1.1
+Stable tag: 5.1.2
 License: GPLv2 or later
 Requires PHP: 7.0
 
@@ -464,6 +464,15 @@ For users that are not logged in, it is still advised to use the image option in
 
 
 == Changelog ==
+
+= 5.1.2 =
+* 2026-10-14
+* Fix XSS security issue.
+  Use esc_url instead of esc_attr for the permalink in the metabox.
+  Only show this metabox line in PHP.
+  Not adding this metabox line on preview or ajax for security reasons, do not accept permalink in $_POST.
+  Thanks crow at wordfence.
+* The same for Social Media sharing.
 
 = 5.1.1 =
 * 2026-09-22
